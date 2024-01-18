@@ -11,7 +11,7 @@ enemys = []
 class Rect:
     def __init__(self):
         self.hp = 4
-        self.speed = 1
+        self.speed = 0.5
         self.damage = 1
         self.color = pygame.Color('green')
         self.size = 40
@@ -41,7 +41,7 @@ class Rect:
 class Circle:
     def __init__(self):
         self.hp = 2
-        self.speed = 3
+        self.speed = 1.5
         self.damage = 1
         self.color = pygame.Color('blue')
         self.size = 20
@@ -70,7 +70,7 @@ class Circle:
 class Triangle:
     def __init__(self):
         self.hp = 3
-        self.speed = 2
+        self.speed = 1
         self.damage = 1
         self.color = pygame.Color('yellow')
         self.size = 30
@@ -105,7 +105,7 @@ class Triangle:
 class Octagon:
     def __init__(self):
         self.hp = 15
-        self.speed = 0.5
+        self.speed = 0.25
         self.damage = 1
         self.color = pygame.Color('darkgrey')
         self.size = 50
