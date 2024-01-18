@@ -55,6 +55,7 @@ class Screen:
         # erguohdfbnosdvnidefjlbrwieeegknkvnadjkbnaknve;adsi2u9ipwegu9q3jkpowrrrhtnhr
         self.size = self.width, self.height
         self.screen = pygame.display.set_mode(self.size)
+        # evbuiwevuwebuwruwguiuiweghuowegweghiwegioweghio
 
     def resizeWindowPlus(self, pos):
         # Увеличивает окно при соприкосновении с ним пули
