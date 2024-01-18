@@ -28,6 +28,7 @@ class App:
         while self.run:
             self.checkEvents()
             self.screen.player.move(self.buttonsPressed)
+            self.screen.player.update()
             self.screen.player.bullets.update()
             # updateEnemys(self.screen.player)
             updateParticlesXP(self.screen.player)

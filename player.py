@@ -9,11 +9,8 @@ class Player:
     def __init__(self, parent):
         # Инициализация настроек игрока
         self.parent = parent
-        self.positionFromCenter = self.x, self.y = (0, 0)
+        self.pos = self.x, self.y = (0, 0)
         self.size = 40
-        self.pos = (
-            self.parent.size[0] // 2 + self.positionFromCenter[0] - self.size // 2,
-            self.parent.size[1] // 2 + self.positionFromCenter[1] - self.size // 2)
         self.speed = 3
         self.health = 10
         self.xp = 0
@@ -29,46 +26,44 @@ class Player:
 
     def draw(self):
         # Отрисовка персонажа на экране в зависимости от его размеров
-        self.parent.screen.blit(self.image, self.pos)
+        self.parent.screen.blit(self.image, (self.pos[0] - self.size // 2, self.pos[1] - self.size // 2))
 
     def move(self, buttons):
         # Перемещение игрока
         self.time += 1
         if pygame.K_a in buttons and pygame.K_w in buttons:
-            if self.parent.size[0] // 2 + self.positionFromCenter[0] - self.size // 2 > 0:
+            if self.pos[0] - self.size // 2 > 0:
                 self.x -= math.sqrt(self.speed)
-            if self.parent.size[1] // 2 + self.positionFromCenter[1] - self.size // 2 > 0:
+            if self.pos[1] - self.size // 2 > 0:
                 self.y -= math.sqrt(self.speed)
         elif pygame.K_d in buttons and pygame.K_w in buttons:
-            if self.parent.size[0] // 2 + self.positionFromCenter[0] + self.size // 2 < self.parent.size[0]:
+            if self.pos[0] + self.size // 2 < self.parent.size[0]:
                 self.x += math.sqrt(self.speed)
-            if self.parent.size[1] // 2 + self.positionFromCenter[1] - self.size // 2 > 0:
+            if self.pos[1] - self.size // 2 > 0:
                 self.y -= math.sqrt(self.speed)
         elif pygame.K_a in buttons and pygame.K_s in buttons:
-            if self.parent.size[0] // 2 + self.positionFromCenter[0] - self.size // 2 > 0:
+            if self.pos[0] - self.size // 2 > 0:
                 self.x -= math.sqrt(self.speed)
-            if self.parent.size[1] // 2 + self.positionFromCenter[1] + self.size // 2 < self.parent.size[1]:
+            if self.pos[1] + self.size // 2 < self.parent.size[1]:
                 self.y += math.sqrt(self.speed)
         elif pygame.K_d in buttons and pygame.K_s in buttons:
-            if self.parent.size[0] // 2 + self.positionFromCenter[0] + self.size // 2 < self.parent.size[0]:
+            if self.pos[0] + self.size // 2 < self.parent.size[0]:
                 self.x += math.sqrt(self.speed)
-            if self.parent.size[1] // 2 + self.positionFromCenter[1] + self.size // 2 < self.parent.size[1]:
+            if self.pos[1] + self.size // 2 < self.parent.size[1]:
                 self.y += math.sqrt(self.speed)
         elif pygame.K_a in buttons:
-            if self.parent.size[0] // 2 + self.positionFromCenter[0] - self.size // 2 > 0:
+            if self.pos[0] - self.size // 2 > 0:
                 self.x -= self.speed
         elif pygame.K_d in buttons:
-            if self.parent.size[0] // 2 + self.positionFromCenter[0] + self.size // 2 < self.parent.size[0]:
+            if self.pos[0] + self.size // 2 < self.parent.size[0]:
                 self.x += self.speed
         elif pygame.K_w in buttons:
-            if self.parent.size[1] // 2 + self.positionFromCenter[1] - self.size // 2 > 0:
+            if self.pos[1] - self.size // 2 > 0:
                 self.y -= self.speed
         elif pygame.K_s in buttons:
-            if self.parent.size[1] // 2 + self.positionFromCenter[1] + self.size // 2 < self.parent.size[1]:
+            if self.pos[1] + self.size // 2 < self.parent.size[1]:
                 self.y += self.speed
-        self.positionFromCenter = self.x, self.y
-        self.pos = (self.parent.size[0] // 2 + self.positionFromCenter[0] - self.size // 2,
-                    self.parent.size[1] // 2 + self.positionFromCenter[1] - self.size // 2)
+        self.pos = self.x, self.y
 
     def playerGetDamage(self, enemyPos):
         if self.getDamageKd >= 60:
@@ -78,3 +73,11 @@ class Player:
             self.x += round(vector[0] * 2, 2)
             self.y += round(vector[1] * 2, 2)
             self.pos = self.x, self.y
+
+    def update(self):
+        if self.pos[0] + self.size // 2 >= self.parent.size[0]:
+            self.x -= 1
+        if self.pos[1] + self.size // 2 >= self.parent.size[1]:
+            self.y -= 1
+        self.pos = self.x, self.y
+

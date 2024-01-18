@@ -73,7 +73,6 @@ class Screen:
                 self.y += 0.125
         self.pos = self.x, self.y
         self.size = self.width, self.height
-        # self.screen = pygame.display.set_mode(self.size)
         self.window.size = self.size
         self.window.position = self.pos
         if self.status != 'none':
@@ -100,6 +99,5 @@ class Screen:
             self.height += 30
         self.size = self.width, self.height
         self.pos = self.x, self.y
-        # self.screen = pygame.display.set_mode(self.size)
         self.window.size = self.size
         self.window.position = self.pos
