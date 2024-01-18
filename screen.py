@@ -15,7 +15,7 @@ class Screen:
         self.monResolution = self.getMonitorResolution()
         self.pos = self.x, self.y = (
             self.monResolution[0] // 2 - self.size[0], self.monResolution[1] // 2 - self.size[1])
-        self.fps = 120
+        self.fps = 100
 
         self.bgColor = pygame.Color('black')
         self.image = pygame.image.load('images/Player.png')
