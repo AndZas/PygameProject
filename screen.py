@@ -15,7 +15,7 @@ class Screen:
         self.monResolution = self.getMonitorResolution()
         self.pos = self.x, self.y = (
             self.monResolution[0] // 2 - self.size[0], self.monResolution[1] // 2 - self.size[1])
-        self.fps = 100
+        self.fps = 120
 
         self.bgColor = pygame.Color('black')
         self.image = pygame.image.load('images/Player.png')
@@ -52,6 +52,7 @@ class Screen:
         if self.height > self.minSize[1]:
             self.height -= 0.25
         os.environ['SDL_VIDEO_CENTERED'] = '0'
+        # erguohdfbnosdvnidefjlbrwieeegknkvnadjkbnaknve;adsi2u9ipwegu9q3jkpowrrrhtnhr
         self.size = self.width, self.height
         self.screen = pygame.display.set_mode(self.size)
 
@@ -67,9 +68,3 @@ class Screen:
             self.height += 30
         self.size = self.width, self.height
         self.screen = pygame.display.set_mode(self.size)
-
-
-if __name__ == '__main__':
-    app = Screen()
-    while True:
-        app.update()
