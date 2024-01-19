@@ -11,7 +11,7 @@ class Screen:
         # Настройки окна
         self.parent = parent
         self.minSize = (300, 300)
-        self.size = self.width, self.height = (800, 800)
+        self.size = self.width, self.height = (500, 500)
         self.monResolution = self.getMonitorResolution()
         self.pos = self.x, self.y = (
             self.monResolution[0] // 2 - self.size[0] // 2, self.monResolution[1] // 2 - self.size[1] // 2)
@@ -83,7 +83,7 @@ class Screen:
 
     def resizeWindowPlus(self, pos):
         # Увеличивает окно при соприкосновении с ним пули
-        if pos[0] <= 0:
+        if pos[0] - self.x <= 0:
             self.status = 'left'
             if self.x - 200 <= 0:
                 self.x -= 30 * max(self.x / 200, 0)
@@ -91,7 +91,7 @@ class Screen:
             else:
                 self.x -= 30
                 self.width += 30
-        if pos[1] <= 0:
+        if pos[1] - self.y <= 0:
             self.status = 'up'
             if self.y - 150 <= 30:
                 self.y -= 30 * max((self.y - 30) / 150, 0)
@@ -99,13 +99,13 @@ class Screen:
             else:
                 self.y -= 30
                 self.height += 30
-        if pos[0] >= self.size[0]:
+        if pos[0] - self.x >= self.size[0]:
             self.status = 'right'
             if (self.x + self.size[0]) + 200 >= self.monResolution[0]:
                 self.width += 30 * max((1 - ((self.x + self.size[0]) - self.monResolution[0] + 200) / 200), 0)
             else:
                 self.width += 30
-        if pos[1] >= self.size[1]:
+        if pos[1] - self.y >= self.size[1]:
             self.status = 'down'
             if (self.y + self.size[1]) + 200 >= self.monResolution[1]:
                 self.height += 30 * max((1 - ((self.y + self.size[1] + 50) - self.monResolution[1] + 150) / 150), 0)
