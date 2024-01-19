@@ -6,7 +6,7 @@ import pygame
 # Класс одной пули
 class Bullet:
     def __init__(self, PlayerPos, MousePos):
-        self.speed = 5
+        self.speed = 2.5
         self.damage = 1
         self.pos = PlayerPos
         self.size = 2

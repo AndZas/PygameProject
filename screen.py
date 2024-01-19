@@ -15,7 +15,7 @@ class Screen:
         self.monResolution = self.getMonitorResolution()
         self.pos = self.x, self.y = (
             self.monResolution[0] // 2 - self.size[0] // 2, self.monResolution[1] // 2 - self.size[1] // 2)
-        self.fps = 120
+        self.fps = 240
         os.environ['SDL_VIDEO_CENTERED'] = '0'
 
         self.bgColor = pygame.Color('black')
@@ -55,29 +55,29 @@ class Screen:
         # Уменьшает окно каждый кадр
         if self.width > self.minSize[0]:
             if self.status != 'right':
-                self.width -= 0.25
+                self.width -= 0.125
             if self.status != 'left':
-                self.x += 0.25
-                self.width -= 0.25
-            if self.status == 'none':
-                self.width -= 0.25
                 self.x += 0.125
+                self.width -= 0.125
+            if self.status == 'none':
+                self.width -= 0.125
+                self.x += 0.0625
         if self.height > self.minSize[1]:
             if self.status != 'down':
-                self.height -= 0.25
+                self.height -= 0.125
             if self.status != 'up':
-                self.y += 0.25
-                self.height -= 0.25
-            if self.status == 'none':
-                self.height -= 0.25
                 self.y += 0.125
+                self.height -= 0.125
+            if self.status == 'none':
+                self.height -= 0.125
+                self.y += 0.0625
         self.pos = self.x, self.y
         self.size = self.width, self.height
         self.window.size = self.size
         self.window.position = self.pos
         if self.status != 'none':
             self.time += 1
-            if self.time >= 240:
+            if self.time >= 480:
                 self.time = 0
                 self.status = 'none'
 
