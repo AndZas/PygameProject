@@ -11,7 +11,7 @@ class Player:
         self.parent = parent
         self.pos = self.x, self.y = (0, 0)
         self.size = 40
-        self.speed = 3
+        self.speed = 0.75
         self.health = 10
         self.xp = 0
         self.wallBunching = 30
