@@ -40,7 +40,7 @@ class Bullets:
 
     def shoot(self, pos):
         self.bullets.append(
-            Bullet((self.parent.pos[0], self.parent.pos[1]), pos))
+            Bullet((self.parent.pos[0] - self.parent.parent.pos[0], self.parent.pos[1] - self.parent.parent.pos[1]), pos))
 
     def draw(self):
         for bullet in self.bullets:
