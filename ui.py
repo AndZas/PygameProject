@@ -136,7 +136,6 @@ class EndWindow():
         '00:00:00'
         self.screen = screen
         self.time_survived = self.ms_to_time(time_survived)
-        print(time_survived)
         self.texts = [Text((0, 40), 60, 'game over', center_x=True),
                       Text((0, 110 + 10), 25, f'coins collected: {coins_collected}', center_x=True),
                       Text((0, 155 + 13), 25, f'time survived: {self.time_survived}', center_x=True),

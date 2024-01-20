@@ -105,4 +105,5 @@ class Player:
         self.health = 10
         self.xp = 0
 
+        self.image = self.afkImage
         self.time = 0  # Количество кадров
