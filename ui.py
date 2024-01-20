@@ -331,12 +331,11 @@ class Level():
         return 'Level'
 
 
-def main():
+def main1():
     pygame.init()
     screen = pygame.display.set_mode((600, 400))
     running = True
     w = StartWindow(screen)
-    # w = EndWindow(screen, 5, '00:00:00', 20, 2)
     clock = pygame.time.Clock()
     while running:
         screen.fill((0, 0, 0))
@@ -347,11 +346,30 @@ def main():
             elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
                 w.click(pos)
         w.draw()
-        # w.run()
+        clock.tick(60)
+        pygame.display.flip()
+    pygame.quit()
+
+
+def main2(coins, time):
+    pygame.init()
+    screen = pygame.display.set_mode((600, 400))
+    running = True
+    w = EndWindow(screen, coins, time, 20, 2)
+    clock = pygame.time.Clock()
+    while running:
+        screen.fill((0, 0, 0))
+        for event in pygame.event.get():
+            pos = pygame.mouse.get_pos()
+            if event.type == pygame.QUIT:
+                running = False
+            elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+                w.click(pos)
+        w.run()
         clock.tick(60)
         pygame.display.flip()
     pygame.quit()
 
 
 if __name__ == '__main__':
-    main()
+    main1()

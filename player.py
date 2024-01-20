@@ -1,5 +1,6 @@
 from bullets import *
 from hud import *
+from ui import *
 
 
 class Player:
@@ -74,7 +75,7 @@ class Player:
                 self.y += self.speed
         self.pos = self.x, self.y
 
-    def playerGetDamage(self, enemyPos):
+    def playerGetDamage(self, enemyPos, screen):
         if self.getDamageKd >= 240:
             self.image = self.getDamageImage
             startPos = self.pos
@@ -85,6 +86,8 @@ class Player:
             self.y += round(vector[1] * 2, 2)
             self.pos = self.x, self.y
             createParticlesDamage(startPos, self.pos, self.parent)
+            if self.health <= 0:
+                main2(self.xp, screen.timer.time)
 
     def update(self):
         if self.pos[0] - self.size // 2 <= self.parent.x:
