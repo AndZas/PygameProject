@@ -40,6 +40,7 @@ class App:
             self.screen.update()
 
     def clear(self):
+        self.buttonsPressed = []
         self.screen.clear()
         self.screen.timer.clear()
         self.screen.player.clear()
