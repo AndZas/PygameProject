@@ -135,9 +135,11 @@ class EndWindow():
     def __init__(self, screen, coins_collected: int, time_survived: str, bullets_fired: int, enemies_killed: int):
         '00:00:00'
         self.screen = screen
+        self.time_survived = self.ms_to_time(time_survived)
+        print(time_survived)
         self.texts = [Text((0, 40), 60, 'game over', center_x=True),
                       Text((0, 110 + 10), 25, f'coins collected: {coins_collected}', center_x=True),
-                      Text((0, 155 + 13), 25, f'time survived: {time_survived}', center_x=True),
+                      Text((0, 155 + 13), 25, f'time survived: {self.time_survived}', center_x=True),
                       Text((0, 202 + 15), 25, f'bullets fired: {bullets_fired}', center_x=True),
                       Text((0, 250 + 17), 25, f'enemies killed: {enemies_killed}', center_x=True),
                       Text((0, 295 + 20), 15, f'close this window to try again', center_x=True, color=(143, 145, 168))]
@@ -145,6 +147,13 @@ class EndWindow():
     def run(self):
         for text in self.texts:
             text.render(self.screen)
+
+    def ms_to_time(self, millis):
+        seconds = (millis / 1000) % 60
+        seconds = round(float(seconds), 2)
+        minutes = int((millis / (1000 * 60)) % 60)
+        hours = int((millis / (1000 * 60 * 60)) % 24)
+        return f"{hours}:{minutes}:{seconds}"
 
 
 class MenuSettings:
@@ -335,8 +344,8 @@ def main():
     pygame.init()
     screen = pygame.display.set_mode((600, 400))
     running = True
-    w = StartWindow(screen)
-    # w = EndWindow(screen, 5, '00:00:00', 20, 2)
+    # w = StartWindow(screen)
+    w = EndWindow(screen, 5, 8639856, 20, 2)
     clock = pygame.time.Clock()
     while running:
         screen.fill((0, 0, 0))
@@ -346,8 +355,8 @@ def main():
                 running = False
             elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
                 w.click(pos)
-        w.draw()
-        # w.run()
+        # w.draw()
+        w.run()
         clock.tick(60)
         pygame.display.flip()
     pygame.quit()
