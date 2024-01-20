@@ -1,7 +1,7 @@
 import pygame.event
 
 from screen import *
-
+from ui import in_tamer_on_off, hide_HUD_on_off
 
 class App:
     def __init__(self):
@@ -32,9 +32,9 @@ class App:
             self.screen.player.move(self.buttonsPressed)
             self.screen.player.update()
             self.screen.player.bullets.update()
-            self.screen.timer.update(True)
-            self.screen.player.coins.update(True)
-            self.screen.health.update(self.screen.player.health, self.screen.player.maxHealth, True)
+            self.screen.timer.update(in_tamer_on_off)
+            self.screen.player.coins.update(hide_HUD_on_off)
+            self.screen.health.update(self.screen.player.health, self.screen.player.maxHealth, hide_HUD_on_off)
             updateEnemys(self.screen)
             updateParticlesXP(self.screen.player)
             updateParticlesShoot()

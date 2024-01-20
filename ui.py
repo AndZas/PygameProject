@@ -1,10 +1,12 @@
+import os
 import sys
-
 import pygame
 
 music_volume = None
 sounds_effect = None
 off_sound = 1
+in_tamer_on_off = False
+hide_HUD_on_off = True
 
 
 class StartWindow:
@@ -81,15 +83,15 @@ class StartWindow:
         self.screen.blit(door, (x, y))
 
     def click(self, mouse_pos):
-        global off_sound, music_volume, sounds_effect
+        global off_sound, music_volume, sounds_effect, play
         x, y = mouse_pos
         if self.pos_play[0] < x < self.pos_play[0] + self.play_w and self.pos_play[1] < y < self.pos_play[
             1] + self.play_h:
             self.play_game = True
             pygame.time.delay(100)
-            self.open_level_menu()
+            # self.open_level_menu()
             print('Играть')
-
+            play = True
         elif self.pos_settings[0] < x < self.pos_settings[0] + self.settings_w and \
                 self.pos_settings[1] < y < self.pos_settings[1] + self.settings_h:
             self.open_menu_settings()
@@ -161,8 +163,8 @@ class MenuSettings:
         self.bg_music = music
         self.sound_effect = Slider((400, 35), (200, 10), sounds_effect if sounds_effect is not None else 0.5, 0, 100)
         self.music = Slider((400, 75), (200, 10), music_volume if music_volume is not None else 0.5, 0, 100)
-        self.in_game_timer = SwitchButton((300, 100), False)
-        self.hide_HUD = SwitchButton((300, 150), False)
+        self.in_game_timer = SwitchButton((300, 100), False, text='in-game timer')
+        self.hide_HUD = SwitchButton((300, 150), True, text='hide HUD')
         self.sliders = [self.sound_effect, self.music, self.in_game_timer, self.hide_HUD]
         self.texts = [Text((105, 20), 25, 'sound effect'), Text((190, 60), 25, 'music'),
                       Text((85, 105), 25, 'in-game timer'), Text((145, 155), 25, 'hide HUD')]
@@ -176,11 +178,12 @@ class MenuSettings:
         self.bg_music.set_volume(music_volume)
 
     def run(self):
+        global in_tamer_on_off, hide_HUD_on_off
         self.screen.fill("black")
         self.change_music_effect_volume()
         for i in self.texts:
             i.render(self.screen)
-        """///"""
+
         mouse_pos = pygame.mouse.get_pos()
         mouse = pygame.mouse.get_pressed()
         for slider in self.sliders:
@@ -196,12 +199,19 @@ class MenuSettings:
             elif str(slider) == 'SwitchButton':
                 if slider.container_rect.collidepoint(mouse_pos) and mouse[0] == 1:
                     if slider.working is True:
+                        if slider.get_name() == 'hide HUD':
+                            hide_HUD_on_off = False
+                        elif slider.get_name() == 'in-game timer':
+                            in_tamer_on_off = False
                         slider.working = False
                     else:
+                        if slider.get_name() == 'hide HUD':
+                            hide_HUD_on_off = True
+                        elif slider.get_name() == 'in-game timer':
+                            in_tamer_on_off = True
                         slider.working = True
                     pygame.time.delay(100)
                 slider.render(self.screen)
-        """///"""
 
 
 class Slider:
@@ -276,11 +286,12 @@ class Text():
 
 
 class SwitchButton:
-    def __init__(self, pos: tuple, working=False):
+    def __init__(self, pos: tuple, working: bool = False, text: str = ''):
         self.pos = pos
         self.working = working
         self.w = 60
         self.h = 40
+        self.text = text
         self.container_rect = pygame.Rect(pos[0], pos[1], self.w, self.h)
 
     def render(self, screen):
@@ -289,6 +300,9 @@ class SwitchButton:
         else:
             img = pygame.transform.scale(pygame.image.load('images\StartWindow\off_btn.png'), (self.w, self.h))
         screen.blit(img, (self.pos))  # левый верхний угол в точке pos
+
+    def get_name(self):
+        return self.text
 
     def __str__(self):
         return 'SwitchButton'
@@ -305,16 +319,14 @@ class LevelsMenu():
     def run(self):
         self.screen.fill("black")
         self.text.render(self.screen)
-        """///"""
         mouse_pos = pygame.mouse.get_pos()
         mouse = pygame.mouse.get_pressed()
         for level in self.levels:
             if level.container_rect.collidepoint(mouse_pos):
                 if mouse[0]:
                     print(level.get_level())
-                    pygame.time.delay(100)
+                    pygame.time.delay(300)
             level.render(self.screen)
-        """///"""
 
 
 class Level():
@@ -339,7 +351,12 @@ class Level():
         return 'Level'
 
 
+running = True
+play = False
+
+
 def main1():
+    global running
     pygame.init()
     screen = pygame.display.set_mode((600, 400))
     running = True
@@ -350,7 +367,7 @@ def main1():
         screen.fill((0, 0, 0))
         for event in pygame.event.get():
             pos = pygame.mouse.get_pos()
-            if event.type == pygame.QUIT:
+            if event.type == pygame.QUIT or play is True:
                 running = False
             elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
                 w.click(pos)
@@ -359,24 +376,21 @@ def main1():
         clock.tick(60)
         pygame.display.flip()
     pygame.quit()
+    if play:
+        os.system('python cycle.py')
 
 
 def main2(coins, time, bullets, enemys, parent):
     pygame.init()
     screen = pygame.display.set_mode((600, 400))
     running = True
-    # w = StartWindow(screen)
     w = EndWindow(screen, coins, time, bullets, enemys)
     clock = pygame.time.Clock()
     while running:
         screen.fill((0, 0, 0))
         for event in pygame.event.get():
-            pos = pygame.mouse.get_pos()
             if event.type == pygame.QUIT:
                 running = False
-            elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
-                w.click(pos)
-        # w.draw()
         w.run()
         clock.tick(60)
         pygame.display.flip()

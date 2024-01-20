@@ -10,11 +10,11 @@ killedEnemys = 0
 
 
 class Rect:
-    def __init__(self, ParentScreen):
+    def __init__(self, ParentScreen, hp=4, speed=0.25, damage=1):
         self.parent = ParentScreen
-        self.hp = 4
-        self.speed = 0.25
-        self.damage = 1
+        self.hp = hp
+        self.speed = speed
+        self.damage = damage
         self.color = pygame.Color('green')
         self.size = 40
         self.xp = {1: 2, 2: 1}
@@ -41,11 +41,11 @@ class Rect:
 
 
 class Circle:
-    def __init__(self, parentScreen):
+    def __init__(self, parentScreen, hp=2, speed=1, damage=1):
         self.parent = parentScreen
-        self.hp = 2
-        self.speed = 1
-        self.damage = 1
+        self.hp = hp
+        self.speed = speed
+        self.damage = damage
         self.size = 20
         self.xp = {1: 3, 2: 1}
         self.pos = self.x, self.y = (random.randint(0, self.parent.monResolution[0]),
@@ -71,11 +71,11 @@ class Circle:
 
 
 class Triangle:
-    def __init__(self, parentScreen):
+    def __init__(self, parentScreen, hp=3, speed=0.5, damage=1):
         self.parent = parentScreen
-        self.hp = 3
-        self.speed = 0.5
-        self.damage = 1
+        self.hp = hp
+        self.speed = speed
+        self.damage = damage
         self.size = 40
         self.xp = {1: 3}
         self.pos = self.x, self.y = (random.randint(0, self.parent.monResolution[0]),
@@ -103,11 +103,11 @@ class Triangle:
 
 
 class Octagon:
-    def __init__(self, parentScreen):
+    def __init__(self, parentScreen, hp=15, speed=0.125, damage=1):
         self.parent = parentScreen
-        self.hp = 15
-        self.speed = 0.125
-        self.damage = 1
+        self.hp = hp
+        self.speed = speed
+        self.damage = damage
         self.color = pygame.Color('darkgrey')
         self.size = 50
         self.xp = {1: 3, 2: 2, 3: 1}
