@@ -25,7 +25,7 @@ class Timer:
             screen.screen.blit(self.font.render(
                 f'{int(self.time / 100 / 60 / 60)}:{int(self.time / 100 / 60)}:{int(self.time / 100)}.'
                 f'{str(int(self.time))[max(int(len(str(int(self.time)))), 2) - 2:]}',
-                True, pygame.Color('Graydw')), (10, screen.size[1] - 25))
+                True, pygame.Color('Gray')), (10, screen.size[1] - 25))
 
     def update(self, on):
         self.on = on
