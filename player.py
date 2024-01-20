@@ -16,7 +16,7 @@ class Player:
         self.xp = 0
         self.wallBunching = 30
 
-        self.image = pygame.image.load('images/Player.png')
+        self.image = pygame.image.load('images/Textures/Player.png')
 
         self.kd = 120  # Количество кадров
         self.getDamageKd = 240  # Количество кадров

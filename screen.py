@@ -19,7 +19,7 @@ class Screen:
         os.environ['SDL_VIDEO_CENTERED'] = '0'
 
         self.bgColor = pygame.Color('black')
-        self.image = pygame.image.load('images/Player.png')
+        self.image = pygame.image.load('images/Textures/Player.png')
 
         self.screen = pygame.display.set_mode(self.size)
         pygame.display.set_caption('WindowKill')
