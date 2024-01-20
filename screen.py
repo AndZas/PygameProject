@@ -4,6 +4,7 @@ from screeninfo import get_monitors
 
 from enemys import *
 from player import Player
+from hud import Timer
 
 
 class Screen:
@@ -29,6 +30,7 @@ class Screen:
 
         # Экземпляры классов
         self.player = Player(self)
+        self.timer = Timer()
 
         #
         self.status = 'none'
@@ -50,6 +52,8 @@ class Screen:
         drawParticlesDamage(self.screen)
         drawEnemys(self.screen)
         self.player.draw()
+        self.timer.draw(self)
+        # self.player.border.draw(self)
         pygame.display.update()
         self.clock.tick(self.fps)
 

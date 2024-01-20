@@ -1,6 +1,5 @@
-import pygame
-
 from bullets import *
+from hud import RedBorder
 
 
 class Player:
@@ -24,6 +23,7 @@ class Player:
         self.time = 0  # Количество кадров
 
         self.bullets = Bullets(self)
+        self.border = RedBorder()
 
     def draw(self):
         # Отрисовка персонажа на экране в зависимости от его размеров
@@ -34,6 +34,8 @@ class Player:
         self.getDamageKd += 1
         if self.getDamageKd > 240:
             self.image = self.afkImage
+            self.border.timer += 1
+
         # Перемещение игрока
         self.time += 1
         if pygame.K_a in buttons and pygame.K_w in buttons:

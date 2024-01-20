@@ -30,6 +30,7 @@ class App:
             self.screen.player.move(self.buttonsPressed)
             self.screen.player.update()
             self.screen.player.bullets.update()
+            self.screen.timer.update(True)
             updateEnemys(self.screen)
             updateParticlesXP(self.screen.player)
             updateParticlesShoot()
