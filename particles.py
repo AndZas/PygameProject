@@ -28,6 +28,7 @@ class ParticleXp:
         a = vecLen // self.speed
         if a <= 1:
             player.xp += self.size
+            player.coins.count += self.size
             particlesXP.remove(self)
         elif a <= self.playerDistance:
             self.x += round(vector[0] / a, 3)

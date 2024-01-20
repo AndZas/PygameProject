@@ -3,8 +3,7 @@ from pygame._sdl2.video import Window
 from screeninfo import get_monitors
 
 from enemys import *
-from player import Player
-from hud import Timer
+from player import *
 
 
 class Screen:
@@ -31,6 +30,7 @@ class Screen:
         # Экземпляры классов
         self.player = Player(self)
         self.timer = Timer()
+        self.health = Health()
 
         #
         self.status = 'none'
@@ -53,6 +53,8 @@ class Screen:
         drawEnemys(self.screen)
         self.player.draw()
         self.timer.draw(self)
+        self.player.coins.draw(self)
+        self.health.draw(self)
         # self.player.border.draw(self)
         pygame.display.update()
         self.clock.tick(self.fps)

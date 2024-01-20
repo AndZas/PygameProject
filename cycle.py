@@ -31,6 +31,8 @@ class App:
             self.screen.player.update()
             self.screen.player.bullets.update()
             self.screen.timer.update(True)
+            self.screen.player.coins.update(True)
+            self.screen.health.update(self.screen.player.health, self.screen.player.maxHealth, True)
             updateEnemys(self.screen)
             updateParticlesXP(self.screen.player)
             updateParticlesShoot()

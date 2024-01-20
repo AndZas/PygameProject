@@ -1,5 +1,5 @@
 from bullets import *
-from hud import RedBorder
+from hud import *
 
 
 class Player:
@@ -10,6 +10,7 @@ class Player:
         self.size = 40
         self.speed = 0.75
         self.health = 10
+        self.maxHealth = 10
         self.xp = 0
         self.wallBunching = 30
 
@@ -24,6 +25,7 @@ class Player:
 
         self.bullets = Bullets(self)
         self.border = RedBorder()
+        self.coins = Coins()
 
     def draw(self):
         # Отрисовка персонажа на экране в зависимости от его размеров
