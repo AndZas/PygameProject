@@ -1,5 +1,4 @@
-import pygame
-import math
+from particles import *
 
 
 # Класс одной пули
@@ -40,6 +39,14 @@ class Bullets:
                 0] - self.parent.parent.x >= self.parent.parent.size[0] or bullet.pos[
                 1] - self.parent.parent.y <= 0 or bullet.pos[
                 1] - self.parent.parent.y >= self.parent.parent.size[1]:
+                if bullet.pos[0] - self.parent.parent.x <= 0:
+                    createParticlesShoot(bullet.pos, 'left', self.parent.parent)
+                elif bullet.pos[0] - self.parent.parent.x >= self.parent.parent.size[0]:
+                    createParticlesShoot(bullet.pos, 'right', self.parent.parent)
+                elif bullet.pos[1] - self.parent.parent.y <= 0:
+                    createParticlesShoot(bullet.pos, 'up', self.parent.parent)
+                elif bullet.pos[1] - self.parent.parent.y >= self.parent.parent.size[1]:
+                    createParticlesShoot(bullet.pos, 'down', self.parent.parent)
                 self.parent.parent.resizeWindowPlus(bullet.pos)
                 self.bullets.remove(bullet)
 

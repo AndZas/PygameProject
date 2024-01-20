@@ -64,7 +64,8 @@ class StartWidndow:
         if self.pos_play[0] < x < self.pos_play[0] + self.play_w and self.pos_play[1] < y < self.pos_play[
             1] + self.play_h:
             self.play_game = True
-            print('Играть')
+            os.system('python cycle.py')
+            sys.exit()
         elif self.pos_settings[0] < x < self.pos_settings[0] + self.settings_w and \
                 self.pos_settings[1] < y < self.pos_settings[1] + self.settings_h:
             self.open_menu()

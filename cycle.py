@@ -32,6 +32,7 @@ class App:
             self.screen.player.bullets.update()
             # updateEnemys(self.screen.player)
             updateParticlesXP(self.screen.player)
+            updateParticlesShoot()
             self.screen.update()
 
 

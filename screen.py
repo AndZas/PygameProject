@@ -46,6 +46,7 @@ class Screen:
         self.resizeWindowMinus()
         self.player.bullets.draw()
         drawParticlesXP(self.screen)
+        drawParticlesShoot(self.screen)
         drawEnemys(self.screen)
         self.player.draw()
         pygame.display.update()
