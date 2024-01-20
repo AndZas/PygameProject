@@ -1,8 +1,6 @@
-import math
-
 import pygame
 
-from bullets import Bullets
+from bullets import *
 
 
 class Player:
@@ -16,7 +14,10 @@ class Player:
         self.xp = 0
         self.wallBunching = 30
 
-        self.image = pygame.image.load('images/Textures/Player.png')
+        # Изображения
+        self.afkImage = pygame.image.load('images/Textures/Player.png')
+        self.getDamageImage = pygame.image.load('images/Textures/Player_GetDamage.png')
+        self.image = self.afkImage
 
         self.kd = 120  # Количество кадров
         self.getDamageKd = 240  # Количество кадров
@@ -30,6 +31,9 @@ class Player:
             self.pos[0] - self.size // 2 - self.parent.x, self.pos[1] - self.size // 2 - self.parent.y))
 
     def move(self, buttons):
+        self.getDamageKd += 1
+        if self.getDamageKd > 240:
+            self.image = self.afkImage
         # Перемещение игрока
         self.time += 1
         if pygame.K_a in buttons and pygame.K_w in buttons:
@@ -67,13 +71,16 @@ class Player:
         self.pos = self.x, self.y
 
     def playerGetDamage(self, enemyPos):
-        if self.getDamageKd >= 60:
+        if self.getDamageKd >= 240:
+            self.image = self.getDamageImage
+            startPos = self.pos
             self.health -= 1
             self.getDamageKd = 0
             vector = self.x - enemyPos[0], self.y - enemyPos[1]
             self.x += round(vector[0] * 2, 2)
             self.y += round(vector[1] * 2, 2)
             self.pos = self.x, self.y
+            createParticlesDamage(startPos, self.pos, self.parent)
 
     def update(self):
         if self.pos[0] - self.size // 2 <= self.parent.x:
