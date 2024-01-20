@@ -8,7 +8,7 @@ class App:
         self.buttonsPressed = []
         self.run = True
 
-        self.screen = Screen()
+        self.screen = Screen(self)
 
     def checkEvents(self):
         # Проверка событий
@@ -38,6 +38,16 @@ class App:
             updateParticlesShoot()
             updateParticlesDamage()
             self.screen.update()
+
+    def clear(self):
+        self.screen.clear()
+        self.screen.timer.clear()
+        self.screen.player.clear()
+        self.screen.player.coins.clear()
+        self.screen.health.clear()
+        self.screen.player.bullets.clear()
+        clearEnemies()
+        clearParticles()
 
 
 if __name__ == '__main__':

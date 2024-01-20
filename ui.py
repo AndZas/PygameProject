@@ -362,7 +362,7 @@ def main1():
     pygame.quit()
 
 
-def main2(coins, time, bullets, enemys):
+def main2(coins, time, bullets, enemys, parent):
     pygame.init()
     screen = pygame.display.set_mode((600, 400))
     running = True
@@ -381,7 +381,7 @@ def main2(coins, time, bullets, enemys):
         w.run()
         clock.tick(60)
         pygame.display.flip()
-    pygame.quit()
+    parent.clear()
 
 
 if __name__ == '__main__':

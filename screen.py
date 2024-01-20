@@ -123,3 +123,12 @@ class Screen:
         self.pos = self.x, self.y
         self.window.size = self.size
         self.window.position = self.pos
+
+    def clear(self):
+        self.size = self.width, self.height = (500, 500)
+        self.pos = self.x, self.y = (
+            self.monResolution[0] // 2 - self.size[0] // 2, self.monResolution[1] // 2 - self.size[1] // 2)
+
+        #
+        self.status = 'none'
+        self.time = 0

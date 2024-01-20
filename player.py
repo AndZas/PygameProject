@@ -31,7 +31,7 @@ class Player:
     def draw(self):
         # Отрисовка персонажа на экране в зависимости от его размеров
         self.parent.screen.blit(self.image, (
-            self.pos[0] - self.size // 2 - self.parent.x, self.pos[1] - self.size // 2 - self.parent.y))
+            int(self.pos[0] - self.size // 2 - self.parent.x), int(self.pos[1] - self.size // 2 - self.parent.y)))
 
     def move(self, buttons):
         self.getDamageKd += 1
@@ -87,7 +87,7 @@ class Player:
             self.pos = self.x, self.y
             createParticlesDamage(startPos, self.pos, self.parent)
             if self.health <= 0:
-                main2(self.xp, screen.timer.time, self.bullets.shootedBullets, killedEnemys)
+                main2(self.xp, screen.timer.time, self.bullets.shootedBullets, killedEnemys, self.parent.parent)
 
     def update(self):
         if self.pos[0] - self.size // 2 <= self.parent.x:
@@ -99,3 +99,10 @@ class Player:
         if self.pos[1] + self.size // 2 >= self.parent.y + self.parent.size[1]:
             self.y -= 1
         self.pos = self.x, self.y
+
+    def clear(self):
+        self.pos = self.x, self.y = (self.parent.x + self.parent.size[0] // 2, self.parent.y + self.parent.size[1] // 2)
+        self.health = 10
+        self.xp = 0
+
+        self.time = 0  # Количество кадров

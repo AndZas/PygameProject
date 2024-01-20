@@ -31,6 +31,9 @@ class Timer:
         self.on = on
         self.time += self.koef
 
+    def clear(self):
+        self.time = 0
+
 
 class Coins:
     def __init__(self):
@@ -45,6 +48,9 @@ class Coins:
 
     def update(self, on):
         self.on = on
+
+    def clear(self):
+        self.count = 0
 
 
 class Health:
@@ -63,3 +69,7 @@ class Health:
         self.count = hp
         self.max = maxHp
         self.on = on
+
+    def clear(self):
+        self.count = 10
+        self.max = 10

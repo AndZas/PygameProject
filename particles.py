@@ -178,3 +178,10 @@ def drawParticlesDamage(screen):
 def updateParticlesDamage():
     for particle in particlesDamage:
         particle.update()
+
+
+def clearParticles():
+    global particlesDamage, particlesShoot, particlesXP
+    particlesShoot = []
+    particlesDamage = []
+    particlesXP = []

@@ -48,10 +48,14 @@ class Bullets:
                     createParticlesShoot(bullet.pos, 'up', self.parent.parent)
                 elif bullet.pos[1] - self.parent.parent.y >= self.parent.parent.size[1]:
                     createParticlesShoot(bullet.pos, 'down', self.parent.parent)
+                sound = r'sounds\assets_sounds_impact.wav'
+                pygame.mixer.Sound(sound).play(0, -1, False)
                 self.parent.parent.resizeWindowPlus(bullet.pos)
                 self.bullets.remove(bullet)
 
     def shoot(self, pos):
+        sound = r'sounds\assets_sounds_shoot.wav'
+        pygame.mixer.Sound(sound).play(0, -1, False)
         self.shootedBullets += 1
         self.bullets.append(
             Bullet((self.parent.pos[0], self.parent.pos[1]),
@@ -60,3 +64,7 @@ class Bullets:
     def draw(self):
         for bullet in self.bullets:
             bullet.draw(self.parent.parent.screen)
+
+    def clear(self):
+        self.bullets = []
+        self.shootedBullets = 0

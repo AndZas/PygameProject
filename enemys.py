@@ -163,3 +163,10 @@ def updateEnemys(screen):
 def drawEnemys(screen):
     for enemy in enemys:
         enemy.draw(screen)
+
+
+def clearEnemies():
+    global time, enemys, killedEnemys
+    time = createKD
+    enemys = []
+    killedEnemys = 0
