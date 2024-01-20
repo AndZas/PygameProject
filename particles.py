@@ -6,7 +6,7 @@ import pygame
 particles = []
 
 
-class Particle:
+class ParticleXp:
     def __init__(self, pos, size):
         self.pos = self.x, self.y = pos
         self.size = size
@@ -36,7 +36,7 @@ def createParticlesXP(rect, count):
     for size in count:
         for c in range(count[size]):
             coords = (random.randint(rect[0], rect[0] + rect[2]), random.randint(rect[1], rect[1] + rect[3]))
-            particles.append(Particle(coords, size))
+            particles.append(ParticleXp(coords, size))
 
 
 def updateParticlesXP(player):
