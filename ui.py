@@ -2,6 +2,10 @@ import sys
 import pygame
 import os
 
+music_volume = None
+sounds_effect = None
+off_sound = 1
+
 
 class StartWidndow:
     def __init__(self, screen):
@@ -17,10 +21,26 @@ class StartWidndow:
         self.pos_dynamic = [50, 10]
         self.pos_door = []
 
-        self.off_sound = 1
+        self.play_background_music()
+
+    def play_background_music(self):
+        bg_music_file = r'sounds\fon_music_2.wav'
+        self.bg_music = pygame.mixer.Sound(bg_music_file)
+        self.bg_music.play(0, -1, False)
+
+    def on_off_volume_fon_music(self):  # функция проверяет выключена музыка или нет и выставляет громкость
+        if off_sound == 1:
+            self.bg_music.set_volume(0.5)
+        elif off_sound == -1:
+            self.bg_music.set_volume(0)
+        if music_volume is not None:
+            self.bg_music.set_volume(music_volume)
 
     def draw(self):
         path = 'images\StartWindow'
+
+        # Корректируем громкость
+        self.on_off_volume_fon_music()
 
         # Надпись WindowKill
         font = pygame.font.Font(None, 100)
@@ -43,7 +63,7 @@ class StartWidndow:
         self.screen.blit(settings, (x, y))  # левый верхний угол в точке 10 10
 
         # Кнопка динамика
-        if self.off_sound == 1:
+        if off_sound == 1:
             dynamic = pygame.transform.scale(pygame.image.load(path + '\dynamic.png'), (self.dynamic_w, self.dynamic_h))
         else:
             dynamic = pygame.transform.scale(pygame.image.load(path + r'\off_dynamic.png'),
@@ -60,23 +80,33 @@ class StartWidndow:
         self.screen.blit(door, (x, y))
 
     def click(self, mouse_pos):
+        global off_sound, music_volume, sounds_effect
         x, y = mouse_pos
         if self.pos_play[0] < x < self.pos_play[0] + self.play_w and self.pos_play[1] < y < self.pos_play[
             1] + self.play_h:
             self.play_game = True
+            pygame.time.delay(100)
+            self.open_level_menu()
             print('Играть')
+
         elif self.pos_settings[0] < x < self.pos_settings[0] + self.settings_w and \
                 self.pos_settings[1] < y < self.pos_settings[1] + self.settings_h:
-            self.open_menu()
+            self.open_menu_settings()
         elif self.pos_dynamic[0] < x < self.pos_dynamic[0] + self.dynamic_w and \
                 self.pos_dynamic[1] < y < self.pos_dynamic[1] + self.dynamic_h:
-            self.off_sound *= -1  # -1 - выключить 1 - включить
+            if off_sound == 1:
+                music_volume = 0
+                sounds_effect = 0
+            else:
+                music_volume = 0.5
+                sounds_effect = 0.5
+            off_sound *= -1  # -1 - выключить 1 - включить
         elif self.pos_door[0] < x < self.pos_door[0] + self.door_w and \
                 self.pos_door[1] < y < self.pos_door[1] + self.door_h:
             sys.exit()
 
-    def open_menu(self):
-        menu = Menu(self.screen)
+    def open_menu_settings(self):
+        menu = MenuSettings(self.screen, self.bg_music)
         run = True
         clock = pygame.time.Clock()
         while run:
@@ -87,18 +117,42 @@ class StartWidndow:
             pygame.display.flip()
             clock.tick(60)
 
+    def open_level_menu(self):
+        menu = LevelsMenu(self.screen)
+        run2 = True
+        clock = pygame.time.Clock()
+        while run2:
+            for event in pygame.event.get():
+                if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
+                    run2 = False
+            menu.run()
+            pygame.display.flip()
+            clock.tick(60)
 
-class Menu:
-    def __init__(self, screen) -> None:
+
+class MenuSettings:
+    def __init__(self, screen, music) -> None:
         self.screen = screen
-        self.sliders = [Slider((400, 35), (200, 10), 0.5, 0, 100), Slider((400, 75), (200, 10), 0.5, 0, 100),
-                        SwitchButton((300, 100), False), SwitchButton((300, 150), False)]
+        self.bg_music = music
+        self.sound_effect = Slider((400, 35), (200, 10), sounds_effect if sounds_effect is not None else 0.5, 0, 100)
+        self.music = Slider((400, 75), (200, 10), music_volume if music_volume is not None else 0.5, 0, 100)
+        self.in_game_timer = SwitchButton((300, 100), False)
+        self.hide_HUD = SwitchButton((300, 150), False)
+        self.sliders = [self.sound_effect, self.music, self.in_game_timer, self.hide_HUD]
         self.texts = [Text((105, 20), 40, 'sound effect'), Text((190, 60), 40, 'music'),
                       Text((85, 105), 40, 'in-game timer'), Text((145, 155), 40, 'hide HUD')]
 
+    def change_music_effect_volume(self):
+        global music_volume, off_sound, sounds_effect
+        music_volume = round(self.music.get_value() / 100, 1)
+        sounds_effect = round(self.sound_effect.get_value() / 100, 1)
+        if music_volume > 0:
+            off_sound = 1
+        self.bg_music.set_volume(music_volume)
+
     def run(self):
         self.screen.fill("black")
-
+        self.change_music_effect_volume()
         for i in self.texts:
             i.render(self.screen)
         """///"""
@@ -208,6 +262,51 @@ class SwitchButton:
 
     def __str__(self):
         return 'SwitchButton'
+
+
+class LevelsMenu():
+    def __init__(self, screen):
+        self.screen = screen
+        self.levels = [Level((110, 100), (100, 100), '0'), Level((240, 100), (100, 100), '1'),
+                       Level((370, 100), (100, 100), '2'), Level((110, 230), (100, 100), '3'),
+                       Level((240, 230), (100, 100), '4'), Level((370, 230), (100, 100), '5')]
+        self.text = Text((screen.get_width() // 2 - 220 // 2, 10), 100, 'Levels')
+
+    def run(self):
+        self.screen.fill("black")
+        self.text.render(self.screen)
+        """///"""
+        mouse_pos = pygame.mouse.get_pos()
+        mouse = pygame.mouse.get_pressed()
+        for level in self.levels:
+            if level.container_rect.collidepoint(mouse_pos):
+                if mouse[0]:
+                    print(level.get_level())
+                    pygame.time.delay(100)
+            level.render(self.screen)
+        """///"""
+
+
+class Level():
+    def __init__(self, pos: tuple, size: tuple, text=''):
+        self.x, self.y = pos
+        self.w, self.h = size
+        self.text = text
+        self.container_rect = pygame.Rect(self.x, self.y, self.w, self.h)
+
+    def get_level(self):
+        return int(self.text)
+
+    def render(self, screen):
+        pygame.draw.rect(screen, color='green', rect=self.container_rect)
+        font = pygame.font.Font(None, 100)
+        text = font.render(self.text, 1, (255, 255, 255))
+        text_x = self.x + self.w // 2 - text.get_width() // 2
+        text_y = self.y + self.h // 2 - text.get_height() // 2
+        screen.blit(text, (text_x, text_y))
+
+    def __str__(self):
+        return 'Level'
 
 
 def main():
