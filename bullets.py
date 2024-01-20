@@ -31,6 +31,7 @@ class Bullets:
     def __init__(self, parent):
         self.parent = parent
         self.bullets = []
+        self.shootedBullets = 0
 
     def update(self):
         for bullet in self.bullets:
@@ -51,6 +52,7 @@ class Bullets:
                 self.bullets.remove(bullet)
 
     def shoot(self, pos):
+        self.shootedBullets += 1
         self.bullets.append(
             Bullet((self.parent.pos[0], self.parent.pos[1]),
                    pos, self.parent))

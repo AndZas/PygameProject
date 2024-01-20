@@ -1,4 +1,3 @@
-import os
 from pygame._sdl2.video import Window
 from screeninfo import get_monitors
 

@@ -18,7 +18,7 @@ class Timer:
         self.time = 0
         self.koef = 0.425
         self.font = pygame.font.Font('font/AtariClassic-gry3.ttf', 15)
-        self.on = Timer
+        self.on = True
 
     def draw(self, screen):
         if self.on:
