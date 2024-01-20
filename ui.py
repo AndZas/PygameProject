@@ -7,7 +7,7 @@ sounds_effect = None
 off_sound = 1
 
 
-class StartWidndow:
+class StartWindow:
     def __init__(self, screen):
         self.screen = screen
         self.play_w, self.play_h = 60, 60
@@ -43,7 +43,8 @@ class StartWidndow:
         self.on_off_volume_fon_music()
 
         # Надпись WindowKill
-        font = pygame.font.Font(None, 100)
+        # text = Text((0, ))
+        font = pygame.font.Font('Font\Comfortaa-VariableFont_wght.ttf', 70)
         text = font.render("WindowKill", 1, (255, 255, 255))
         text_x = self.screen.get_width() // 2 - text.get_width() // 2
         text_y = self.screen.get_height() // 2 - text.get_height() // 2 - self.play_h - 10
@@ -130,6 +131,22 @@ class StartWidndow:
             clock.tick(60)
 
 
+class EndWindow():
+    def __init__(self, screen, coins_collected: int, time_survived: str, bullets_fired: int, enemies_killed: int):
+        '00:00:00'
+        self.screen = screen
+        self.texts = [Text((0, 40), 60, 'game over', center_x=True),
+                      Text((0, 110 + 10), 25, f'coins collected: {coins_collected}', center_x=True),
+                      Text((0, 155 + 13), 25, f'time survived: {time_survived}', center_x=True),
+                      Text((0, 202 + 15), 25, f'bullets fired: {bullets_fired}', center_x=True),
+                      Text((0, 250 + 17), 25, f'enemies killed: {enemies_killed}', center_x=True),
+                      Text((0, 295 + 20), 15, f'close this window to try again', center_x=True, color=(143, 145, 168))]
+
+    def run(self):
+        for text in self.texts:
+            text.render(self.screen)
+
+
 class MenuSettings:
     def __init__(self, screen, music) -> None:
         self.screen = screen
@@ -139,8 +156,8 @@ class MenuSettings:
         self.in_game_timer = SwitchButton((300, 100), False)
         self.hide_HUD = SwitchButton((300, 150), False)
         self.sliders = [self.sound_effect, self.music, self.in_game_timer, self.hide_HUD]
-        self.texts = [Text((105, 20), 40, 'sound effect'), Text((190, 60), 40, 'music'),
-                      Text((85, 105), 40, 'in-game timer'), Text((145, 155), 40, 'hide HUD')]
+        self.texts = [Text((105, 20), 25, 'sound effect'), Text((190, 60), 25, 'music'),
+                      Text((85, 105), 25, 'in-game timer'), Text((145, 155), 25, 'hide HUD')]
 
     def change_music_effect_volume(self):
         global music_volume, off_sound, sounds_effect
@@ -234,14 +251,19 @@ class Slider:
 
 
 class Text():
-    def __init__(self, pos: tuple, size: tuple, text: str):
+    def __init__(self, pos: tuple, size: tuple, text: str, center_x: bool = False, color: tuple = (255, 255, 255)):
         self.pos = pos
         self.size = size
         self.text = text
+        self.center_x = center_x
+        self.color = color
 
     def render(self, screen):
-        font = pygame.font.Font(None, self.size)
-        text = font.render(self.text, 1, (255, 255, 255))
+        font = pygame.font.Font('Font\Comfortaa-VariableFont_wght.ttf', self.size)
+        text = font.render(self.text, 1, self.color)
+
+        if self.center_x:
+            self.pos = [screen.get_width() // 2 - text.get_width() // 2, self.pos[1]]
         screen.blit(text, (self.pos))
 
 
@@ -314,6 +336,7 @@ def main():
     screen = pygame.display.set_mode((600, 400))
     running = True
     w = StartWidndow(screen)
+    # w = EndWindow(screen, 5, '00:00:00', 20, 2)
     clock = pygame.time.Clock()
     while running:
         screen.fill((0, 0, 0))
@@ -324,6 +347,7 @@ def main():
             elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
                 w.click(pos)
         w.draw()
+        # w.run()
         clock.tick(60)
         pygame.display.flip()
     pygame.quit()
