@@ -25,7 +25,7 @@ class Rect:
         vector = player.pos[0] - self.pos[0], player.pos[1] - self.pos[1]
         vecLen = math.sqrt(vector[0] ** 2 + vector[1] ** 2)
         a = vecLen // self.speed
-        if a <= 25:
+        if a <= 150:
             player.playerGetDamage(self.pos)
         else:
             self.x += round(vector[0] / a, 3)
@@ -56,7 +56,7 @@ class Circle:
         vector = player.pos[0] - self.pos[0], player.pos[1] - self.pos[1]
         vecLen = math.sqrt(vector[0] ** 2 + vector[1] ** 2)
         a = vecLen // self.speed
-        if a <= 8:
+        if a <= 25:
             player.playerGetDamage(self.pos)
         else:
             self.x += round(vector[0] / a, 3)
@@ -88,7 +88,7 @@ class Triangle:
         vector = player.pos[0] - self.pos[0], player.pos[1] - self.pos[1]
         vecLen = math.sqrt(vector[0] ** 2 + vector[1] ** 2)
         a = vecLen // self.speed
-        if a <= 15:
+        if a <= 70:
             player.playerGetDamage(self.pos)
         else:
             self.x += round(vector[0] / a, 3)
@@ -118,9 +118,9 @@ class Octagon:
         vector = player.pos[0] - self.pos[0], player.pos[1] - self.pos[1]
         vecLen = math.sqrt(vector[0] ** 2 + vector[1] ** 2)
         a = vecLen // self.speed
-        if a <= 15:
+        if a <= 400:
             player.playerGetDamage(self.pos)
-        elif a > 250:
+        elif a > 1000:
             self.x += round(vector[0] / a, 3)
             self.y += round(vector[1] / a, 3)
         self.pos = (self.x, self.y)
@@ -143,7 +143,7 @@ def updateEnemys(screen):
     global time, createKD, koeff
     if time >= createKD:
         time = 0
-        enemys.append(random.choice([Rect(screen), Circle(screen), Triangle(screen), Octagon(screen)]))
+        enemys.append(random.choice([Rect(screen), Triangle(screen), Circle(screen), Octagon(screen)]))
     else:
         time += 1.7
     for enemy in enemys:

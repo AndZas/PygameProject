@@ -33,6 +33,7 @@ class App:
             updateEnemys(self.screen)
             updateParticlesXP(self.screen.player)
             updateParticlesShoot()
+            updateParticlesDamage()
             self.screen.update()
 
 

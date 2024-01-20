@@ -47,6 +47,7 @@ class Screen:
         self.player.bullets.draw()
         drawParticlesXP(self.screen)
         drawParticlesShoot(self.screen)
+        drawParticlesDamage(self.screen)
         drawEnemys(self.screen)
         self.player.draw()
         pygame.display.update()
