@@ -6,6 +6,7 @@ koeff = 10
 createKD = 1.7 * 480
 time = createKD
 enemys = []
+killedEnemys = 0
 
 
 class Rect:
@@ -26,7 +27,7 @@ class Rect:
         vecLen = math.sqrt(vector[0] ** 2 + vector[1] ** 2)
         a = vecLen // self.speed
         if a <= 150:
-            player.playerGetDamage(self.pos, self.parent)
+            player.playerGetDamage(self.pos, self.parent, killedEnemys)
         else:
             self.x += round(vector[0] / a, 3)
             self.y += round(vector[1] / a, 3)
@@ -57,7 +58,7 @@ class Circle:
         vecLen = math.sqrt(vector[0] ** 2 + vector[1] ** 2)
         a = vecLen // self.speed
         if a <= 25:
-            player.playerGetDamage(self.pos, self.parent)
+            player.playerGetDamage(self.pos, self.parent, killedEnemys)
         else:
             self.x += round(vector[0] / a, 3)
             self.y += round(vector[1] / a, 3)
@@ -89,7 +90,7 @@ class Triangle:
         vecLen = math.sqrt(vector[0] ** 2 + vector[1] ** 2)
         a = vecLen // self.speed
         if a <= 70:
-            player.playerGetDamage(self.pos, self.parent)
+            player.playerGetDamage(self.pos, self.parent, killedEnemys)
         else:
             self.x += round(vector[0] / a, 3)
             self.y += round(vector[1] / a, 3)
@@ -119,7 +120,7 @@ class Octagon:
         vecLen = math.sqrt(vector[0] ** 2 + vector[1] ** 2)
         a = vecLen // self.speed
         if a <= 400:
-            player.playerGetDamage(self.pos, self.parent)
+            player.playerGetDamage(self.pos, self.parent, killedEnemys)
         elif a > 1000:
             self.x += round(vector[0] / a, 3)
             self.y += round(vector[1] / a, 3)
@@ -140,7 +141,7 @@ class Octagon:
 
 
 def updateEnemys(screen):
-    global time, createKD, koeff
+    global time, createKD, koeff, killedEnemys
     if time >= createKD:
         time = 0
         enemys.append(random.choice([Rect(screen), Triangle(screen), Circle(screen), Octagon(screen)]))
@@ -153,6 +154,7 @@ def updateEnemys(screen):
                 screen.player.bullets.bullets.remove(bullet)
                 enemy.hp -= bullet.damage
                 if enemy.hp <= 0:
+                    killedEnemys += 1
                     createParticlesXP(enemy.rect, enemy.xp, enemy.parent)
                     enemys.remove(enemy)
                     koeff -= 1

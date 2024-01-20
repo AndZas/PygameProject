@@ -75,7 +75,7 @@ class Player:
                 self.y += self.speed
         self.pos = self.x, self.y
 
-    def playerGetDamage(self, enemyPos, screen):
+    def playerGetDamage(self, enemyPos, screen, killedEnemys):
         if self.getDamageKd >= 240:
             self.image = self.getDamageImage
             startPos = self.pos
@@ -87,7 +87,7 @@ class Player:
             self.pos = self.x, self.y
             createParticlesDamage(startPos, self.pos, self.parent)
             if self.health <= 0:
-                main2(self.xp, screen.timer.time)
+                main2(self.xp, screen.timer.time, self.bullets.shootedBullets, killedEnemys)
 
     def update(self):
         if self.pos[0] - self.size // 2 <= self.parent.x:

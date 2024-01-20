@@ -351,11 +351,11 @@ def main1():
     pygame.quit()
 
 
-def main2(coins, time):
+def main2(coins, time, bullets, enemys):
     pygame.init()
     screen = pygame.display.set_mode((600, 400))
     running = True
-    w = EndWindow(screen, coins, time, 20, 2)
+    w = EndWindow(screen, coins, time, bullets, enemys)
     clock = pygame.time.Clock()
     while running:
         screen.fill((0, 0, 0))
