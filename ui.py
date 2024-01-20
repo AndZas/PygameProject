@@ -64,8 +64,7 @@ class StartWidndow:
         if self.pos_play[0] < x < self.pos_play[0] + self.play_w and self.pos_play[1] < y < self.pos_play[
             1] + self.play_h:
             self.play_game = True
-            os.system('python cycle.py')
-            sys.exit()
+            print('Играть')
         elif self.pos_settings[0] < x < self.pos_settings[0] + self.settings_w and \
                 self.pos_settings[1] < y < self.pos_settings[1] + self.settings_h:
             self.open_menu()
@@ -93,7 +92,7 @@ class Menu:
     def __init__(self, screen) -> None:
         self.screen = screen
         self.sliders = [Slider((400, 35), (200, 10), 0.5, 0, 100), Slider((400, 75), (200, 10), 0.5, 0, 100),
-                        SwitchButton((300, 105), False), SwitchButton((300, 150), False)]
+                        SwitchButton((300, 100), False), SwitchButton((300, 150), False)]
         self.texts = [Text((105, 20), 40, 'sound effect'), Text((190, 60), 40, 'music'),
                       Text((85, 105), 40, 'in-game timer'), Text((145, 155), 40, 'hide HUD')]
 
@@ -121,6 +120,7 @@ class Menu:
                         slider.working = False
                     else:
                         slider.working = True
+                    pygame.time.delay(100)
                 slider.render(self.screen)
         """///"""
 
@@ -196,8 +196,8 @@ class SwitchButton:
         self.pos = pos
         self.working = working
         self.w = 60
-        self.h = 30
-        self.container_rect = pygame.Rect(pos[0], pos[1], pos[0] + self.w, pos[1] + self.h)
+        self.h = 40
+        self.container_rect = pygame.Rect(pos[0], pos[1], self.w, self.h)
 
     def render(self, screen):
         if self.working:
