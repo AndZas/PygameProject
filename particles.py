@@ -8,7 +8,8 @@ particlesShoot = []
 
 
 class ParticleXp:
-    def __init__(self, pos, size):
+    def __init__(self, pos, size, parentScreen):
+        self.parent = parentScreen
         self.pos = self.x, self.y = pos
         self.size = size
         self.speed = 4
@@ -17,7 +18,7 @@ class ParticleXp:
         self.rect = pygame.Rect(self.pos[0] - self.size // 2, self.pos[1] - self.size // 2, self.size, self.size)
 
     def draw(self, screen):
-        pygame.draw.circle(screen, self.color, self.pos, self.size * 2)
+        pygame.draw.circle(screen, self.color, (self.pos[0] - self.parent.x, self.pos[1] - self.parent.y), self.size * 2)
 
     def update(self, player):
         vector = player.pos[0] - self.pos[0], player.pos[1] - self.pos[1]
@@ -33,11 +34,11 @@ class ParticleXp:
         self.rect = pygame.Rect(self.pos[0] - self.size // 2, self.pos[1] - self.size // 2, self.size, self.size * 2)
 
 
-def createParticlesXP(rect, count):
+def createParticlesXP(rect, count, ParentScreen):
     for size in count:
         for c in range(count[size]):
             coords = (random.randint(rect[0], rect[0] + rect[2]), random.randint(rect[1], rect[1] + rect[3]))
-            particlesXP.append(ParticleXp(coords, size))
+            particlesXP.append(ParticleXp(coords, size, ParentScreen))
 
 
 def updateParticlesXP(player):
