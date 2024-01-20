@@ -77,6 +77,8 @@ class Player:
 
     def playerGetDamage(self, enemyPos, screen, killedEnemys):
         if self.getDamageKd >= 240:
+            sound = r'sounds\Damage.wav'
+            pygame.mixer.Sound(sound).play(0, -1, False)
             self.image = self.getDamageImage
             startPos = self.pos
             self.health -= 1

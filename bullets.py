@@ -54,7 +54,7 @@ class Bullets:
                 self.bullets.remove(bullet)
 
     def shoot(self, pos):
-        sound = r'sounds\assets_sounds_shoot.wav'
+        sound = r'sounds\Shoot.wav'
         pygame.mixer.Sound(sound).play(0, -1, False)
         self.shootedBullets += 1
         self.bullets.append(

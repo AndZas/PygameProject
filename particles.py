@@ -27,6 +27,8 @@ class ParticleXp:
         vecLen = math.sqrt(vector[0] ** 2 + vector[1] ** 2)
         a = vecLen // self.speed
         if a <= 1:
+            sound = random.choice([r'sounds\Get_Xp1.wav', r'sounds\Get_Xp2.wav'])
+            pygame.mixer.Sound(sound).play(0, -1, False)
             player.xp += self.size
             player.coins.count += self.size
             particlesXP.remove(self)

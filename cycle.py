@@ -25,6 +25,8 @@ class App:
 
     def Run(self):
         # Основной цикл
+        sound = r'sounds\fon_music_2.wav'
+        pygame.mixer.Sound(sound).play(0, -1, False)
         while self.run:
             self.checkEvents()
             self.screen.player.move(self.buttonsPressed)
