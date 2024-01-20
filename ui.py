@@ -292,7 +292,7 @@ class LevelsMenu():
         self.levels = [Level((110, 100), (100, 100), '0'), Level((240, 100), (100, 100), '1'),
                        Level((370, 100), (100, 100), '2'), Level((110, 230), (100, 100), '3'),
                        Level((240, 230), (100, 100), '4'), Level((370, 230), (100, 100), '5')]
-        self.text = Text((screen.get_width() // 2 - 220 // 2, 10), 100, 'Levels')
+        self.text = Text((screen.get_width() // 2 - 220 // 2, 10), 65, 'Levels')
 
     def run(self):
         self.screen.fill("black")
@@ -335,7 +335,7 @@ def main():
     pygame.init()
     screen = pygame.display.set_mode((600, 400))
     running = True
-    w = StartWidndow(screen)
+    w = StartWindow(screen)
     # w = EndWindow(screen, 5, '00:00:00', 20, 2)
     clock = pygame.time.Clock()
     while running:
