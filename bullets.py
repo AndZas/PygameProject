@@ -1,4 +1,5 @@
 from particles import *
+from read_files import read_settings
 
 
 # Класс одной пули
@@ -49,13 +50,19 @@ class Bullets:
                 elif bullet.pos[1] - self.parent.parent.y >= self.parent.parent.size[1]:
                     createParticlesShoot(bullet.pos, 'down', self.parent.parent)
                 sound = r'sounds\assets_sounds_impact.wav'
-                pygame.mixer.Sound(sound).play(0, -1, False)
+                impact = pygame.mixer.Sound(sound).play(0, -1, False)
+                if impact is not None:
+                    impact.set_volume(read_settings()[0])
+
                 self.parent.parent.resizeWindowPlus(bullet.pos)
                 self.bullets.remove(bullet)
 
     def shoot(self, pos):
         sound = r'sounds\Shoot.wav'
-        pygame.mixer.Sound(sound).play(0, -1, False)
+        shoot = pygame.mixer.Sound(sound).play(0, -1, False)
+        if shoot is not None:
+            shoot.set_volume(read_settings()[0])
+
         self.shootedBullets += 1
         self.bullets.append(
             Bullet((self.parent.pos[0], self.parent.pos[1]),

@@ -28,7 +28,7 @@ class StartWindow:
     def play_background_music(self):
         bg_music_file = r'sounds\fon_music_2.wav'
         self.bg_music = pygame.mixer.Sound(bg_music_file)
-        self.bg_music.play(0, -1, False)
+        self.bg_music.play(1, -1, False)
 
     def on_off_volume_fon_music(self):  # функция проверяет выключена музыка или нет и выставляет громкость
         if off_sound == 1:
@@ -75,12 +75,13 @@ class StartWindow:
         self.screen.blit(dynamic, (x, y))  # левый верхний угол в точке 50 10
 
         # Кнопка двери
-        door = pygame.transform.scale(pygame.image.load(path + '\go_out.png'),
-
-                                      (self.door_w, self.door_h))
+        door = pygame.transform.scale(pygame.image.load(path + '\go_out.png'), (self.door_w, self.door_h))
         self.pos_door = [10, self.screen.get_height() - 10 - door.get_height()]
         x, y = self.pos_door
         self.screen.blit(door, (x, y))
+
+        with open('settings', 'w') as file:  # добавить лвл
+            file.write(f'{sounds_effect};{music_volume};{in_tamer_on_off};{hide_HUD_on_off}')
 
     def click(self, mouse_pos):
         global off_sound, music_volume, sounds_effect, play
@@ -90,7 +91,6 @@ class StartWindow:
             self.play_game = True
             pygame.time.delay(100)
             # self.open_level_menu()
-            print('Играть')
             play = True
         elif self.pos_settings[0] < x < self.pos_settings[0] + self.settings_w and \
                 self.pos_settings[1] < y < self.pos_settings[1] + self.settings_h:
@@ -163,8 +163,8 @@ class MenuSettings:
         self.bg_music = music
         self.sound_effect = Slider((400, 35), (200, 10), sounds_effect if sounds_effect is not None else 0.5, 0, 100)
         self.music = Slider((400, 75), (200, 10), music_volume if music_volume is not None else 0.5, 0, 100)
-        self.in_game_timer = SwitchButton((300, 100), False, text='in-game timer')
-        self.hide_HUD = SwitchButton((300, 150), True, text='hide HUD')
+        self.in_game_timer = SwitchButton((300, 100), in_tamer_on_off, text='in-game timer')
+        self.hide_HUD = SwitchButton((300, 150), hide_HUD_on_off, text='hide HUD')
         self.sliders = [self.sound_effect, self.music, self.in_game_timer, self.hide_HUD]
         self.texts = [Text((105, 20), 25, 'sound effect'), Text((190, 60), 25, 'music'),
                       Text((85, 105), 25, 'in-game timer'), Text((145, 155), 25, 'hide HUD')]
@@ -361,7 +361,6 @@ def main1():
     screen = pygame.display.set_mode((600, 400))
     running = True
     w = StartWindow(screen)
-    # w = EndWindow(screen, 5, 8639856, 20, 2)
     clock = pygame.time.Clock()
     while running:
         screen.fill((0, 0, 0))
@@ -372,12 +371,12 @@ def main1():
             elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
                 w.click(pos)
         w.draw()
-        # w.run()
         clock.tick(60)
         pygame.display.flip()
-    pygame.quit()
     if play:
-        os.system('python cycle.py')
+        from cycle import App
+        app = App()
+        app.Run()
 
 
 def main2(coins, time, bullets, enemys, parent):

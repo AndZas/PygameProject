@@ -1,3 +1,4 @@
+from read_files import read_settings
 from bullets import *
 from hud import *
 from ui import *
@@ -77,8 +78,12 @@ class Player:
 
     def playerGetDamage(self, enemyPos, screen, killedEnemys):
         if self.getDamageKd >= 240:
+
             sound = r'sounds\Damage.wav'
-            pygame.mixer.Sound(sound).play(0, -1, False)
+            damage = pygame.mixer.Sound(sound).play(0, -1, False)
+            if damage is not None:
+                damage.set_volume(read_settings()[0])
+
             self.image = self.getDamageImage
             startPos = self.pos
             self.health -= 1
@@ -89,7 +94,7 @@ class Player:
             self.pos = self.x, self.y
             createParticlesDamage(startPos, self.pos, self.parent)
             if self.health <= 0:
-                main2(self.xp, screen.timer.time, self.bullets.shootedBullets, killedEnemys, self.parent.parent)
+                main2(self.xp, screen.timer.time * 10, self.bullets.shootedBullets, killedEnemys, self.parent.parent)
 
     def update(self):
         if self.pos[0] - self.size // 2 <= self.parent.x:
