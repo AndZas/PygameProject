@@ -1,4 +1,5 @@
 def read_settings():
+    # Читает данные из файла settings
     with open('settings') as file:
         data = file.read().split(';')
         in_tamer_on_off, hide_HUD_on_off = [True if i == 'True' else False for i in data[2:4]]

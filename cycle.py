@@ -53,12 +53,11 @@ class App:
             self.screen.health.update(self.screen.player.health, self.screen.player.maxHealth, hide_HUD_on_off)
             updateEnemys(self.screen)
             updateParticlesXP(self.screen.player)
-            updateParticlesShoot()
-            updateParticlesDamage()
-            updateParticlesKilled()
+            updateParticles()
             self.screen.update()
 
     def clear(self):
+        # Очистка всех данных для перезапуска
         self.buttonsPressed = []
         self.screen.clear()
         self.screen.timer.clear()
@@ -68,8 +67,3 @@ class App:
         self.screen.player.bullets.clear()
         clearEnemies()
         clearParticles()
-
-
-if __name__ == '__main__':
-    app = App()
-    app.Run()

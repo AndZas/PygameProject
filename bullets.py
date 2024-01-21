@@ -18,11 +18,13 @@ class Bullet:
         vectLen = math.sqrt(vect[0] ** 2 + vect[1] ** 2)
         self.resVect = (round(vect[0] / (vectLen / self.speed), 2), round(vect[1] / (vectLen / self.speed), 2))
 
+    # Отрисовка пули
     def draw(self, screen):
         pygame.draw.circle(screen, self.color, (
             self.pos[0] - self.size // 2 - self.parent.parent.x, self.pos[1] - self.size // 2 - self.parent.parent.y),
                            2)
 
+    # Обновление пули
     def update(self):
         self.pos = (self.pos[0] + self.resVect[0], self.pos[1] + self.resVect[1])
 
@@ -34,6 +36,7 @@ class Bullets:
         self.bullets = []
         self.shootedBullets = 0
 
+    # Обновление всего списка пуль
     def update(self):
         for bullet in self.bullets:
             bullet.update()
@@ -57,6 +60,7 @@ class Bullets:
                 self.parent.parent.resizeWindowPlus(bullet.pos, self.parent.wallBunching)
                 self.bullets.remove(bullet)
 
+    # Выстрел при нажатии на ЛКМ
     def shoot(self, pos):
         sound = r'sounds\Shoot.wav'
         shoot = pygame.mixer.Sound(sound).play(0, -1, False)
@@ -68,10 +72,12 @@ class Bullets:
             Bullet((self.parent.pos[0], self.parent.pos[1]),
                    pos, self.parent))
 
+    # Отрисовка всего списка пуль
     def draw(self):
         for bullet in self.bullets:
             bullet.draw(self.parent.parent.screen)
 
+    # Очистка позиций пуль
     def clear(self):
         self.bullets = []
         self.shootedBullets = 0

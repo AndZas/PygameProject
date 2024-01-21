@@ -6,6 +6,7 @@ from enemys import *
 from player import *
 
 
+# Экран
 class Screen:
     def __init__(self, parent=None):
         # Настройки окна
@@ -26,13 +27,12 @@ class Screen:
         pygame.display.set_icon(self.image)
         self.clock = pygame.time.Clock()
         self.window = Window.from_display_module()
-        # self.window = (600, 300)
+
         # Экземпляры классов
         self.player = Player(self)
         self.timer = Timer()
         self.health = Health()
 
-        #
         self.status = 'none'
         self.time = 0
 
@@ -47,16 +47,12 @@ class Screen:
         self.screen.fill(self.bgColor)
         self.resizeWindowMinus()
         self.player.bullets.draw()
-        drawParticlesXP(self.screen)
-        drawParticlesShoot(self.screen)
-        drawParticlesDamage(self.screen)
-        drawParticlesKilled(self.screen)
+        drawParticles(self.screen)
         drawEnemys(self.screen)
         self.player.draw()
         self.timer.draw(self)
         self.player.coins.draw(self)
         self.health.draw(self)
-        # self.player.border.draw(self)
         pygame.display.update()
         self.clock.tick(self.fps)
 
@@ -126,10 +122,10 @@ class Screen:
         self.window.position = self.pos
 
     def clear(self):
+        # Очищает координаты и позицию окна
         self.size = self.width, self.height = (500, 500)
         self.pos = self.x, self.y = (
             self.monResolution[0] // 2 - self.size[0] // 2, self.monResolution[1] // 2 - self.size[1] // 2)
 
-        #
         self.status = 'none'
         self.time = 0

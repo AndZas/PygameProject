@@ -24,6 +24,7 @@ enemys = []
 killedEnemys = 0
 
 
+# Прямоугольник
 class Rect:
     def __init__(self, ParentScreen, hp=4, speed=0.25, damage=1):
         self.parent = ParentScreen
@@ -42,6 +43,7 @@ class Rect:
         self.rect = pygame.Rect(self.pos[0] - self.size // 2, self.pos[1] - self.size // 2, self.size, self.size)
 
     def update(self, player):
+        # Обновление врага
         vector = player.pos[0] - self.pos[0], player.pos[1] - self.pos[1]
         vecLen = math.sqrt(vector[0] ** 2 + vector[1] ** 2)
         a = vecLen // self.speed
@@ -54,6 +56,7 @@ class Rect:
         self.rect = pygame.Rect(self.pos[0] - self.size // 2, self.pos[1] - self.size // 2, self.size, self.size)
 
     def draw(self, screen):
+        # Отрисовка врага
         pygame.draw.rect(screen, self.color,
                          (self.pos[0] - self.size // 2 - self.parent.x, self.pos[1] - self.size // 2 - self.parent.y,
                           self.size, self.size), 4)
@@ -62,6 +65,7 @@ class Rect:
         return 'Rect'
 
 
+# Круг
 class Circle:
     def __init__(self, parentScreen, hp=2, speed=1, damage=1):
         self.parent = parentScreen
@@ -81,6 +85,7 @@ class Circle:
         self.color = pygame.Color('aqua')
 
     def update(self, player):
+        # Обновление врага
         vector = player.pos[0] - self.pos[0], player.pos[1] - self.pos[1]
         vecLen = math.sqrt(vector[0] ** 2 + vector[1] ** 2)
         a = vecLen // self.speed
@@ -93,6 +98,7 @@ class Circle:
         self.rect = pygame.Rect(self.pos[0] - self.size // 2, self.pos[1] - self.size // 2, self.size, self.size)
 
     def draw(self, screen):
+        # Отрисовка врага
         screen.blit(self.image,
                     (self.pos[0] - self.size // 2 - self.parent.x, self.pos[1] - self.size // 2 - self.parent.y))
 
@@ -100,6 +106,7 @@ class Circle:
         return 'Circle'
 
 
+# Треугольник
 class Triangle:
     def __init__(self, parentScreen, hp=3, speed=0.5, damage=1):
         self.parent = parentScreen
@@ -120,6 +127,7 @@ class Triangle:
         self.color = pygame.Color('yellow')
 
     def update(self, player):
+        # Обновление врага
         self.angle += 0.1
         vector = player.pos[0] - self.pos[0], player.pos[1] - self.pos[1]
         vecLen = math.sqrt(vector[0] ** 2 + vector[1] ** 2)
@@ -133,6 +141,7 @@ class Triangle:
         self.rect = pygame.Rect(self.pos[0] - self.size // 2, self.pos[1] - self.size // 2, self.size, self.size)
 
     def draw(self, screen):
+        # Отрисовка врага
         screen.blit(pygame.transform.rotate(self.image, self.angle),
                     (self.pos[0] - self.size // 2 - self.parent.x, self.pos[1] - self.size // 2 - self.parent.y))
 
@@ -140,6 +149,7 @@ class Triangle:
         return 'Triangle'
 
 
+# Восьмиугольник
 class Octagon:
     def __init__(self, parentScreen, hp=15, speed=0.125, damage=1):
         self.parent = parentScreen
@@ -158,6 +168,7 @@ class Octagon:
         self.rect = pygame.Rect(self.pos[0] - self.size // 2, self.pos[1] - self.size // 2, self.size, self.size)
 
     def update(self, player):
+        # Обновление врага
         vector = player.pos[0] - self.pos[0], player.pos[1] - self.pos[1]
         vecLen = math.sqrt(vector[0] ** 2 + vector[1] ** 2)
         a = vecLen // self.speed
@@ -170,6 +181,7 @@ class Octagon:
         self.rect = pygame.Rect(self.pos[0] - self.size // 2, self.pos[1] - self.size // 2, self.size, self.size)
 
     def draw(self, screen):
+        # Отрисовка врага
         pygame.draw.lines(screen, self.color, False,
                           [(self.x - self.size // 2 - self.parent.x, self.y + self.size // 4 - self.parent.y),
                            (self.x - self.size // 2 - self.parent.x, self.y - self.size // 4 - self.parent.y),
@@ -185,6 +197,7 @@ class Octagon:
         return 'Octagon'
 
 
+# Обновление всех врагов
 def updateEnemys(screen):
     global time, createKD, koeff, killedEnemys
     lst = [Rect(screen), Triangle(screen), Circle(screen), Octagon(screen)]
@@ -214,11 +227,13 @@ def updateEnemys(screen):
         print('Next level')
 
 
+# Отрисовка всех врагов
 def drawEnemys(screen):
     for enemy in enemys:
         enemy.draw(screen)
 
 
+# Очистка врагов при перезапуске
 def clearEnemies():
     global time, enemys, killedEnemys
     time = createKD

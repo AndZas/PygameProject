@@ -1,6 +1,7 @@
 import pygame
 
 
+# Быстрое создание надписей
 class Text():
     def __init__(self, pos: tuple, size: tuple, text: str, center_x: bool = False, color: tuple = (255, 255, 255)):
         self.pos = pos
@@ -9,6 +10,7 @@ class Text():
         self.center_x = center_x
         self.color = color
 
+    # Рендер
     def render(self, screen):
         font = pygame.font.Font('Font\Comfortaa-VariableFont_wght.ttf', self.size)
         text = font.render(self.text, 1, self.color)
@@ -18,6 +20,7 @@ class Text():
         screen.blit(text, (self.pos))
 
 
+# Создание плиток уровней
 class Level():
     def __init__(self, pos: tuple, size: tuple, text=''):
         self.x, self.y = pos
@@ -26,9 +29,11 @@ class Level():
         self.container_rect = pygame.Rect(self.x, self.y, self.w, self.h)
 
     def get_level(self):
+        # Возвращает выбранный уровень
         return int(self.text)
 
     def render(self, screen):
+        # Отрисовка
         pygame.draw.rect(screen, color='green', rect=self.container_rect)
         font = pygame.font.Font(None, 100)
         text = font.render(self.text, 1, (255, 255, 255))
@@ -40,6 +45,7 @@ class Level():
         return 'Level'
 
 
+# Создание переключателя
 class SwitchButton:
     def __init__(self, pos: tuple, working: bool = False, text: str = ''):
         self.pos = pos
@@ -50,6 +56,7 @@ class SwitchButton:
         self.container_rect = pygame.Rect(pos[0], pos[1], self.w, self.h)
 
     def render(self, screen):
+        # Отрисовка
         if self.working:
             img = pygame.transform.scale(pygame.image.load('images\StartWindow\on_btn.png'), (self.w, self.h))
         else:
@@ -57,12 +64,14 @@ class SwitchButton:
         screen.blit(img, (self.pos))  # левый верхний угол в точке pos
 
     def get_name(self):
+        # Возвращает текст
         return self.text
 
     def __str__(self):
         return 'SwitchButton'
 
 
+# Создание слайдера
 class Slider:
     def __init__(self, pos: tuple, size: tuple, initial_val: float, min: int, max: int) -> None:
         self.pos = pos
@@ -82,6 +91,7 @@ class Slider:
                                        self.size[1])
 
     def move_slider(self, mouse_pos):
+        # Изменить позицию слайдера
         pos = mouse_pos[0]
         if pos < self.slider_left_pos:
             pos = self.slider_left_pos
@@ -90,6 +100,7 @@ class Slider:
         self.button_rect.centerx = pos
 
     def render(self, screen):
+        # Отрисовка
         pygame.draw.rect(screen, (69, 76, 89), self.container_rect)
         x, y, w, h = self.container_rect
 
@@ -108,6 +119,7 @@ class Slider:
         pygame.draw.circle(screen, color_right, (x + w, self.button_rect[1]), 5)
 
     def get_value(self):
+        # Возвращает значение слайдера
         val_range = self.slider_right_pos - self.slider_left_pos - 1
         button_val = self.button_rect.centerx - self.slider_left_pos
 

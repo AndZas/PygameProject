@@ -3,6 +3,7 @@ from hud import *
 from ui import *
 
 
+# Игрок
 class Player:
     def __init__(self, parent):
         # Инициализация настроек игрока
@@ -26,7 +27,6 @@ class Player:
         self.time = 0  # Количество кадров
 
         self.bullets = Bullets(self)
-        self.border = RedBorder()
         self.coins = Coins()
 
     def draw(self):
@@ -35,12 +35,11 @@ class Player:
             int(self.pos[0] - self.size // 2 - self.parent.x), int(self.pos[1] - self.size // 2 - self.parent.y)))
 
     def move(self, buttons):
+        # Перемещение игрока
         self.getDamageKd += 1
         if self.getDamageKd > 240:
             self.image = self.afkImage
-            self.border.timer += 1
 
-        # Перемещение игрока
         self.time += 1
         if pygame.K_a in buttons and pygame.K_w in buttons:
             if self.pos[0] - self.parent.x - self.size // 2 > 0:
@@ -77,6 +76,7 @@ class Player:
         self.pos = self.x, self.y
 
     def playerGetDamage(self, enemyPos, screen, killedEnemys, damage1):
+        # Получение урона игроком
         if self.getDamageKd >= 240:
 
             sound = r'sounds\Damage.wav'
@@ -94,9 +94,10 @@ class Player:
             self.pos = self.x, self.y
             createParticlesDamage(startPos, self.pos, self.parent)
             if self.health <= 0:
-                main2(self.xp, screen.timer.time * 10, self.bullets.shootedBullets, killedEnemys, self.parent.parent)
+                startEndWindow(self.xp, screen.timer.time * 10, self.bullets.shootedBullets, killedEnemys, self.parent.parent)
 
     def update(self):
+        # Обновление позиций игрока
         if self.pos[0] - self.size // 2 <= self.parent.x:
             self.x += 1
         if self.pos[0] + self.size // 2 >= self.parent.x + self.parent.size[0]:
@@ -108,6 +109,7 @@ class Player:
         self.pos = self.x, self.y
 
     def clear(self):
+        # Очистка координат игрока
         self.pos = self.x, self.y = (self.parent.x + self.parent.size[0] // 2, self.parent.y + self.parent.size[1] // 2)
         self.health = 10
         self.xp = 0
