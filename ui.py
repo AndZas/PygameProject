@@ -1,4 +1,3 @@
-import os
 import sys
 import pygame
 from widgets import Text, Level, Slider, SwitchButton

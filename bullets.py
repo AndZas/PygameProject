@@ -7,7 +7,7 @@ class Bullet:
     def __init__(self, PlayerPos, MousePos, parent):
         self.parent = parent
         self.speed = 2.5
-        self.damage = 1
+        self.damage = self.parent.damage
         self.pos = PlayerPos
         self.size = 2
         self.color = pygame.Color('white')
@@ -54,7 +54,7 @@ class Bullets:
                 if impact is not None:
                     impact.set_volume(read_settings()[0])
 
-                self.parent.parent.resizeWindowPlus(bullet.pos)
+                self.parent.parent.resizeWindowPlus(bullet.pos, self.parent.wallBunching)
                 self.bullets.remove(bullet)
 
     def shoot(self, pos):

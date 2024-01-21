@@ -1,3 +1,4 @@
+import os
 from pygame._sdl2.video import Window
 from screeninfo import get_monitors
 
@@ -89,36 +90,36 @@ class Screen:
                 self.time = 0
                 self.status = 'none'
 
-    def resizeWindowPlus(self, pos):
+    def resizeWindowPlus(self, pos, punching):
         # Увеличивает окно при соприкосновении с ним пули
         if pos[0] - self.x <= 0:
             self.status = 'left'
             if self.x - 200 <= 0:
-                self.x -= 30 * max(self.x / 200, 0)
-                self.width += 30 * max(self.x / 200, 0)
+                self.x -= punching * max(self.x / 200, 0)
+                self.width += punching * max(self.x / 200, 0)
             else:
-                self.x -= 30
-                self.width += 30
+                self.x -= punching
+                self.width += punching
         if pos[1] - self.y <= 0:
             self.status = 'up'
-            if self.y - 150 <= 30:
-                self.y -= 30 * max((self.y - 30) / 150, 0)
-                self.height += 30 * max((self.y - 30) / 150, 0)
+            if self.y - 150 <= punching:
+                self.y -= punching * max((self.y - punching) / 150, 0)
+                self.height += punching * max((self.y - punching) / 150, 0)
             else:
-                self.y -= 30
-                self.height += 30
+                self.y -= punching
+                self.height += punching
         if pos[0] - self.x >= self.size[0]:
             self.status = 'right'
             if (self.x + self.size[0]) + 200 >= self.monResolution[0]:
-                self.width += 30 * max((1 - ((self.x + self.size[0]) - self.monResolution[0] + 200) / 200), 0)
+                self.width += punching * max((1 - ((self.x + self.size[0]) - self.monResolution[0] + 200) / 200), 0)
             else:
-                self.width += 30
+                self.width += punching
         if pos[1] - self.y >= self.size[1]:
             self.status = 'down'
             if (self.y + self.size[1]) + 200 >= self.monResolution[1]:
-                self.height += 30 * max((1 - ((self.y + self.size[1] + 50) - self.monResolution[1] + 150) / 150), 0)
+                self.height += punching * max((1 - ((self.y + self.size[1] + 50) - self.monResolution[1] + 150) / 150), 0)
             else:
-                self.height += 30
+                self.height += punching
         self.size = int(self.width), int(self.height)
         self.pos = int(self.x), int(self.y)
         self.window.size = self.size
