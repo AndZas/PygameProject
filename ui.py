@@ -1,6 +1,11 @@
+import os
 import sys
 import pygame
-from widgets import Text, Level, Slider, SwitchButton
+from widgets import Text, Level, Slider, SwitchButton, Image
+import json
+from read_files import read_json_file, dump_json_file, read_money, dump_money
+
+# from player import Player
 
 music_volume = None
 sounds_effect = None
@@ -10,7 +15,6 @@ hide_HUD_on_off = True
 lvl = None
 
 
-# Создание стартового окна
 class StartWindow:
     def __init__(self, screen):
         self.screen = screen
@@ -28,13 +32,11 @@ class StartWindow:
         self.play_background_music()
 
     def play_background_music(self):
-        # Проигрывает фоновую музыку
         bg_music_file = r'sounds\fon_music_2.wav'
         self.bg_music = pygame.mixer.Sound(bg_music_file)
         self.bg_music.play(-1, -1, False)
 
-    def on_off_volume_fon_music(self):
-        # функция проверяет выключена музыка или нет и выставляет громкость
+    def on_off_volume_fon_music(self):  # функция проверяет выключена музыка или нет и выставляет громкость
         if off_sound == 1:
             self.bg_music.set_volume(0.5)
         elif off_sound == -1:
@@ -43,13 +45,13 @@ class StartWindow:
             self.bg_music.set_volume(music_volume)
 
     def draw(self):
-        # Отрисовка стартового окна
         path = 'images\StartWindow'
 
         # Корректируем громкость
         self.on_off_volume_fon_music()
 
         # Надпись WindowKill
+        # text = Text((0, ))
         font = pygame.font.Font('Font\Comfortaa-VariableFont_wght.ttf', 70)
         text = font.render("WindowKill", 1, (255, 255, 255))
         text_x = self.screen.get_width() // 2 - text.get_width() // 2
@@ -57,40 +59,36 @@ class StartWindow:
         self.screen.blit(text, (text_x, text_y))
 
         # Кнопка play
-        play = pygame.transform.scale(pygame.image.load(path + '\play_button.png'),
-                                      (self.play_w, self.play_h))
         x, y = self.screen.get_width() // 2 - self.play_w // 2, self.screen.get_height() // 2 - self.play_h // 2 + 40
-        self.screen.blit(play, (x, y))
+        play = Image(path + '\play_button.png', (self.play_w, self.play_h), (x, y))
         self.pos_play = [x, y, self.play_w, self.play_h]
+        play.render(self.screen)
 
         # Кнопка настроек
-        settings = pygame.transform.scale(pygame.image.load(path + '\settings_4.png'),
-                                          (self.settings_w, self.settings_h))
-        x, y = self.pos_settings
-        self.screen.blit(settings, (x, y))  # левый верхний угол в точке 10 10
+        settings = Image(path + '\settings_4.png', (self.settings_w, self.settings_h), (self.pos_settings))
+        settings.render(self.screen)
 
         # Кнопка динамика
         if off_sound == 1:
-            dynamic = pygame.transform.scale(pygame.image.load(path + '\dynamic.png'), (self.dynamic_w, self.dynamic_h))
+            # dynamic = pygame.transform.scale(pygame.image.load(path + '\dynamic.png'), (self.dynamic_w, self.dynamic_h))
+            dynamic = Image(path + '\dynamic.png', (self.dynamic_w, self.dynamic_h), (self.pos_dynamic))
         else:
-            dynamic = pygame.transform.scale(pygame.image.load(path + r'\off_dynamic.png'),
-                                             (self.dynamic_w, self.dynamic_h))
-        x, y = self.pos_dynamic
-        self.screen.blit(dynamic, (x, y))  # левый верхний угол в точке 50 10
+            dynamic = Image(path + r'\off_dynamic.png', (self.dynamic_w, self.dynamic_h), (self.pos_dynamic))
+
+        dynamic.render(self.screen)  # левый верхний угол в точке 50 10
 
         # Кнопка двери
-        door = pygame.transform.scale(pygame.image.load(path + '\go_out.png'), (self.door_w, self.door_h))
-        self.pos_door = [10, self.screen.get_height() - 10 - door.get_height()]
+        self.pos_door = [10, self.screen.get_height() - 40]
         x, y = self.pos_door
-        self.screen.blit(door, (x, y))
+        door = Image(path + '\go_out.png', (self.door_w, self.door_h), (x, y))
+        door.render(self.screen)
 
-        with open('settings', 'w') as file:
+        with open('settings', 'w') as file:  # добавить лвл
             file.write(f'{sounds_effect if sounds_effect is not None else 0.5};'
                        f'{music_volume if music_volume is not None else 0.5};'
                        f'{in_tamer_on_off};{hide_HUD_on_off};{lvl}')
 
     def click(self, mouse_pos):
-        # Проверка на нажатие кнопки мыши
         global off_sound, music_volume, sounds_effect, play
         x, y = mouse_pos
         if self.pos_play[0] < x < self.pos_play[0] + self.play_w and self.pos_play[1] < y < self.pos_play[
@@ -116,7 +114,6 @@ class StartWindow:
             sys.exit()
 
     def open_menu_settings(self):
-        # Открывает настройки
         menu = MenuSettings(self.screen, self.bg_music)
         run = True
         clock = pygame.time.Clock()
@@ -129,7 +126,6 @@ class StartWindow:
             clock.tick(60)
 
     def open_level_menu(self):
-        # Открывает меню уровней
         global lvl
         menu = LevelsMenu(self.screen)
         run2 = True
@@ -144,7 +140,6 @@ class StartWindow:
             clock.tick(60)
 
 
-# Финальное окно
 class EndWindow():
     def __init__(self, screen, coins_collected: int, time_survived: str, bullets_fired: int, enemies_killed: int):
         '00:00:00'
@@ -158,12 +153,10 @@ class EndWindow():
                       Text((0, 295 + 20), 15, f'close this window to try again', center_x=True, color=(143, 145, 168))]
 
     def run(self):
-        # Рисует финальное окно
         for text in self.texts:
             text.render(self.screen)
 
     def ms_to_time(self, millis):
-        # Перевод Миллисекунд в остальное время
         seconds = (millis / 1000) % 60
         seconds = round(float(seconds), 2)
         minutes = int((millis / (1000 * 60)) % 60)
@@ -171,7 +164,6 @@ class EndWindow():
         return f"{hours}:{minutes}:{seconds}"
 
 
-# Окно настроек
 class MenuSettings:
     def __init__(self, screen, music) -> None:
         self.screen = screen
@@ -185,7 +177,6 @@ class MenuSettings:
                       Text((85, 105), 25, 'in-game timer'), Text((145, 155), 25, 'hide HUD')]
 
     def change_music_effect_volume(self):
-        # Изменяет громкость звуковых эффектов
         global music_volume, off_sound, sounds_effect
         music_volume = round(self.music.get_value() / 100, 1)
         sounds_effect = round(self.sound_effect.get_value() / 100, 1)
@@ -194,7 +185,6 @@ class MenuSettings:
         self.bg_music.set_volume(music_volume)
 
     def run(self):
-        # Рисует окно настроек
         global in_tamer_on_off, hide_HUD_on_off
         self.screen.fill("black")
         self.change_music_effect_volume()
@@ -231,7 +221,6 @@ class MenuSettings:
                 slider.render(self.screen)
 
 
-# Меню уровней
 class LevelsMenu():
     def __init__(self, screen):
         self.screen = screen
@@ -242,7 +231,6 @@ class LevelsMenu():
         self.lvl = None
 
     def run(self):
-        # Рисует меню уровней
         self.screen.fill("black")
         self.text.render(self.screen)
         mouse_pos = pygame.mouse.get_pos()
@@ -255,23 +243,81 @@ class LevelsMenu():
             level.render(self.screen)
 
 
-# Окно закупки
 class SpaceWindow():
-    def __init__(self, screen, money):
+    def __init__(self, screen):
         self.screen = screen
-        self.money = money
+        self.w = 150
+        self.h = 150
+        self.read_json()
+
+    def read_json(self):
+        data = read_json_file()
+        self.money = read_money()
+        print(self.money)
+        self.player_speed, self.player_hp, self.player_wall_punch = data[0]
+        self.speed_price, self.hp_price, self.wall_punch_price = data[1]
 
     def run(self):
-        # Рисует окно закупки
         self.screen.fill("black")
+
+        avr_sc_w = self.screen.get_width() // 2
+        avr_w = self.w // 2
+
+        pygame.draw.circle(self.screen, pygame.Color('Purple'), (avr_sc_w - 10, 50), 10)
+        Text((avr_sc_w + 10, 35), 30, text=str(self.money), color=pygame.Color('Purple')).render(self.screen)
+
+        x, y = avr_sc_w - avr_w - avr_w * 2 - 20, self.screen.get_height() // 2 - self.h // 2
+        self.speed = Image('images\BuyMenuWindow\speed_img.png', (self.w, self.h), (x, y))
+        self.speed.render(self.screen)
+        pygame.draw.circle(self.screen, pygame.Color('Purple'), (avr_sc_w - avr_w * 2 - 30, 293), 5)
+        Text((avr_sc_w - avr_w * 2 - 20, 280), 25, text=str(self.speed_price), color=pygame.Color('Purple')).render(
+            self.screen)
+
+        x, y = avr_sc_w - avr_w, self.screen.get_height() // 2 - self.h // 2
+        self.heal = Image('images\BuyMenuWindow\heal_img.png', (self.w, self.h), (x, y))
+        self.heal.render(self.screen)
+        pygame.draw.circle(self.screen, pygame.Color('Purple'), (avr_sc_w - 20, 293), 5)
+        Text((0, 280), 25, text=str(self.hp_price), color=pygame.Color('Purple'), center_x=True).render(self.screen)
+
+        x, y = avr_sc_w - avr_w + avr_w * 2 + 20, self.screen.get_height() // 2 - self.h // 2
+        self.wall_punch = Image('images\BuyMenuWindow\wall_punch.png', (self.w, self.h), (x, y))
+        self.wall_punch.render(self.screen)
+        pygame.draw.circle(self.screen, pygame.Color('Purple'), (avr_sc_w + avr_w * 2 + 11, 293), 5)
+        Text((avr_sc_w + avr_w * 2 + 20, 280), 25, text=str(self.wall_punch_price),
+             color=pygame.Color('Purple')).render(
+            self.screen)
+
+    def click(self):
+        mouse_pos = pygame.mouse.get_pos()
+        if self.speed.container_rect.collidepoint(mouse_pos):
+            if self.money >= self.speed_price:
+                self.player_speed += 0.25
+                self.money -= self.speed_price
+                self.speed_price *= 2
+        elif self.heal.container_rect.collidepoint(mouse_pos):
+            if self.money >= self.hp_price:
+                self.player_hp += 10
+                self.money -= self.hp_price
+                self.hp_price *= 2
+        elif self.wall_punch.container_rect.collidepoint(mouse_pos):
+            if self.money >= self.wall_punch_price:
+                self.player_wall_punch += 10
+                self.money -= self.wall_punch_price
+                self.wall_punch_price *= 2
+
+        pygame.time.delay(300)
+        dct = {"Player": {"speed": self.player_speed, "hp": self.player_hp, "wall punch": self.player_wall_punch},
+               "Prices": {"speed": self.speed_price, "hp": self.hp_price, "wall punch": self.wall_punch_price}}
+        dump_json_file(dct)
+        dump_money(money=self.money)
+        self.run()
 
 
 running = True
 play = False
 
 
-def startGame():
-    # Запуск игры
+def main1():
     global running
     pygame.init()
     screen = pygame.display.set_mode((600, 400))
@@ -295,8 +341,7 @@ def startGame():
         app.Run()
 
 
-def startEndWindow(coins, time, bullets, enemys, parent):
-    # Запуск финального окна
+def main2(coins, time, bullets, enemys, parent):
     pygame.init()
     screen = pygame.display.set_mode((600, 400))
     running = True
@@ -314,4 +359,6 @@ def startEndWindow(coins, time, bullets, enemys, parent):
 
 
 if __name__ == '__main__':
-    startGame()
+    dump_json_file()
+    dump_money(0)
+    main1()

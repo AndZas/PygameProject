@@ -1,21 +1,19 @@
 from bullets import *
 from hud import *
 from ui import *
+from read_files import read_json_file
 
 
-# Игрок
 class Player:
     def __init__(self, parent):
         # Инициализация настроек игрока
         self.parent = parent
         self.pos = self.x, self.y = (self.parent.x + self.parent.size[0] // 2, self.parent.y + self.parent.size[1] // 2)
         self.size = 40
-        self.speed = 0.75
-        self.health = 10
-        self.damage = 1
+        self.speed, self.health, self.wallBunching = read_json_file()[0]
+        self.give_damage = 1
         self.maxHealth = 10
-        self.xp = 0
-        self.wallBunching = 30
+        self.xp = read_money()
 
         # Изображения
         self.afkImage = pygame.image.load('images/Textures/Player.png')
@@ -27,6 +25,7 @@ class Player:
         self.time = 0  # Количество кадров
 
         self.bullets = Bullets(self)
+        self.border = RedBorder()
         self.coins = Coins()
 
     def draw(self):
@@ -35,11 +34,12 @@ class Player:
             int(self.pos[0] - self.size // 2 - self.parent.x), int(self.pos[1] - self.size // 2 - self.parent.y)))
 
     def move(self, buttons):
-        # Перемещение игрока
         self.getDamageKd += 1
         if self.getDamageKd > 240:
             self.image = self.afkImage
+            self.border.timer += 1
 
+        # Перемещение игрока
         self.time += 1
         if pygame.K_a in buttons and pygame.K_w in buttons:
             if self.pos[0] - self.parent.x - self.size // 2 > 0:
@@ -76,7 +76,6 @@ class Player:
         self.pos = self.x, self.y
 
     def playerGetDamage(self, enemyPos, screen, killedEnemys, damage1):
-        # Получение урона игроком
         if self.getDamageKd >= 240:
 
             sound = r'sounds\Damage.wav'
@@ -94,10 +93,9 @@ class Player:
             self.pos = self.x, self.y
             createParticlesDamage(startPos, self.pos, self.parent)
             if self.health <= 0:
-                startEndWindow(self.xp, screen.timer.time * 10, self.bullets.shootedBullets, killedEnemys, self.parent.parent)
+                main2(self.xp, screen.timer.time * 10, self.bullets.shootedBullets, killedEnemys, self.parent.parent)
 
     def update(self):
-        # Обновление позиций игрока
         if self.pos[0] - self.size // 2 <= self.parent.x:
             self.x += 1
         if self.pos[0] + self.size // 2 >= self.parent.x + self.parent.size[0]:
@@ -109,7 +107,6 @@ class Player:
         self.pos = self.x, self.y
 
     def clear(self):
-        # Очистка координат игрока
         self.pos = self.x, self.y = (self.parent.x + self.parent.size[0] // 2, self.parent.y + self.parent.size[1] // 2)
         self.health = 10
         self.xp = 0

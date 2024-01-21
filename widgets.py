@@ -3,7 +3,7 @@ import pygame
 
 # Быстрое создание надписей
 class Text():
-    def __init__(self, pos: tuple, size: tuple, text: str, center_x: bool = False, color: tuple = (255, 255, 255)):
+    def __init__(self, pos: tuple, size: int, text: str, center_x: bool = False, color: tuple = (255, 255, 255)):
         self.pos = pos
         self.size = size
         self.text = text
@@ -127,3 +127,18 @@ class Slider:
 
     def __str__(self):
         return 'Slider'
+
+
+class Image():
+    def __init__(self, path: str, size: tuple, pos: tuple):
+        self.path = path
+        self.w, self.h = size
+        self.pos = pos
+        self.container_rect = pygame.Rect(pos[0], pos[1], self.w, self.h)
+
+    def render(self, screen):
+        speed = pygame.transform.scale(pygame.image.load(self.path), (self.w, self.h))
+        screen.blit(speed, (self.pos))
+
+    def __str__(self):
+        return 'Image'

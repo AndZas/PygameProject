@@ -31,7 +31,7 @@ class Screen:
         # Экземпляры классов
         self.player = Player(self)
         self.timer = Timer()
-        self.health = Health()
+        self.health = Health(self.player.health)
 
         self.status = 'none'
         self.time = 0
