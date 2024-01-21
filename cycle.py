@@ -11,7 +11,6 @@ class App:
         self.run = True
 
         self.screen = Screen(self)
-
     def checkEvents(self):
         # Проверка событий
         for event in pygame.event.get():

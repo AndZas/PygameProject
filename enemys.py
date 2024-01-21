@@ -1,27 +1,34 @@
 import sys
-
+from time import sleep
 import pygame.draw
 from particles import *
 import sqlite3
-# from ui import
-lvl = read_settings()[-1]
-con = sqlite3.connect("Levels")
-cur = con.cursor()
-result = cur.execute(f"SELECT * FROM Levels WHERE Number = '{lvl}'").fetchall()
-con.close()
-
-enemies = result[0][1].split(', ')
-
-speed_koeff = result[0][2]
-damage_koeff = result[0][3]
-health_koeff = result[0][4]
-to_next_lvl = result[0][5]
+from widgets import Text
+from read_files import read_settings, dump_settings
 
 koeff = 10
 createKD = 1.7 * 480
 time = createKD
 enemys = []
 killedEnemys = 0
+killedEnemys_for_end = 0
+
+
+def update_level():
+    global enemies, speed_koeff, speed_koeff, damage_koeff, health_koeff, to_next_lvl, lvl
+    lvl = read_settings()[-1]
+    con = sqlite3.connect("Levels")
+    cur = con.cursor()
+    result = cur.execute(f"SELECT * FROM Levels WHERE Number = '{lvl}'").fetchall()
+    con.close()
+    enemies = result[0][1].split(', ')
+    speed_koeff = result[0][2]
+    damage_koeff = result[0][3]
+    health_koeff = result[0][4]
+    to_next_lvl = result[0][5]
+
+
+update_level()
 
 
 # Прямоугольник
@@ -48,7 +55,7 @@ class Rect:
         vecLen = math.sqrt(vector[0] ** 2 + vector[1] ** 2)
         a = vecLen // self.speed
         if a <= 150:
-            player.playerGetDamage(self.pos, self.parent, killedEnemys, self.damage)
+            player.playerGetDamage(self.pos, self.parent, killedEnemys_for_end, self.damage)
         else:
             self.x += round(vector[0] / a, 3)
             self.y += round(vector[1] / a, 3)
@@ -90,7 +97,7 @@ class Circle:
         vecLen = math.sqrt(vector[0] ** 2 + vector[1] ** 2)
         a = vecLen // self.speed
         if a <= 25:
-            player.playerGetDamage(self.pos, self.parent, killedEnemys, self.damage)
+            player.playerGetDamage(self.pos, self.parent, killedEnemys_for_end, self.damage)
         else:
             self.x += round(vector[0] / a, 3)
             self.y += round(vector[1] / a, 3)
@@ -133,7 +140,7 @@ class Triangle:
         vecLen = math.sqrt(vector[0] ** 2 + vector[1] ** 2)
         a = vecLen // self.speed
         if a <= 70:
-            player.playerGetDamage(self.pos, self.parent, killedEnemys, self.damage)
+            player.playerGetDamage(self.pos, self.parent, killedEnemys_for_end, self.damage)
         else:
             self.x += round(vector[0] / a, 3)
             self.y += round(vector[1] / a, 3)
@@ -173,7 +180,7 @@ class Octagon:
         vecLen = math.sqrt(vector[0] ** 2 + vector[1] ** 2)
         a = vecLen // self.speed
         if a <= 400:
-            player.playerGetDamage(self.pos, self.parent, killedEnemys, self.damage)
+            player.playerGetDamage(self.pos, self.parent, killedEnemys_for_end, self.damage)
         elif a > 1000:
             self.x += round(vector[0] / a, 3)
             self.y += round(vector[1] / a, 3)
@@ -199,7 +206,7 @@ class Octagon:
 
 # Обновление всех врагов
 def updateEnemys(screen):
-    global time, createKD, koeff, killedEnemys
+    global time, createKD, koeff, killedEnemys_for_end, killedEnemys
     lst = [Rect(screen), Triangle(screen), Circle(screen), Octagon(screen)]
     choice = []
     for i in range(len(lst)):
@@ -217,6 +224,7 @@ def updateEnemys(screen):
                 screen.player.bullets.bullets.remove(bullet)
                 enemy.hp -= bullet.damage
                 if enemy.hp <= 0:
+                    killedEnemys_for_end += 1
                     killedEnemys += 1
                     createParticlesKilled(enemy.pos, screen, enemy.color, enemy.size)
                     createParticlesXP(enemy.rect, enemy.xp, enemy.parent)
@@ -224,7 +232,18 @@ def updateEnemys(screen):
                     koeff -= 1
 
     if killedEnemys == to_next_lvl:
-        print('Next level')
+        dump_settings(1)
+        killedEnemys = 0
+        r = True
+        while r:
+            for event in pygame.event.get():
+                if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+                    r = False
+            Text((0, screen.screen.get_height() // 2), 40, f'Level: {lvl + 1}', center_x=True,
+                 color=pygame.Color('white')).render(screen.screen)
+            pygame.display.update()
+        update_level()
+        screen.parent.buttonsPressed = []
 
 
 # Отрисовка всех врагов
@@ -235,7 +254,8 @@ def drawEnemys(screen):
 
 # Очистка врагов при перезапуске
 def clearEnemies():
-    global time, enemys, killedEnemys
+    global time, enemys, killedEnemys_for_end, killedEnemys
     time = createKD
     enemys = []
+    killedEnemys_for_end = 0
     killedEnemys = 0

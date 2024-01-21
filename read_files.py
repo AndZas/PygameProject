@@ -11,6 +11,12 @@ def read_settings():
     return sound_effct, music, in_tamer_on_off, hide_HUD_on_off, lvl
 
 
+def dump_settings(c):
+    sound_effct, music, in_tamer_on_off, hide_HUD_on_off, lvl = read_settings()
+    with open('settings', 'w') as file:
+        file.write(f'{sound_effct};{music};{in_tamer_on_off};{hide_HUD_on_off};{lvl + c}')
+
+
 def read_json_file():
     # Читает данные из файла json
     with open('prices_and_player.json', encoding='utf-8') as file:

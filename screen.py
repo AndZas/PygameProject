@@ -114,7 +114,8 @@ class Screen:
         if pos[1] - self.y >= self.size[1]:
             self.status = 'down'
             if (self.y + self.size[1]) + 200 >= self.monResolution[1]:
-                self.height += punching * max((1 - ((self.y + self.size[1] + 50) - self.monResolution[1] + 150) / 150), 0)
+                self.height += punching * max((1 - ((self.y + self.size[1] + 50) - self.monResolution[1] + 150) / 150),
+                                              0)
             else:
                 self.height += punching
         self.size = int(self.width), int(self.height)

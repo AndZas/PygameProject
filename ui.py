@@ -1,8 +1,9 @@
+import os
 import sys
 import pygame
 from widgets import Text, Level, Slider, SwitchButton, Image
+import json
 from read_files import read_json_file, dump_json_file, read_money_and_health, dump_money_and_health
-
 
 music_volume = None
 sounds_effect = None
@@ -12,7 +13,6 @@ hide_HUD_on_off = True
 lvl = None
 
 
-# Создание стартового окна
 class StartWindow:
     def __init__(self, screen):
         self.screen = screen
@@ -32,13 +32,11 @@ class StartWindow:
         pygame.display.set_icon(pygame.image.load('images/Textures/Player.png'))
 
     def play_background_music(self):
-        # Проигрывает фоновую музыку
         bg_music_file = r'sounds\fon_music_2.wav'
         self.bg_music = pygame.mixer.Sound(bg_music_file)
         self.bg_music.play(-1, -1, False)
 
-    def on_off_volume_fon_music(self):
-        # функция проверяет выключена музыка или нет и выставляет громкость
+    def on_off_volume_fon_music(self):  # функция проверяет выключена музыка или нет и выставляет громкость
         if off_sound == 1:
             self.bg_music.set_volume(0.5)
         elif off_sound == -1:
@@ -47,13 +45,13 @@ class StartWindow:
             self.bg_music.set_volume(music_volume)
 
     def draw(self):
-        # Отрисовка стартового окна
         path = 'images\StartWindow'
 
         # Корректируем громкость
         self.on_off_volume_fon_music()
 
         # Надпись WindowKill
+        # text = Text((0, ))
         font = pygame.font.Font('Font\Comfortaa-VariableFont_wght.ttf', 70)
         text = font.render("WindowKill", 1, (255, 255, 255))
         text_x = self.screen.get_width() // 2 - text.get_width() // 2
@@ -72,6 +70,7 @@ class StartWindow:
 
         # Кнопка динамика
         if off_sound == 1:
+            # dynamic = pygame.transform.scale(pygame.image.load(path + '\dynamic.png'), (self.dynamic_w, self.dynamic_h))
             dynamic = Image(path + '\dynamic.png', (self.dynamic_w, self.dynamic_h), (self.pos_dynamic))
         else:
             dynamic = Image(path + r'\off_dynamic.png', (self.dynamic_w, self.dynamic_h), (self.pos_dynamic))
@@ -90,7 +89,6 @@ class StartWindow:
                        f'{in_tamer_on_off};{hide_HUD_on_off};{lvl}')
 
     def click(self, mouse_pos):
-        # Проверка на нажатие кнопки мыши
         global off_sound, music_volume, sounds_effect, play
         x, y = mouse_pos
         if self.pos_play[0] < x < self.pos_play[0] + self.play_w and self.pos_play[1] < y < self.pos_play[
@@ -115,7 +113,6 @@ class StartWindow:
             sys.exit()
 
     def open_menu_settings(self):
-        # Открывает настройки
         menu = MenuSettings(self.screen, self.bg_music)
         run = True
         clock = pygame.time.Clock()
@@ -128,7 +125,6 @@ class StartWindow:
             clock.tick(60)
 
     def open_level_menu(self):
-        # Открывает меню уровней
         global lvl
         menu = LevelsMenu(self.screen)
         run2 = True
@@ -142,9 +138,9 @@ class StartWindow:
             menu.run()
             pygame.display.flip()
             clock.tick(60)
+        print(lvl)
 
 
-# Финальное окно
 class EndWindow():
     def __init__(self, screen, coins_collected: int, time_survived: str, bullets_fired: int, enemies_killed: int):
         '00:00:00'
@@ -158,12 +154,10 @@ class EndWindow():
                       Text((0, 295 + 20), 15, f'close this window to try again', center_x=True, color=(143, 145, 168))]
 
     def run(self):
-        # Рисует финальное окно
         for text in self.texts:
             text.render(self.screen)
 
     def ms_to_time(self, millis):
-        # Перевод Миллисекунд в остальное время
         seconds = (millis / 1000) % 60
         seconds = round(float(seconds), 2)
         minutes = int((millis / (1000 * 60)) % 60)
@@ -171,7 +165,6 @@ class EndWindow():
         return f"{hours}:{minutes}:{seconds}"
 
 
-# Окно настроек
 class MenuSettings:
     def __init__(self, screen, music) -> None:
         self.screen = screen
@@ -185,7 +178,6 @@ class MenuSettings:
                       Text((85, 105), 25, 'in-game timer'), Text((145, 155), 25, 'hide HUD')]
 
     def change_music_effect_volume(self):
-        # Изменяет громкость звуковых эффектов
         global music_volume, off_sound, sounds_effect
         music_volume = round(self.music.get_value() / 100, 1)
         sounds_effect = round(self.sound_effect.get_value() / 100, 1)
@@ -194,7 +186,6 @@ class MenuSettings:
         self.bg_music.set_volume(music_volume)
 
     def run(self):
-        # Рисует окно настроек
         global in_tamer_on_off, hide_HUD_on_off
         self.screen.fill("black")
         self.change_music_effect_volume()
@@ -231,7 +222,6 @@ class MenuSettings:
                 slider.render(self.screen)
 
 
-# Меню уровней
 class LevelsMenu():
     def __init__(self, screen):
         self.screen = screen
@@ -242,7 +232,6 @@ class LevelsMenu():
         self.lvl = None
 
     def run(self):
-        # Рисует меню уровней
         self.screen.fill("black")
         self.text.render(self.screen)
         mouse_pos = pygame.mouse.get_pos()
@@ -255,7 +244,6 @@ class LevelsMenu():
             level.render(self.screen)
 
 
-# Окно закупки
 class SpaceWindow():
     def __init__(self, screen):
         self.screen = screen
@@ -264,15 +252,14 @@ class SpaceWindow():
         self.read_json()
 
     def read_json(self):
-        # Читает json файл
         data = read_json_file()
         self.money = read_money_and_health()[0]
+        print(self.money)
         self.player_speed, self.player_wall_punch = data[0]
         self.player_hp = read_money_and_health()[1]
         self.speed_price, self.hp_price, self.wall_punch_price = data[1]
 
     def run(self):
-        # Рисует окно закупки
         self.screen.fill("black")
         avr_sc_w = self.screen.get_width() // 2
         avr_w = self.w // 2
@@ -302,7 +289,6 @@ class SpaceWindow():
             self.screen)
 
     def click(self):
-        # Проверка на нажатие кнопки мыши
         mouse_pos = pygame.mouse.get_pos()
         if self.speed.container_rect.collidepoint(mouse_pos):
             if self.money >= self.speed_price:
@@ -333,9 +319,7 @@ class SpaceWindow():
 running = True
 
 
-# Запуск приложения
 def main1():
-
     global running
     pygame.init()
     screen = pygame.display.set_mode((600, 400))
@@ -360,7 +344,6 @@ def main1():
 
 
 def main2(coins, time, bullets, enemys, parent):
-    # Запуск финального окна
     pygame.init()
     screen = pygame.display.set_mode((600, 400))
     running = True
