@@ -29,7 +29,7 @@ class StartWindow:
     def play_background_music(self):
         bg_music_file = r'sounds\fon_music_2.wav'
         self.bg_music = pygame.mixer.Sound(bg_music_file)
-        self.bg_music.play(1, -1, False)
+        self.bg_music.play(-1, -1, False)
 
     def on_off_volume_fon_music(self):  # функция проверяет выключена музыка или нет и выставляет громкость
         if off_sound == 1:

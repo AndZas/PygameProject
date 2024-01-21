@@ -44,24 +44,24 @@ class Player:
         self.time += 1
         if pygame.K_a in buttons and pygame.K_w in buttons:
             if self.pos[0] - self.parent.x - self.size // 2 > 0:
-                self.x -= math.sqrt(self.speed)
+                self.x -= self.speed / 1.5
             if self.pos[1] - self.parent.y - self.size // 2 > 0:
-                self.y -= math.sqrt(self.speed)
+                self.y -= self.speed / 1.5
         elif pygame.K_d in buttons and pygame.K_w in buttons:
             if self.pos[0] - self.parent.x + self.size // 2 < self.parent.size[0]:
-                self.x += math.sqrt(self.speed)
+                self.x += self.speed / 1.5
             if self.pos[1] - self.parent.y - self.size // 2 > 0:
-                self.y -= math.sqrt(self.speed)
+                self.y -= self.speed / 1.5
         elif pygame.K_a in buttons and pygame.K_s in buttons:
             if self.pos[0] - self.parent.x - self.size // 2 > 0:
-                self.x -= math.sqrt(self.speed)
+                self.x -= self.speed / 1.5
             if self.pos[1] - self.parent.y + self.size // 2 < self.parent.size[1]:
-                self.y += math.sqrt(self.speed)
+                self.y += self.speed / 1.5
         elif pygame.K_d in buttons and pygame.K_s in buttons:
             if self.pos[0] - self.parent.x + self.size // 2 < self.parent.size[0]:
-                self.x += math.sqrt(self.speed)
+                self.x += self.speed / 1.5
             if self.pos[1] - self.parent.y + self.size // 2 < self.parent.size[1]:
-                self.y += math.sqrt(self.speed)
+                self.y += self.speed / 1.5
         elif pygame.K_a in buttons:
             if self.pos[0] - self.parent.x - self.size // 2 > 0:
                 self.x -= self.speed

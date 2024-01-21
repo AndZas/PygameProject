@@ -20,6 +20,10 @@ class Rect:
         self.xp = {1: 2, 2: 1}
         self.pos = self.x, self.y = (random.randint(0, self.parent.monResolution[0]),
                                      random.randint(0, self.parent.monResolution[1]))
+        while self.parent.x < self.pos[0] < self.parent.x + self.parent.size[0] and self.parent.y < self.pos[
+            1] < self.parent.y + self.parent.size[1]:
+            self.pos = self.x, self.y = (random.randint(0, self.parent.monResolution[0]),
+                                         random.randint(0, self.parent.monResolution[1]))
         self.rect = pygame.Rect(self.pos[0] - self.size // 2, self.pos[1] - self.size // 2, self.size, self.size)
 
     def update(self, player):
@@ -50,6 +54,10 @@ class Circle:
         self.xp = {1: 3, 2: 1}
         self.pos = self.x, self.y = (random.randint(0, self.parent.monResolution[0]),
                                      random.randint(0, self.parent.monResolution[1]))
+        while self.parent.x < self.pos[0] < self.parent.x + self.parent.size[0] and self.parent.y < self.pos[
+            1] < self.parent.y + self.parent.size[1]:
+            self.pos = self.x, self.y = (random.randint(0, self.parent.monResolution[0]),
+                                         random.randint(0, self.parent.monResolution[1]))
         self.rect = pygame.Rect(self.pos[0] - self.size // 2, self.pos[1] - self.size // 2, self.size, self.size)
         self.image = pygame.transform.scale(pygame.image.load('images/Textures/Circle.png'), (self.size, self.size))
         self.color = pygame.Color('aqua')
@@ -81,6 +89,10 @@ class Triangle:
         self.xp = {1: 3}
         self.pos = self.x, self.y = (random.randint(0, self.parent.monResolution[0]),
                                      random.randint(0, self.parent.monResolution[1]))
+        while self.parent.x < self.pos[0] < self.parent.x + self.parent.size[0] and self.parent.y < self.pos[
+            1] < self.parent.y + self.parent.size[1]:
+            self.pos = self.x, self.y = (random.randint(0, self.parent.monResolution[0]),
+                                         random.randint(0, self.parent.monResolution[1]))
         self.rect = pygame.Rect(self.pos[0] - self.size // 2, self.pos[1] - self.size // 2, self.size, self.size)
         self.angle = 0
         self.image = pygame.transform.scale(pygame.image.load('images/Textures/Triangle.png'), (self.size, self.size))
@@ -115,6 +127,10 @@ class Octagon:
         self.xp = {1: 3, 2: 2, 3: 1}
         self.pos = self.x, self.y = (random.randint(0, self.parent.monResolution[0]),
                                      random.randint(0, self.parent.monResolution[1]))
+        while self.parent.x < self.pos[0] < self.parent.x + self.parent.size[0] and self.parent.y < self.pos[
+            1] < self.parent.y + self.parent.size[1]:
+            self.pos = self.x, self.y = (random.randint(0, self.parent.monResolution[0]),
+                                         random.randint(0, self.parent.monResolution[1]))
         self.rect = pygame.Rect(self.pos[0] - self.size // 2, self.pos[1] - self.size // 2, self.size, self.size)
 
     def update(self, player):
