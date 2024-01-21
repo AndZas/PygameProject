@@ -82,8 +82,8 @@ class StartWindow:
         self.screen.blit(door, (x, y))
 
         with open('settings', 'w') as file:  # добавить лвл
-            file.write(f'{sounds_effect if sounds_effect else 0.5};'
-                       f'{music_volume if music_volume else 0.5};'
+            file.write(f'{sounds_effect if sounds_effect is not None else 0.5};'
+                       f'{music_volume if music_volume is not None else 0.5};'
                        f'{in_tamer_on_off};{hide_HUD_on_off}')
 
     def click(self, mouse_pos):
