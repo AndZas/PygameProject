@@ -30,6 +30,8 @@ class StartWindow:
         self.pos_door = []
 
         self.play_background_music()
+        pygame.display.set_caption('WindowKill')
+        pygame.display.set_icon(pygame.image.load('images/Textures/Player.png'))
 
     def play_background_music(self):
         bg_music_file = r'sounds\fon_music_2.wav'
