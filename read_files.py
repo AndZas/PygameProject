@@ -12,6 +12,7 @@ def read_settings():
 
 
 def read_json_file():
+    # Читает данные из файла json
     with open('prices_and_player.json', encoding='utf-8') as file:
         data = json.load(file)
     profile_player = data['Player']
@@ -23,6 +24,7 @@ def read_json_file():
 
 
 def dump_json_file(dct=None):
+    # Сброс настроек json файла
     if dct is None:
         dct = {"Player": {"speed": 0.75, "wall punch": 30},
                "Prices": {"speed": 10, "hp": 10, "wall punch": 10}}
@@ -31,11 +33,13 @@ def dump_json_file(dct=None):
 
 
 def read_money_and_health():
+    # Возвращает количество здоровья и денег в данный момент
     with open('money_health') as file:
         money, health = map(int, file.read().split(';'))
     return money, health
 
 
 def dump_money_and_health(money, health):
+    # Сброс здоровья и денег
     with open('money_health', 'w') as file:
         file.write(str(money) + ';' + str(health))

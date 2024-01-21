@@ -129,6 +129,7 @@ class Slider:
         return 'Slider'
 
 
+# Загрузка изображений
 class Image():
     def __init__(self, path: str, size: tuple, pos: tuple):
         self.path = path
@@ -137,6 +138,7 @@ class Image():
         self.container_rect = pygame.Rect(pos[0], pos[1], self.w, self.h)
 
     def render(self, screen):
+        # Отрисовка
         speed = pygame.transform.scale(pygame.image.load(self.path), (self.w, self.h))
         screen.blit(speed, (self.pos))
 

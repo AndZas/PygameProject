@@ -59,6 +59,7 @@ class App:
             self.screen.update()
 
     def clear(self):
+        # Очистка всех данных для перезапуска
         self.buttonsPressed = []
         self.screen.clear()
         self.screen.timer.clear()

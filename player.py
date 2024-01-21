@@ -4,6 +4,7 @@ from ui import *
 from read_files import read_json_file
 
 
+# Игрок
 class Player:
     def __init__(self, parent):
         # Инициализация настроек игрока
@@ -34,11 +35,11 @@ class Player:
             int(self.pos[0] - self.size // 2 - self.parent.x), int(self.pos[1] - self.size // 2 - self.parent.y)))
 
     def move(self, buttons):
+        # Перемещение игрока
         self.getDamageKd += 1
         if self.getDamageKd > 240:
             self.image = self.afkImage
 
-        # Перемещение игрока
         self.time += 1
         if pygame.K_a in buttons and pygame.K_w in buttons:
             if self.pos[0] - self.parent.x - self.size // 2 > 0:
@@ -75,6 +76,7 @@ class Player:
         self.pos = self.x, self.y
 
     def playerGetDamage(self, enemyPos, screen, killedEnemys, damage1):
+        # Получение урона игроком
         if self.getDamageKd >= 240:
 
             sound = r'sounds\Damage.wav'
@@ -96,9 +98,9 @@ class Player:
                 main2(self.xp, screen.timer.time * 10, self.bullets.shootedBullets, killedEnemys, self.parent.parent)
 
     def update(self):
+        # Обновление позиций игрока
         self.speed, self.wallBunching = read_json_file()[0]
         self.health = read_money_and_health()[1]
-        # self.speed, self.health, self.wallBunching = read_json_file()[0]
         if self.pos[0] - self.size // 2 <= self.parent.x:
             self.x += 1
         if self.pos[0] + self.size // 2 >= self.parent.x + self.parent.size[0]:
@@ -110,6 +112,7 @@ class Player:
         self.pos = self.x, self.y
 
     def clear(self):
+        # Очистка координат игрока
         self.pos = self.x, self.y = (self.parent.x + self.parent.size[0] // 2, self.parent.y + self.parent.size[1] // 2)
         self.health = 10
         self.xp = 0
