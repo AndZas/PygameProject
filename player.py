@@ -1,4 +1,3 @@
-from read_files import read_settings
 from bullets import *
 from hud import *
 from ui import *
@@ -76,7 +75,7 @@ class Player:
                 self.y += self.speed
         self.pos = self.x, self.y
 
-    def playerGetDamage(self, enemyPos, screen, killedEnemys):
+    def playerGetDamage(self, enemyPos, screen, killedEnemys, damage1):
         if self.getDamageKd >= 240:
 
             sound = r'sounds\Damage.wav'
@@ -86,7 +85,7 @@ class Player:
 
             self.image = self.getDamageImage
             startPos = self.pos
-            self.health -= 1
+            self.health -= damage1
             self.getDamageKd = 0
             vector = self.x - enemyPos[0], self.y - enemyPos[1]
             self.x += round(vector[0] * 2, 2)
