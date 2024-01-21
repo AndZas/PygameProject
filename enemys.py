@@ -234,14 +234,10 @@ def updateEnemys(screen):
     if killedEnemys == to_next_lvl:
         dump_settings(1)
         killedEnemys = 0
-        r = True
-        while r:
-            for event in pygame.event.get():
-                if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
-                    r = False
-            Text((0, screen.screen.get_height() // 2), 40, f'Level: {lvl + 1}', center_x=True,
-                 color=pygame.Color('white')).render(screen.screen)
-            pygame.display.update()
+        Text((0, screen.screen.get_height() // 2), 40, f'Level: {lvl + 1}', center_x=True,
+             color=pygame.Color('white')).render(screen.screen)
+        pygame.display.update()
+        sleep(1)
         update_level()
         screen.parent.buttonsPressed = []
 
