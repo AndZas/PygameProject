@@ -3,7 +3,7 @@ import sys
 import pygame
 from widgets import Text, Level, Slider, SwitchButton, Image
 import json
-from read_files import read_json_file, dump_json_file, read_money, dump_money
+from read_files import read_json_file, dump_json_file, read_money_and_health, dump_money_and_health
 
 # from player import Player
 
@@ -96,7 +96,6 @@ class StartWindow:
             self.play_game = True
             pygame.time.delay(100)
             self.open_level_menu()
-            play = True
         elif self.pos_settings[0] < x < self.pos_settings[0] + self.settings_w and \
                 self.pos_settings[1] < y < self.pos_settings[1] + self.settings_h:
             self.open_menu_settings()
@@ -133,11 +132,13 @@ class StartWindow:
         while run2:
             for event in pygame.event.get():
                 if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE or menu.lvl is not None:
-                    lvl = menu.lvl
                     run2 = False
+                    if menu.lvl is not None:
+                        lvl = menu.lvl
             menu.run()
             pygame.display.flip()
             clock.tick(60)
+        print(lvl)
 
 
 class EndWindow():
@@ -252,14 +253,14 @@ class SpaceWindow():
 
     def read_json(self):
         data = read_json_file()
-        self.money = read_money()
+        self.money = read_money_and_health()[0]
         print(self.money)
-        self.player_speed, self.player_hp, self.player_wall_punch = data[0]
+        self.player_speed, self.player_wall_punch = data[0]
+        self.player_hp = read_money_and_health()[1]
         self.speed_price, self.hp_price, self.wall_punch_price = data[1]
 
     def run(self):
         self.screen.fill("black")
-
         avr_sc_w = self.screen.get_width() // 2
         avr_w = self.w // 2
 
@@ -306,15 +307,16 @@ class SpaceWindow():
                 self.wall_punch_price *= 2
 
         pygame.time.delay(300)
-        dct = {"Player": {"speed": self.player_speed, "hp": self.player_hp, "wall punch": self.player_wall_punch},
-               "Prices": {"speed": self.speed_price, "hp": self.hp_price, "wall punch": self.wall_punch_price}}
+        dct = {
+            "Player": {"speed": self.player_speed, "wall punch": self.player_wall_punch},
+            "Prices": {"speed": self.speed_price, "hp": self.hp_price, "wall punch": self.wall_punch_price}}
         dump_json_file(dct)
-        dump_money(money=self.money)
+        dump_money_and_health(money=self.money, health=min(10, self.player_hp))
+        self.read_json()
         self.run()
 
 
 running = True
-play = False
 
 
 def main1():
@@ -328,14 +330,14 @@ def main1():
         screen.fill((0, 0, 0))
         for event in pygame.event.get():
             pos = pygame.mouse.get_pos()
-            if event.type == pygame.QUIT or play is True:
+            if event.type == pygame.QUIT or lvl is not None:
                 running = False
             elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
                 w.click(pos)
         w.draw()
         clock.tick(60)
         pygame.display.flip()
-    if play:
+    if lvl:
         from cycle import App
         app = App()
         app.Run()
@@ -360,5 +362,5 @@ def main2(coins, time, bullets, enemys, parent):
 
 if __name__ == '__main__':
     dump_json_file()
-    dump_money(0)
+    dump_money_and_health(0, 10)
     main1()

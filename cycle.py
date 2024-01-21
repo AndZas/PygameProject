@@ -19,13 +19,14 @@ class App:
                 self.run = False
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE:
-                    xp = self.screen.player.xp
-                    app = SpaceWindow(self.screen.screen, money=xp)
+                    app = SpaceWindow(self.screen.screen)
                     running3 = True
                     while running3:
                         for event2 in pygame.event.get():
                             if event2.type == pygame.KEYDOWN and event2.key == pygame.K_SPACE:
                                 running3 = False
+                            elif event2.type == pygame.MOUSEBUTTONDOWN and event2.button == 1:
+                                app.click()
                         app.run()
                         pygame.display.update()
                         self.screen.window.position = (self.screen.monResolution[0] // 2 - 600 // 2,
@@ -44,6 +45,7 @@ class App:
         # Основной цикл
         while self.run:
             self.checkEvents()
+
             self.screen.player.move(self.buttonsPressed)
             self.screen.player.update()
             self.screen.player.bullets.update()
@@ -53,9 +55,7 @@ class App:
             self.screen.health.update(self.screen.player.health, self.screen.player.maxHealth, hide_HUD_on_off)
             updateEnemys(self.screen)
             updateParticlesXP(self.screen.player)
-            updateParticlesShoot()
-            updateParticlesDamage()
-            updateParticlesKilled()
+            updateParticles()
             self.screen.update()
 
     def clear(self):
@@ -68,6 +68,8 @@ class App:
         self.screen.player.bullets.clear()
         clearEnemies()
         clearParticles()
+        dump_money_and_health(0, 10)
+        dump_json_file()
 
 
 if __name__ == '__main__':

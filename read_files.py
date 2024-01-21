@@ -17,25 +17,25 @@ def read_json_file():
     profile_player = data['Player']
     prices = data['Prices']
 
-    player_speed, player_hp, player_wall_punch = profile_player.values()
+    player_speed, player_wall_punch = profile_player.values()
     speed_price, hp_price, wall_punch_price = prices.values()
-    return [player_speed, player_hp, player_wall_punch], [speed_price, hp_price, wall_punch_price]
+    return [player_speed, player_wall_punch], [speed_price, hp_price, wall_punch_price]
 
 
 def dump_json_file(dct=None):
     if dct is None:
-        dct = {"Player": {"speed": 0.75, "hp": 10, "wall punch": 30},
+        dct = {"Player": {"speed": 0.75, "wall punch": 30},
                "Prices": {"speed": 10, "hp": 10, "wall punch": 10}}
     with open('prices_and_player.json', 'w') as file:
         json.dump(dct, file, ensure_ascii=False, indent=4)
 
 
-def read_money():
-    with open('money_') as file:
-        data = int(file.read())
-    return data
+def read_money_and_health():
+    with open('money_health') as file:
+        money, health = map(int, file.read().split(';'))
+    return money, health
 
 
-def dump_money(money):
-    with open('money_', 'w') as file:
-        file.write(str(money))
+def dump_money_and_health(money, health):
+    with open('money_health', 'w') as file:
+        file.write(str(money) + ';' + str(health))
