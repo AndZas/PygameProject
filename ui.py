@@ -8,6 +8,7 @@ sounds_effect = None
 off_sound = 1
 in_tamer_on_off = False
 hide_HUD_on_off = True
+lvl = None
 
 
 class StartWindow:
@@ -84,7 +85,7 @@ class StartWindow:
         with open('settings', 'w') as file:  # добавить лвл
             file.write(f'{sounds_effect if sounds_effect is not None else 0.5};'
                        f'{music_volume if music_volume is not None else 0.5};'
-                       f'{in_tamer_on_off};{hide_HUD_on_off}')
+                       f'{in_tamer_on_off};{hide_HUD_on_off};{lvl}')
 
     def click(self, mouse_pos):
         global off_sound, music_volume, sounds_effect, play
@@ -93,7 +94,7 @@ class StartWindow:
             1] + self.play_h:
             self.play_game = True
             pygame.time.delay(100)
-            # self.open_level_menu()
+            self.open_level_menu()
             play = True
         elif self.pos_settings[0] < x < self.pos_settings[0] + self.settings_w and \
                 self.pos_settings[1] < y < self.pos_settings[1] + self.settings_h:
@@ -124,12 +125,14 @@ class StartWindow:
             clock.tick(60)
 
     def open_level_menu(self):
+        global lvl
         menu = LevelsMenu(self.screen)
         run2 = True
         clock = pygame.time.Clock()
         while run2:
             for event in pygame.event.get():
-                if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
+                if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE or menu.lvl is not None:
+                    lvl = menu.lvl
                     run2 = False
             menu.run()
             pygame.display.flip()
@@ -215,6 +218,28 @@ class MenuSettings:
                         slider.working = True
                     pygame.time.delay(100)
                 slider.render(self.screen)
+
+
+class LevelsMenu():
+    def __init__(self, screen):
+        self.screen = screen
+        self.levels = [Level((110, 100), (100, 100), '0'), Level((240, 100), (100, 100), '1'),
+                       Level((370, 100), (100, 100), '2'), Level((110, 230), (100, 100), '3'),
+                       Level((240, 230), (100, 100), '4'), Level((370, 230), (100, 100), '5')]
+        self.text = Text((screen.get_width() // 2 - 220 // 2, 10), 65, 'Levels')
+        self.lvl = None
+
+    def run(self):
+        self.screen.fill("black")
+        self.text.render(self.screen)
+        mouse_pos = pygame.mouse.get_pos()
+        mouse = pygame.mouse.get_pressed()
+        for level in self.levels:
+            if level.container_rect.collidepoint(mouse_pos):
+                if mouse[0]:
+                    self.lvl = level.get_level()
+                    pygame.time.delay(300)
+            level.render(self.screen)
 
 
 running = True

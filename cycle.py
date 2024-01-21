@@ -28,15 +28,12 @@ class App:
 
     def Run(self):
         # Основной цикл
-        # sound = r'sounds\fon_music_2.wav'
-        # pygame.mixer.Sound(sound).play(0, -1, False)
-        # pygame.
         while self.run:
             self.checkEvents()
             self.screen.player.move(self.buttonsPressed)
             self.screen.player.update()
             self.screen.player.bullets.update()
-            in_tamer_on_off, hide_HUD_on_off = read_settings()[2:]
+            in_tamer_on_off, hide_HUD_on_off = read_settings()[2:4]
             self.screen.timer.update(in_tamer_on_off)
             self.screen.player.coins.update(hide_HUD_on_off)
             self.screen.health.update(self.screen.player.health, self.screen.player.maxHealth, hide_HUD_on_off)

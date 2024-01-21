@@ -1,6 +1,21 @@
-import pygame.draw
+import sys
 
+import pygame.draw
 from particles import *
+import sqlite3
+# from ui import
+lvl = read_settings()[-1]
+con = sqlite3.connect("Levels")
+cur = con.cursor()
+result = cur.execute(f"SELECT * FROM Levels WHERE Number = '{lvl}'").fetchall()
+con.close()
+
+enemies = result[0][1].split(', ')
+
+speed_koeff = result[0][2]
+damage_koeff = result[0][3]
+health_koeff = result[0][4]
+to_next_lvl = result[0][5]
 
 koeff = 10
 createKD = 1.7 * 480
@@ -12,9 +27,9 @@ killedEnemys = 0
 class Rect:
     def __init__(self, ParentScreen, hp=4, speed=0.25, damage=1):
         self.parent = ParentScreen
-        self.hp = hp
-        self.speed = speed
-        self.damage = damage
+        self.hp = hp * health_koeff
+        self.speed = speed * speed_koeff
+        self.damage = damage * damage_koeff
         self.color = pygame.Color('green')
         self.size = 40
         self.xp = {1: 2, 2: 1}
@@ -43,13 +58,16 @@ class Rect:
                          (self.pos[0] - self.size // 2 - self.parent.x, self.pos[1] - self.size // 2 - self.parent.y,
                           self.size, self.size), 4)
 
+    def __str__(self):
+        return 'Rect'
+
 
 class Circle:
     def __init__(self, parentScreen, hp=2, speed=1, damage=1):
         self.parent = parentScreen
-        self.hp = hp
-        self.speed = speed
-        self.damage = damage
+        self.hp = hp * health_koeff
+        self.speed = speed * speed_koeff
+        self.damage = damage * damage_koeff
         self.size = 20
         self.xp = {1: 3, 2: 1}
         self.pos = self.x, self.y = (random.randint(0, self.parent.monResolution[0]),
@@ -78,13 +96,16 @@ class Circle:
         screen.blit(self.image,
                     (self.pos[0] - self.size // 2 - self.parent.x, self.pos[1] - self.size // 2 - self.parent.y))
 
+    def __str__(self):
+        return 'Circle'
+
 
 class Triangle:
     def __init__(self, parentScreen, hp=3, speed=0.5, damage=1):
         self.parent = parentScreen
-        self.hp = hp
-        self.speed = speed
-        self.damage = damage
+        self.hp = hp * health_koeff
+        self.speed = speed * speed_koeff
+        self.damage = damage * damage_koeff
         self.size = 40
         self.xp = {1: 3}
         self.pos = self.x, self.y = (random.randint(0, self.parent.monResolution[0]),
@@ -115,13 +136,16 @@ class Triangle:
         screen.blit(pygame.transform.rotate(self.image, self.angle),
                     (self.pos[0] - self.size // 2 - self.parent.x, self.pos[1] - self.size // 2 - self.parent.y))
 
+    def __str__(self):
+        return 'Triangle'
+
 
 class Octagon:
     def __init__(self, parentScreen, hp=15, speed=0.125, damage=1):
         self.parent = parentScreen
-        self.hp = hp
-        self.speed = speed
-        self.damage = damage
+        self.hp = hp * health_koeff
+        self.speed = speed * speed_koeff
+        self.damage = damage * damage_koeff
         self.color = pygame.Color('darkgrey')
         self.size = 50
         self.xp = {1: 3, 2: 2, 3: 1}
@@ -157,12 +181,20 @@ class Octagon:
                            (self.x - self.size // 4 - self.parent.x, self.y + self.size // 2 - self.parent.y),
                            (self.x - self.size // 2 - self.parent.x, self.y + self.size // 4 - self.parent.y)], 4)
 
+    def __str__(self):
+        return 'Octagon'
+
 
 def updateEnemys(screen):
     global time, createKD, koeff, killedEnemys
+    lst = [Rect(screen), Triangle(screen), Circle(screen), Octagon(screen)]
+    choice = []
+    for i in range(len(lst)):
+        if str(lst[i]) in enemies:
+            choice.append(lst[i])
     if time >= createKD:
         time = 0
-        enemys.append(random.choice([Rect(screen), Triangle(screen), Circle(screen), Octagon(screen)]))
+        enemys.append(random.choice(choice))
     else:
         time += 1.7
     for enemy in enemys:
@@ -177,6 +209,9 @@ def updateEnemys(screen):
                     createParticlesXP(enemy.rect, enemy.xp, enemy.parent)
                     enemys.remove(enemy)
                     koeff -= 1
+
+    if killedEnemys == to_next_lvl:
+        print('Next level')
 
 
 def drawEnemys(screen):
