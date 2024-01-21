@@ -1,11 +1,11 @@
 {
     "Player": {
-        "speed": 0.75,
-        "wall punch": 30
+        "speed": 1.25,
+        "wall punch": 40
     },
     "Prices": {
-        "speed": 10,
-        "hp": 10,
-        "wall punch": 10
+        "speed": 40,
+        "hp": 40,
+        "wall punch": 20
     }
 }

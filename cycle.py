@@ -32,6 +32,7 @@ class App:
                         self.screen.window.position = (self.screen.monResolution[0] // 2 - 600 // 2,
                                                        self.screen.monResolution[1] // 2 - 400 // 2)
                         self.screen.window.size = (600, 400)
+                    self.buttonsPressed = []
                 else:
                     self.buttonsPressed.append(event.key)
             if event.type == pygame.KEYUP:
@@ -45,7 +46,6 @@ class App:
         # Основной цикл
         while self.run:
             self.checkEvents()
-
             self.screen.player.move(self.buttonsPressed)
             self.screen.player.update()
             self.screen.player.bullets.update()
