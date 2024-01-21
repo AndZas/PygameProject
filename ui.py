@@ -5,6 +5,8 @@ from widgets import Text, Level, Slider, SwitchButton, Image
 import json
 from read_files import read_json_file, dump_json_file, read_money_and_health, dump_money_and_health
 
+# from player import Player
+
 music_volume = None
 sounds_effect = None
 off_sound = 1
@@ -138,7 +140,6 @@ class StartWindow:
             menu.run()
             pygame.display.flip()
             clock.tick(60)
-        print(lvl)
 
 
 class EndWindow():
@@ -254,7 +255,6 @@ class SpaceWindow():
     def read_json(self):
         data = read_json_file()
         self.money = read_money_and_health()[0]
-        print(self.money)
         self.player_speed, self.player_wall_punch = data[0]
         self.player_hp = read_money_and_health()[1]
         self.speed_price, self.hp_price, self.wall_punch_price = data[1]
@@ -337,7 +337,7 @@ def main1():
         w.draw()
         clock.tick(60)
         pygame.display.flip()
-    if lvl:
+    if lvl is not None:
         from cycle import App
         app = App()
         app.Run()
