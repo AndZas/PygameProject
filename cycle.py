@@ -5,6 +5,7 @@ from ui import StartWindow
 from read_files import read_settings
 
 
+
 class App:
     def __init__(self):
         self.buttonsPressed = []
@@ -43,6 +44,7 @@ class App:
             updateParticlesXP(self.screen.player)
             updateParticlesShoot()
             updateParticlesDamage()
+            updateParticlesKilled()
             self.screen.update()
 
     def clear(self):

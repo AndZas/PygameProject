@@ -6,6 +6,7 @@ import pygame
 particlesXP = []
 particlesShoot = []
 particlesDamage = []
+particlesKilled = []
 
 
 class ParticleXp:
@@ -185,8 +186,53 @@ def updateParticlesDamage():
         particle.update()
 
 
+class ParticleKilled:
+    def __init__(self, startPos, endPos, color, screen):
+        self.way = 0
+        self.screen = screen
+        self.startPos = startPos
+        self.endPos = endPos
+        self.pos = self.startPos
+        self.speed = random.uniform(0.5, 1)
+        self.size = random.randint(1, 3)
+        self.color = color
+
+        # Расчет вектора
+        vect = (endPos[0] - startPos[0], endPos[1] - startPos[1])
+        vectLen = math.sqrt(vect[0] ** 2 + vect[1] ** 2)
+        a = vectLen / self.speed
+        self.resVect = (round(vect[0] / a, 5), round(vect[1] / a, 5))
+
+    def draw(self, screen):
+        pygame.draw.circle(screen, self.color, (self.pos[0] - self.screen.x, self.pos[1] - self.screen.y), self.size)
+
+    def update(self):
+        self.way += 1
+        self.pos = (self.pos[0] + self.resVect[0], self.pos[1] + self.resVect[1])
+        if self.way >= 120:
+            particlesKilled.remove(self)
+
+
+def createParticlesKilled(startPos, ParentScreen, color, size):
+    for i in range(random.randint(3, 8)):
+        endPos = (random.randint(int(startPos[0]) - size // 2, int(startPos[0]) + size // 2),
+                  random.randint(int(startPos[1]) - size // 2, int(startPos[1]) + size // 2))
+        particlesKilled.append(ParticleKilled(startPos, (int(endPos[0]), int(endPos[1])), color, ParentScreen))
+
+
+def drawParticlesKilled(screen):
+    for particle in particlesKilled:
+        particle.draw(screen)
+
+
+def updateParticlesKilled():
+    for particle in particlesKilled:
+        particle.update()
+
+
 def clearParticles():
-    global particlesDamage, particlesShoot, particlesXP
+    global particlesDamage, particlesShoot, particlesXP, particlesKilled
     particlesShoot = []
     particlesDamage = []
     particlesXP = []
+    particlesKilled = []

@@ -50,6 +50,7 @@ class Screen:
         drawParticlesXP(self.screen)
         drawParticlesShoot(self.screen)
         drawParticlesDamage(self.screen)
+        drawParticlesKilled(self.screen)
         drawEnemys(self.screen)
         self.player.draw()
         self.timer.draw(self)
@@ -79,8 +80,8 @@ class Screen:
             if self.status == 'none':
                 self.height -= 0.125
                 self.y += 0.0625
-        self.pos = self.x, self.y
-        self.size = self.width, self.height
+        self.pos = int(self.x), int(self.y)
+        self.size = int(self.width), int(self.height)
         self.window.size = self.size
         self.window.position = self.pos
         if self.status != 'none':
@@ -119,8 +120,8 @@ class Screen:
                 self.height += 30 * max((1 - ((self.y + self.size[1] + 50) - self.monResolution[1] + 150) / 150), 0)
             else:
                 self.height += 30
-        self.size = self.width, self.height
-        self.pos = self.x, self.y
+        self.size = int(self.width), int(self.height)
+        self.pos = int(self.x), int(self.y)
         self.window.size = self.size
         self.window.position = self.pos
 

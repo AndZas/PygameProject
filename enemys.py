@@ -52,6 +52,7 @@ class Circle:
                                      random.randint(0, self.parent.monResolution[1]))
         self.rect = pygame.Rect(self.pos[0] - self.size // 2, self.pos[1] - self.size // 2, self.size, self.size)
         self.image = pygame.transform.scale(pygame.image.load('images/Textures/Circle.png'), (self.size, self.size))
+        self.color = pygame.Color('aqua')
 
     def update(self, player):
         vector = player.pos[0] - self.pos[0], player.pos[1] - self.pos[1]
@@ -83,6 +84,7 @@ class Triangle:
         self.rect = pygame.Rect(self.pos[0] - self.size // 2, self.pos[1] - self.size // 2, self.size, self.size)
         self.angle = 0
         self.image = pygame.transform.scale(pygame.image.load('images/Textures/Triangle.png'), (self.size, self.size))
+        self.color = pygame.Color('yellow')
 
     def update(self, player):
         self.angle += 0.1
@@ -155,6 +157,7 @@ def updateEnemys(screen):
                 enemy.hp -= bullet.damage
                 if enemy.hp <= 0:
                     killedEnemys += 1
+                    createParticlesKilled(enemy.pos, screen, enemy.color, enemy.size)
                     createParticlesXP(enemy.rect, enemy.xp, enemy.parent)
                     enemys.remove(enemy)
                     koeff -= 1
