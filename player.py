@@ -11,6 +11,7 @@ class Player:
         self.size = 40
         self.speed = 0.75
         self.health = 10
+        self.give_damage = 1
         self.maxHealth = 10
         self.xp = 0
         self.wallBunching = 30
