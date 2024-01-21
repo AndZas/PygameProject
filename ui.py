@@ -242,6 +242,16 @@ class LevelsMenu():
             level.render(self.screen)
 
 
+class SpaceWindow():
+    def __init__(self, screen, money):
+        self.screen = screen
+        self.money = money
+
+
+    def run(self):
+        self.screen.fill("black")
+
+
 running = True
 play = False
 

@@ -1,9 +1,8 @@
 import pygame.event
 
 from screen import *
-from ui import StartWindow
+from ui import StartWindow, SpaceWindow
 from read_files import read_settings
-
 
 
 class App:
@@ -19,9 +18,24 @@ class App:
             if event.type == pygame.QUIT:
                 self.run = False
             if event.type == pygame.KEYDOWN:
-                self.buttonsPressed.append(event.key)
+                if event.key == pygame.K_SPACE:
+                    xp = self.screen.player.xp
+                    app = SpaceWindow(self.screen.screen, money=xp)
+                    running3 = True
+                    while running3:
+                        for event2 in pygame.event.get():
+                            if event2.type == pygame.KEYDOWN and event2.key == pygame.K_SPACE:
+                                running3 = False
+                        app.run()
+                        pygame.display.update()
+                        self.screen.window.position = (self.screen.monResolution[0] // 2 - 600 // 2,
+                                                       self.screen.monResolution[1] // 2 - 400 // 2)
+                        self.screen.window.size = (600, 400)
+                else:
+                    self.buttonsPressed.append(event.key)
             if event.type == pygame.KEYUP:
-                self.buttonsPressed.remove(event.key)
+                if event.key != pygame.K_SPACE:
+                    self.buttonsPressed.remove(event.key)
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 1:
                     self.screen.player.bullets.shoot(pygame.mouse.get_pos())

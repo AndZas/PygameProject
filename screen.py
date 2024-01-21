@@ -26,7 +26,7 @@ class Screen:
         pygame.display.set_icon(self.image)
         self.clock = pygame.time.Clock()
         self.window = Window.from_display_module()
-
+        # self.window = (600, 300)
         # Экземпляры классов
         self.player = Player(self)
         self.timer = Timer()
