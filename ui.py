@@ -1,11 +1,7 @@
-import os
 import sys
 import pygame
 from widgets import Text, Level, Slider, SwitchButton, Image
-import json
 from read_files import read_json_file, dump_json_file, read_money_and_health, dump_money_and_health
-
-# from player import Player
 
 music_volume = None
 sounds_effect = None
@@ -53,7 +49,6 @@ class StartWindow:
         self.on_off_volume_fon_music()
 
         # Надпись WindowKill
-        # text = Text((0, ))
         font = pygame.font.Font('Font/Comfortaa-VariableFont_wght.ttf', 70)
         text = font.render("WindowKill", 1, (255, 255, 255))
         text_x = self.screen.get_width() // 2 - text.get_width() // 2
@@ -72,7 +67,6 @@ class StartWindow:
 
         # Кнопка динамика
         if off_sound == 1:
-            # dynamic = pygame.transform.scale(pygame.image.load(path + '\dynamic.png'), (self.dynamic_w, self.dynamic_h))
             dynamic = Image(path + '/dynamic.png', (self.dynamic_w, self.dynamic_h), (self.pos_dynamic))
         else:
             dynamic = Image(path + r'/off_dynamic.png', (self.dynamic_w, self.dynamic_h), (self.pos_dynamic))

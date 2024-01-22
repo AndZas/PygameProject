@@ -1,7 +1,7 @@
 import pygame.event
 
 from screen import *
-from ui import StartWindow, SpaceWindow
+from ui import SpaceWindow
 from read_files import read_settings
 
 
@@ -11,6 +11,7 @@ class App:
         self.run = True
 
         self.screen = Screen(self)
+
     def checkEvents(self):
         # Проверка событий
         for event in pygame.event.get():
