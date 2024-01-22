@@ -40,6 +40,7 @@ class ParticleXp:
 
             player.xp += self.size
             dump_money_and_health(player.xp, temp[1])
+            player.xp_for_end += self.size
             player.coins.count += self.size
             particlesXP.remove(self)
         elif a <= self.playerDistance:

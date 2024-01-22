@@ -36,7 +36,8 @@ class App:
                     self.buttonsPressed.append(event.key)
             if event.type == pygame.KEYUP:
                 if event.key != pygame.K_SPACE:
-                    self.buttonsPressed.remove(event.key)
+                    if event.key in self.buttonsPressed:
+                        self.buttonsPressed.remove(event.key)
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 1:
                     self.screen.player.bullets.shoot(pygame.mouse.get_pos())

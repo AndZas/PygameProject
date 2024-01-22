@@ -16,7 +16,7 @@ class Player:
         self.damage = 1
         self.maxHealth = 10
         self.xp = read_money_and_health()[0]
-
+        self.xp_for_end = 0
         # Изображения
         self.afkImage = pygame.image.load('images/Textures/Player.png')
         self.getDamageImage = pygame.image.load('images/Textures/Player_GetDamage.png')
@@ -95,7 +95,8 @@ class Player:
             self.pos = self.x, self.y
             createParticlesDamage(startPos, self.pos, self.parent)
             if self.health <= 0:
-                main2(self.xp, screen.timer.time * 10, self.bullets.shootedBullets, killedEnemys, self.parent.parent)
+                main2(self.xp_for_end, screen.timer.time * 10, self.bullets.shootedBullets, killedEnemys,
+                      self.parent.parent)
 
     def update(self):
         # Обновление позиций игрока

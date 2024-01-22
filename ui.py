@@ -31,10 +31,10 @@ class StartWindow:
 
         self.play_background_music()
         pygame.display.set_caption('WindowKill')
-        pygame.display.set_icon(pygame.image.load('images/Textures/Player.png'))
+        pygame.display.set_icon(pygame.image.load(r'images/Textures/Player.png'))
 
     def play_background_music(self):
-        bg_music_file = r'sounds\fon_music_2.wav'
+        bg_music_file = r'sounds/fon_music_2.wav'
         self.bg_music = pygame.mixer.Sound(bg_music_file)
         self.bg_music.play(-1, -1, False)
 
@@ -47,14 +47,14 @@ class StartWindow:
             self.bg_music.set_volume(music_volume)
 
     def draw(self):
-        path = 'images\StartWindow'
+        path = 'images/StartWindow'
 
         # Корректируем громкость
         self.on_off_volume_fon_music()
 
         # Надпись WindowKill
         # text = Text((0, ))
-        font = pygame.font.Font('Font\Comfortaa-VariableFont_wght.ttf', 70)
+        font = pygame.font.Font('Font/Comfortaa-VariableFont_wght.ttf', 70)
         text = font.render("WindowKill", 1, (255, 255, 255))
         text_x = self.screen.get_width() // 2 - text.get_width() // 2
         text_y = self.screen.get_height() // 2 - text.get_height() // 2 - self.play_h - 10
@@ -62,27 +62,27 @@ class StartWindow:
 
         # Кнопка play
         x, y = self.screen.get_width() // 2 - self.play_w // 2, self.screen.get_height() // 2 - self.play_h // 2 + 40
-        play = Image(path + '\play_button.png', (self.play_w, self.play_h), (x, y))
+        play = Image(path + '/play_button.png', (self.play_w, self.play_h), (x, y))
         self.pos_play = [x, y, self.play_w, self.play_h]
         play.render(self.screen)
 
         # Кнопка настроек
-        settings = Image(path + '\settings_4.png', (self.settings_w, self.settings_h), (self.pos_settings))
+        settings = Image(path + '/settings_4.png', (self.settings_w, self.settings_h), (self.pos_settings))
         settings.render(self.screen)
 
         # Кнопка динамика
         if off_sound == 1:
             # dynamic = pygame.transform.scale(pygame.image.load(path + '\dynamic.png'), (self.dynamic_w, self.dynamic_h))
-            dynamic = Image(path + '\dynamic.png', (self.dynamic_w, self.dynamic_h), (self.pos_dynamic))
+            dynamic = Image(path + '/dynamic.png', (self.dynamic_w, self.dynamic_h), (self.pos_dynamic))
         else:
-            dynamic = Image(path + r'\off_dynamic.png', (self.dynamic_w, self.dynamic_h), (self.pos_dynamic))
+            dynamic = Image(path + r'/off_dynamic.png', (self.dynamic_w, self.dynamic_h), (self.pos_dynamic))
 
         dynamic.render(self.screen)  # левый верхний угол в точке 50 10
 
         # Кнопка двери
         self.pos_door = [10, self.screen.get_height() - 40]
         x, y = self.pos_door
-        door = Image(path + '\go_out.png', (self.door_w, self.door_h), (x, y))
+        door = Image(path + '/go_out.png', (self.door_w, self.door_h), (x, y))
         door.render(self.screen)
 
         with open('settings', 'w') as file:  # добавить лвл
@@ -268,20 +268,20 @@ class SpaceWindow():
         Text((avr_sc_w + 10, 35), 30, text=str(self.money), color=pygame.Color('Purple')).render(self.screen)
 
         x, y = avr_sc_w - avr_w - avr_w * 2 - 20, self.screen.get_height() // 2 - self.h // 2
-        self.speed = Image('images\BuyMenuWindow\speed_img.png', (self.w, self.h), (x, y))
+        self.speed = Image('images/BuyMenuWindow/speed_img.png', (self.w, self.h), (x, y))
         self.speed.render(self.screen)
         pygame.draw.circle(self.screen, pygame.Color('Purple'), (avr_sc_w - avr_w * 2 - 30, 293), 5)
         Text((avr_sc_w - avr_w * 2 - 20, 280), 25, text=str(self.speed_price), color=pygame.Color('Purple')).render(
             self.screen)
 
         x, y = avr_sc_w - avr_w, self.screen.get_height() // 2 - self.h // 2
-        self.heal = Image('images\BuyMenuWindow\heal_img.png', (self.w, self.h), (x, y))
+        self.heal = Image('images/BuyMenuWindow/heal_img.png', (self.w, self.h), (x, y))
         self.heal.render(self.screen)
         pygame.draw.circle(self.screen, pygame.Color('Purple'), (avr_sc_w - 20, 293), 5)
         Text((0, 280), 25, text=str(self.hp_price), color=pygame.Color('Purple'), center_x=True).render(self.screen)
 
         x, y = avr_sc_w - avr_w + avr_w * 2 + 20, self.screen.get_height() // 2 - self.h // 2
-        self.wall_punch = Image('images\BuyMenuWindow\wall_punch.png', (self.w, self.h), (x, y))
+        self.wall_punch = Image('images/BuyMenuWindow/wall_punch.png', (self.w, self.h), (x, y))
         self.wall_punch.render(self.screen)
         pygame.draw.circle(self.screen, pygame.Color('Purple'), (avr_sc_w + avr_w * 2 + 11, 293), 5)
         Text((avr_sc_w + avr_w * 2 + 20, 280), 25, text=str(self.wall_punch_price),

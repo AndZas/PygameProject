@@ -234,6 +234,7 @@ def updateEnemys(screen):
     if killedEnemys == to_next_lvl:
         dump_settings(1)
         killedEnemys = 0
+        print(killedEnemys_for_end)
         Text((0, screen.screen.get_height() // 2), 40, f'Level: {lvl + 1}', center_x=True,
              color=pygame.Color('white')).render(screen.screen)
         pygame.display.update()
