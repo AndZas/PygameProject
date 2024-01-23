@@ -68,9 +68,9 @@ class Health:
             screen.screen.blit(text, (screen.size[0] - text.get_width() - 5, 7))
 
     # Обновление счетчика здоровья
-    def update(self, hp, maxHp, on):
+    def update(self, hp, max_hp, on):
         self.count = hp
-        self.max = maxHp
+        self.max = max_hp
         self.on = on
 
     # Очистка счетчика здоровья

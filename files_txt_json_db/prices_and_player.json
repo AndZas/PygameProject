@@ -1,0 +1,11 @@
+{
+    "Player": {
+        "speed": 0.75,
+        "wall punch": 30
+    },
+    "Prices": {
+        "speed": 10,
+        "hp": 10,
+        "wall punch": 10
+    }
+}

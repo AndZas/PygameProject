@@ -4,17 +4,17 @@ from read_files import read_settings
 
 # Класс одной пули
 class Bullet:
-    def __init__(self, PlayerPos, MousePos, parent):
+    def __init__(self, player_pos, mouse_pos, parent):
         self.parent = parent
         self.speed = 2.5
         self.damage = self.parent.damage
-        self.pos = PlayerPos
+        self.pos = player_pos
         self.size = 2
         self.color = pygame.Color('white')
 
         # Расчет вектора движения пули
-        vect = (
-            MousePos[0] - (PlayerPos[0] - self.parent.parent.x), MousePos[1] - (PlayerPos[1] - self.parent.parent.y))
+        vect = (mouse_pos[0] - (player_pos[0] - self.parent.parent.x),
+                mouse_pos[1] - (player_pos[1] - self.parent.parent.y))
         vectLen = math.sqrt(vect[0] ** 2 + vect[1] ** 2)
         self.resVect = (round(vect[0] / (vectLen / self.speed), 2), round(vect[1] / (vectLen / self.speed), 2))
 
@@ -40,10 +40,10 @@ class Bullets:
     def update(self):
         for bullet in self.bullets:
             bullet.update()
-            if bullet.pos[0] - self.parent.parent.x <= 0 or bullet.pos[
-                0] - self.parent.parent.x >= self.parent.parent.size[0] or bullet.pos[
-                1] - self.parent.parent.y <= 0 or bullet.pos[
-                1] - self.parent.parent.y >= self.parent.parent.size[1]:
+            if bullet.pos[0] - self.parent.parent.x <= 0 \
+                    or bullet.pos[0] - self.parent.parent.x >= self.parent.parent.size[0] \
+                    or bullet.pos[1] - self.parent.parent.y <= 0 \
+                    or bullet.pos[1] - self.parent.parent.y >= self.parent.parent.size[1]:
                 if bullet.pos[0] - self.parent.parent.x <= 0:
                     createParticlesShoot(bullet.pos, 'left', self.parent.parent)
                 elif bullet.pos[0] - self.parent.parent.x >= self.parent.parent.size[0]:
@@ -69,8 +69,7 @@ class Bullets:
 
         self.shootedBullets += 1
         self.bullets.append(
-            Bullet((self.parent.pos[0], self.parent.pos[1]),
-                   pos, self.parent))
+            Bullet((self.parent.pos[0], self.parent.pos[1]), pos, self.parent))
 
     # Отрисовка всего списка пуль
     def draw(self):

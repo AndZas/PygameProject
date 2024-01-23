@@ -8,13 +8,23 @@ from player import *
 
 
 # Экран
+def getMonitorResolution():
+    # Возвращает разрешение монитора
+    for monitor in get_monitors():
+        if monitor.is_primary:
+            return monitor.width, monitor.height
+
+
 class Screen:
     def __init__(self, parent=None):
         # Настройки окна
+        self.clear_ = False
+        self.clear_points = False
+        self.flag = True
         self.parent = parent
         self.minSize = (300, 300)
         self.size = self.width, self.height = (500, 500)
-        self.monResolution = self.getMonitorResolution()
+        self.monResolution = getMonitorResolution()
         self.pos = self.x, self.y = (
             self.monResolution[0] // 2 - self.size[0] // 2, self.monResolution[1] // 2 - self.size[1] // 2)
         self.fps = 240
@@ -36,12 +46,6 @@ class Screen:
 
         self.status = 'none'
         self.time = 0
-
-    def getMonitorResolution(self):
-        # Возвращает разрешение монитора
-        for monitor in get_monitors():
-            if monitor.is_primary:
-                return (monitor.width, monitor.height)
 
     def update(self):
         # Обновление экрана каждый кадр

@@ -2,7 +2,7 @@ import pygame
 
 
 # Быстрое создание надписей
-class Text():
+class Text:
     def __init__(self, pos: tuple, size: int, text: str, center_x: bool = False, color: tuple = (255, 255, 255)):
         self.pos = pos
         self.size = size
@@ -17,15 +17,18 @@ class Text():
 
         if self.center_x:
             self.pos = [screen.get_width() // 2 - text.get_width() // 2, self.pos[1]]
-        screen.blit(text, (self.pos))
+        screen.blit(text, self.pos)
 
 
 # Создание плиток уровней
-class Level():
-    def __init__(self, pos: tuple, size: tuple, text=''):
+class Level:
+    def __init__(self, pos: tuple, size: tuple, text='', lvl_done=None):
         self.x, self.y = pos
         self.w, self.h = size
         self.text = text
+        self.color = (0, 255, 0)
+        if int(self.text) < lvl_done:
+            self.color = (181, 230, 29)
         self.container_rect = pygame.Rect(self.x, self.y, self.w, self.h)
 
     def get_level(self):
@@ -34,7 +37,7 @@ class Level():
 
     def render(self, screen):
         # Отрисовка
-        pygame.draw.rect(screen, color='green', rect=self.container_rect)
+        pygame.draw.rect(screen, color=self.color, rect=self.container_rect)
         font = pygame.font.Font(None, 100)
         text = font.render(self.text, 1, (255, 255, 255))
         text_x = self.x + self.w // 2 - text.get_width() // 2
@@ -61,7 +64,7 @@ class SwitchButton:
             img = pygame.transform.scale(pygame.image.load('images\StartWindow\on_btn.png'), (self.w, self.h))
         else:
             img = pygame.transform.scale(pygame.image.load('images\StartWindow\off_btn.png'), (self.w, self.h))
-        screen.blit(img, (self.pos))  # левый верхний угол в точке pos
+        screen.blit(img, self.pos)  # левый верхний угол в точке pos
 
     def get_name(self):
         # Возвращает текст
@@ -73,7 +76,7 @@ class SwitchButton:
 
 # Создание слайдера
 class Slider:
-    def __init__(self, pos: tuple, size: tuple, initial_val: float, min: int, max: int) -> None:
+    def __init__(self, pos: tuple, size: tuple, initial_val: float, min_: int, max_: int) -> None:
         self.pos = pos
         self.size = size
         self.grabbed = False
@@ -82,8 +85,8 @@ class Slider:
         self.slider_right_pos = self.pos[0] + (size[0] // 2)
         self.slider_top_pos = self.pos[1] - (size[1] // 2)
         self.initial_val = initial_val
-        self.min = min
-        self.max = max
+        self.min = min_
+        self.max = max_
         self.initial_val = (self.slider_right_pos - self.slider_left_pos) * initial_val  # <- percentage
 
         self.container_rect = pygame.Rect(self.slider_left_pos - 5, self.slider_top_pos, self.size[0], self.size[1])
@@ -130,8 +133,8 @@ class Slider:
 
 
 # Загрузка изображений
-class Image():
-    def __init__(self, path: str, size: tuple, pos: tuple):
+class Image:
+    def __init__(self, path: str, size: tuple, pos: tuple) -> object:
         self.path = path
         self.w, self.h = size
         self.pos = pos
@@ -140,7 +143,25 @@ class Image():
     def render(self, screen):
         # Отрисовка
         speed = pygame.transform.scale(pygame.image.load(self.path), (self.w, self.h))
-        screen.blit(speed, (self.pos))
+        screen.blit(speed, self.pos)
 
     def __str__(self):
         return 'Image'
+
+
+# Быстрое создание надписей
+class NextLevelNotification:
+    def __init__(self, pos: tuple, size: int, text: str, color: tuple = (255, 255, 255)):
+        self.pos = pos
+        self.size = size
+        self.color = color
+        font = pygame.font.Font('Font\Comfortaa-VariableFont_wght.ttf', self.size)
+        self.text = font.render(text, 1, self.color)
+        self.container_rect = pygame.Rect(pos[0], pos[1], self.text.get_width(), self.text.get_height())
+
+    # Рендер
+    def render(self, screen):
+        screen.blit(self.text, self.container_rect)
+
+    def __str__(self):
+        return 'NextLevelNotification'

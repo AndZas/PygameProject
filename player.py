@@ -75,7 +75,7 @@ class Player:
                 self.y += self.speed
         self.pos = self.x, self.y
 
-    def playerGetDamage(self, enemyPos, screen, killedEnemys, damage1):
+    def playerGetDamage(self, enemy_pos, screen, killed_enemys, damage1):
         # Получение урона игроком
         if self.getDamageKd >= 240:
 
@@ -89,13 +89,13 @@ class Player:
             self.health -= damage1
             dump_money_and_health(read_money_and_health()[0], self.health)
             self.getDamageKd = 0
-            vector = self.x - enemyPos[0], self.y - enemyPos[1]
+            vector = self.x - enemy_pos[0], self.y - enemy_pos[1]
             self.x += round(vector[0] * 2, 2)
             self.y += round(vector[1] * 2, 2)
             self.pos = self.x, self.y
             createParticlesDamage(startPos, self.pos, self.parent)
             if self.health <= 0:
-                main2(self.xp_for_end, screen.timer.time * 10, self.bullets.shootedBullets, killedEnemys,
+                main2(self.xp_for_end, screen.timer.time * 10, self.bullets.shootedBullets, killed_enemys,
                       self.parent.parent)
 
     def update(self):

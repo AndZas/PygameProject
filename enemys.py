@@ -2,8 +2,8 @@ from time import sleep
 import pygame.draw
 from particles import *
 import sqlite3
-from widgets import Text
-from read_files import read_settings, dump_settings
+from widgets import Text, NextLevelNotification
+from read_files import read_settings, read_lvl, dump_lvl
 
 koeff = 10
 createKD = 1.7 * 480
@@ -11,29 +11,18 @@ time = createKD
 enemys = []
 killedEnemys = 0
 killedEnemys_for_end = 0
-
-
-def update_level():
-    global enemies, speed_koeff, speed_koeff, damage_koeff, health_koeff, to_next_lvl, lvl
-    lvl = read_settings()[-1]
-    con = sqlite3.connect("Levels")
-    cur = con.cursor()
-    result = cur.execute(f"SELECT * FROM Levels WHERE Number = '{lvl}'").fetchall()
-    con.close()
-    enemies = result[0][1].split(', ')
-    speed_koeff = result[0][2]
-    damage_koeff = result[0][3]
-    health_koeff = result[0][4]
-    to_next_lvl = result[0][5]
-
-
-update_level()
+enemies = None
+speed_koeff = None
+damage_koeff = None
+health_koeff = None
+to_next_lvl = None
+lvl = None
 
 
 # Прямоугольник
 class Rect:
-    def __init__(self, ParentScreen, hp=4, speed=0.25, damage=1):
-        self.parent = ParentScreen
+    def __init__(self, parent_screen, hp=4, speed=0.25, damage=1):
+        self.parent = parent_screen
         self.hp = hp * health_koeff
         self.speed = speed * speed_koeff
         self.damage = damage * damage_koeff
@@ -42,8 +31,8 @@ class Rect:
         self.xp = {1: 2, 2: 1}
         self.pos = self.x, self.y = (random.randint(0, self.parent.monResolution[0]),
                                      random.randint(0, self.parent.monResolution[1]))
-        while self.parent.x < self.pos[0] < self.parent.x + self.parent.size[0] and self.parent.y < self.pos[
-            1] < self.parent.y + self.parent.size[1]:
+        while self.parent.x < self.pos[0] < self.parent.x + self.parent.size[0] \
+                and self.parent.y < self.pos[1] < self.parent.y + self.parent.size[1]:
             self.pos = self.x, self.y = (random.randint(0, self.parent.monResolution[0]),
                                          random.randint(0, self.parent.monResolution[1]))
         self.rect = pygame.Rect(self.pos[0] - self.size // 2, self.pos[1] - self.size // 2, self.size, self.size)
@@ -73,8 +62,8 @@ class Rect:
 
 # Круг
 class Circle:
-    def __init__(self, parentScreen, hp=2, speed=1, damage=1):
-        self.parent = parentScreen
+    def __init__(self, parent_screen, hp=2, speed=1, damage=1):
+        self.parent = parent_screen
         self.hp = hp * health_koeff
         self.speed = speed * speed_koeff
         self.damage = damage * damage_koeff
@@ -82,8 +71,8 @@ class Circle:
         self.xp = {1: 3, 2: 1}
         self.pos = self.x, self.y = (random.randint(0, self.parent.monResolution[0]),
                                      random.randint(0, self.parent.monResolution[1]))
-        while self.parent.x < self.pos[0] < self.parent.x + self.parent.size[0] and self.parent.y < self.pos[
-            1] < self.parent.y + self.parent.size[1]:
+        while self.parent.x < self.pos[0] < self.parent.x + self.parent.size[0] \
+                and self.parent.y < self.pos[1] < self.parent.y + self.parent.size[1]:
             self.pos = self.x, self.y = (random.randint(0, self.parent.monResolution[0]),
                                          random.randint(0, self.parent.monResolution[1]))
         self.rect = pygame.Rect(self.pos[0] - self.size // 2, self.pos[1] - self.size // 2, self.size, self.size)
@@ -105,8 +94,9 @@ class Circle:
 
     def draw(self, screen):
         # Отрисовка врага
-        screen.blit(self.image,
-                    (self.pos[0] - self.size // 2 - self.parent.x, self.pos[1] - self.size // 2 - self.parent.y))
+        screen.blit(
+            self.image, (self.pos[0] - self.size // 2 - self.parent.x, self.pos[1] - self.size // 2 - self.parent.y)
+        )
 
     def __str__(self):
         return 'Circle'
@@ -114,8 +104,8 @@ class Circle:
 
 # Треугольник
 class Triangle:
-    def __init__(self, parentScreen, hp=3, speed=0.5, damage=1):
-        self.parent = parentScreen
+    def __init__(self, parent_screen, hp=3, speed=0.5, damage=1):
+        self.parent = parent_screen
         self.hp = hp * health_koeff
         self.speed = speed * speed_koeff
         self.damage = damage * damage_koeff
@@ -123,8 +113,8 @@ class Triangle:
         self.xp = {1: 3}
         self.pos = self.x, self.y = (random.randint(0, self.parent.monResolution[0]),
                                      random.randint(0, self.parent.monResolution[1]))
-        while self.parent.x < self.pos[0] < self.parent.x + self.parent.size[0] and self.parent.y < self.pos[
-            1] < self.parent.y + self.parent.size[1]:
+        while self.parent.x < self.pos[0] < self.parent.x + self.parent.size[0] \
+                and self.parent.y < self.pos[1] < self.parent.y + self.parent.size[1]:
             self.pos = self.x, self.y = (random.randint(0, self.parent.monResolution[0]),
                                          random.randint(0, self.parent.monResolution[1]))
         self.rect = pygame.Rect(self.pos[0] - self.size // 2, self.pos[1] - self.size // 2, self.size, self.size)
@@ -148,8 +138,10 @@ class Triangle:
 
     def draw(self, screen):
         # Отрисовка врага
-        screen.blit(pygame.transform.rotate(self.image, self.angle),
-                    (self.pos[0] - self.size // 2 - self.parent.x, self.pos[1] - self.size // 2 - self.parent.y))
+        screen.blit(
+            pygame.transform.rotate(self.image, self.angle),
+            (self.pos[0] - self.size // 2 - self.parent.x, self.pos[1] - self.size // 2 - self.parent.y)
+        )
 
     def __str__(self):
         return 'Triangle'
@@ -157,8 +149,8 @@ class Triangle:
 
 # Восьмиугольник
 class Octagon:
-    def __init__(self, parentScreen, hp=15, speed=0.125, damage=1):
-        self.parent = parentScreen
+    def __init__(self, parent_screen, hp=15, speed=0.125, damage=1):
+        self.parent = parent_screen
         self.hp = hp * health_koeff
         self.speed = speed * speed_koeff
         self.damage = damage * damage_koeff
@@ -167,8 +159,8 @@ class Octagon:
         self.xp = {1: 3, 2: 2, 3: 1}
         self.pos = self.x, self.y = (random.randint(0, self.parent.monResolution[0]),
                                      random.randint(0, self.parent.monResolution[1]))
-        while self.parent.x < self.pos[0] < self.parent.x + self.parent.size[0] and self.parent.y < self.pos[
-            1] < self.parent.y + self.parent.size[1]:
+        while self.parent.x < self.pos[0] < self.parent.x + self.parent.size[0] \
+                and self.parent.y < self.pos[1] < self.parent.y + self.parent.size[1]:
             self.pos = self.x, self.y = (random.randint(0, self.parent.monResolution[0]),
                                          random.randint(0, self.parent.monResolution[1]))
         self.rect = pygame.Rect(self.pos[0] - self.size // 2, self.pos[1] - self.size // 2, self.size, self.size)
@@ -203,8 +195,23 @@ class Octagon:
         return 'Octagon'
 
 
+def update_level():
+    global enemies, speed_koeff, damage_koeff, health_koeff, to_next_lvl, lvl
+    lvl = read_lvl()
+    con = sqlite3.connect("files_txt_json_db/Levels")
+    cur = con.cursor()
+    result = cur.execute(f"SELECT * FROM Levels WHERE Number = '{lvl}'").fetchall()
+    con.close()
+    enemies = result[0][1].split(', ')
+    speed_koeff = result[0][2]
+    damage_koeff = result[0][3]
+    health_koeff = result[0][4]
+    to_next_lvl = result[0][5]
+
+
 # Обновление всех врагов
 def updateEnemys(screen):
+    update_level()
     global time, createKD, koeff, killedEnemys_for_end, killedEnemys
     lst = [Rect(screen), Triangle(screen), Circle(screen), Octagon(screen)]
     choice = []
@@ -231,15 +238,38 @@ def updateEnemys(screen):
                     koeff -= 1
 
     if killedEnemys == to_next_lvl:
-        dump_settings(1)
-        killedEnemys = 0
-        print(killedEnemys_for_end)
-        Text((0, screen.screen.get_height() // 2), 40, f'Level: {lvl + 1}', center_x=True,
-             color=pygame.Color('white')).render(screen.screen)
-        pygame.display.update()
-        sleep(1)
+        t1 = Text((0, 20), 20, 'Congratulations!',
+                  center_x=Text, color=pygame.Color('purple'))
+        t2 = Text((0, 50), 20, 'You have passed this level',
+                  center_x=Text, color=pygame.Color('purple'))
+
+        menu = NextLevelNotification((30, 240), 20, 'menu', color=pygame.Color('purple'))
+        next_lvl = NextLevelNotification((180, 240), 20, 'next level', color=pygame.Color('purple'))
+        running = True
+        pygame.display.set_mode((300, 300))
+        while running:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    screen.flag = False
+                    running = False
+            mouse_pos = pygame.mouse.get_pos()
+            mouse = pygame.mouse.get_pressed()
+            if next_lvl.container_rect.collidepoint(mouse_pos):
+                if mouse[0]:
+                    running = False
+                    pygame.time.delay(300)
+            elif menu.container_rect.collidepoint(mouse_pos):
+                if mouse[0]:
+                    screen.flag = False
+                    running = False
+            next_lvl.render(screen.screen)
+            menu.render(screen.screen)
+            t1.render(screen.screen)
+            t2.render(screen.screen)
+            pygame.display.update()
+        dump_lvl(lvl + 1)
+        screen.clear_ = True
         update_level()
-        screen.parent.buttonsPressed = []
 
 
 # Отрисовка всех врагов
