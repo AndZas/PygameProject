@@ -238,6 +238,7 @@ def updateEnemys(screen):
                     koeff -= 1
 
     if killedEnemys == to_next_lvl:
+        # После прохождения уровня открывается окно
         t1 = Text((0, 20), 20, 'Congratulations!',
                   center_x=Text, color=pygame.Color('purple'))
         t2 = Text((0, 50), 20, 'You have passed this level',

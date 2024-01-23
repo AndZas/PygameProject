@@ -14,6 +14,7 @@ in_tamer_on_off = False
 hide_HUD_on_off = True
 
 
+# Создание стартового окна
 class StartWindow:
     def __init__(self, screen):
         self.bg_music = None
@@ -32,11 +33,13 @@ class StartWindow:
         pygame.display.set_icon(pygame.image.load(r'images/Textures/Player.png'))
 
     def play_background_music(self):
+        # Проигрывает фоновую музыку
         bg_music_file = r'sounds/fon_music_2.wav'
         self.bg_music = pygame.mixer.Sound(bg_music_file)
         self.bg_music.play(-1, -1, False)
 
-    def on_off_volume_fon_music(self):  # функция проверяет выключена музыка или нет и выставляет громкость
+    def on_off_volume_fon_music(self):
+        # функция проверяет выключена музыка или нет и выставляет громкость
         if off_sound == 1:
             self.bg_music.set_volume(0.5)
         elif off_sound == -1:
@@ -45,6 +48,7 @@ class StartWindow:
             self.bg_music.set_volume(music_volume)
 
     def draw(self):
+        # Отрисовка стартового окна
         path = 'images/StartWindow'
 
         # Корректируем громкость
@@ -85,13 +89,14 @@ class StartWindow:
                        f'{in_tamer_on_off};{hide_HUD_on_off}')
 
     def click(self, mouse_pos):
+        # При нажатии на кнопку мыши срабатывает эта функция
         global off_sound, music_volume, sounds_effect
         x, y = mouse_pos
         if self.pos_play[0] < x < self.pos_play[0] + self.play_w \
                 and self.pos_play[1] < y < self.pos_play[1] + self.play_h:
             pygame.time.delay(100)
             key = self.open_level_menu()
-            if key:
+            if key:  # если выбрали уровень открываем окно игры
                 app1 = App()
                 run = True
                 while run:
@@ -144,6 +149,7 @@ class StartWindow:
             sys.exit()
 
     def open_menu_settings(self):
+        # Открывает настройки
         menu = MenuSettings(self.screen, self.bg_music)
         run = True
         clock = pygame.time.Clock()
@@ -156,6 +162,7 @@ class StartWindow:
             clock.tick(60)
 
     def open_level_menu(self):
+        # Открывает меню уровней
         menu = LevelsMenu(self.screen)
         run2 = True
         clock = pygame.time.Clock()
@@ -180,6 +187,7 @@ def ms_to_time(millis):
     return f"{hours}:{minutes}:{seconds}"
 
 
+# Финальное окно
 class EndWindow:
     def __init__(self, screen, coins_collected: int, time_survived: str, bullets_fired: int, enemies_killed: int):
         self.screen = screen
@@ -192,10 +200,12 @@ class EndWindow:
                       Text((0, 295 + 20), 15, f'close this window to try again', center_x=True, color=(143, 145, 168))]
 
     def run(self):
+        # Рисует финальное окно
         for text in self.texts:
             text.render(self.screen)
 
 
+# Окно настроек
 class MenuSettings:
     def __init__(self, screen, music) -> None:
         self.screen = screen
@@ -209,6 +219,7 @@ class MenuSettings:
                       Text((85, 105), 25, 'in-game timer'), Text((145, 155), 25, 'hide HUD')]
 
     def change_music_effect_volume(self):
+        # Изменяет громкость звуковых эффектов
         global music_volume, off_sound, sounds_effect
         music_volume = round(self.music.get_value() / 100, 1)
         sounds_effect = round(self.sound_effect.get_value() / 100, 1)
@@ -217,6 +228,7 @@ class MenuSettings:
         self.bg_music.set_volume(music_volume)
 
     def run(self):
+        # Рисует окно настроек
         global in_tamer_on_off, hide_HUD_on_off
         self.screen.fill("black")
         self.change_music_effect_volume()
@@ -253,11 +265,11 @@ class MenuSettings:
                 slider.render(self.screen)
 
 
+# Меню уровней
 class LevelsMenu:
     def __init__(self, screen):
         self.screen = screen
         self.lvl_done = read_lvl()
-        print(self.lvl_done)
         self.levels = [Level((110, 100), (100, 100), '0', self.lvl_done),
                        Level((240, 100), (100, 100), '1', self.lvl_done),
                        Level((370, 100), (100, 100), '2', self.lvl_done),
@@ -268,6 +280,7 @@ class LevelsMenu:
         self.lvl = None
 
     def run(self):
+        # Рисует меню уровней
         self.screen.fill("black")
         self.text.render(self.screen)
         mouse_pos = pygame.mouse.get_pos()
@@ -281,6 +294,7 @@ class LevelsMenu:
             level.render(self.screen)
 
 
+# Читает json файл
 def read_json():
     data = read_json_file()
     money = read_money_and_health()[0]
@@ -290,6 +304,7 @@ def read_json():
     return money, player_speed, player_wall_punch, player_hp, speed_price, hp_price, wall_punch_price
 
 
+# Окно закупки
 class SpaceWindow:
     def __init__(self, screen):
 
@@ -302,6 +317,7 @@ class SpaceWindow:
         self.money, self.pl_speed, self.pl_punch, self.pl_hp, self.speed_pr, self.hp_pr, self.punch_pr = read_json()
 
     def run(self):
+        # Рисует окно закупки
         self.screen.fill("black")
         avr_sc_w = self.screen.get_width() // 2
         avr_w = self.w // 2
@@ -331,6 +347,7 @@ class SpaceWindow:
             self.screen)
 
     def click(self):
+        # обработчик события нажатия кнопки мыши
         mouse_pos = pygame.mouse.get_pos()
         if self.speed.container_rect.collidepoint(mouse_pos):
             if self.money >= self.speed_pr:
@@ -359,11 +376,8 @@ class SpaceWindow:
         self.run()
 
 
-running = True
-
-
+# Запуск приложения
 def main1():
-    global running
     pygame.init()
     screen = pygame.display.set_mode((600, 400))
     running = True

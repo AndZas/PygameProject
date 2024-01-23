@@ -9,6 +9,7 @@ particlesXP = []
 particles = []
 
 
+# Общий инит для ParticleDamage и ParticleKilled
 class Init:
     def __init__(self, start_pos, end_pos, screen):
         self.screen = screen
