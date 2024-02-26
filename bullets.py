@@ -45,19 +45,19 @@ class Bullets:
                     or bullet.pos[1] - self.parent.parent.y <= 0 \
                     or bullet.pos[1] - self.parent.parent.y >= self.parent.parent.size[1]:
                 if bullet.pos[0] - self.parent.parent.x <= 0:
-                    createParticlesShoot(bullet.pos, 'left', self.parent.parent)
+                    create_particles_shoot(bullet.pos, 'left', self.parent.parent)
                 elif bullet.pos[0] - self.parent.parent.x >= self.parent.parent.size[0]:
-                    createParticlesShoot(bullet.pos, 'right', self.parent.parent)
+                    create_particles_shoot(bullet.pos, 'right', self.parent.parent)
                 elif bullet.pos[1] - self.parent.parent.y <= 0:
-                    createParticlesShoot(bullet.pos, 'up', self.parent.parent)
+                    create_particles_shoot(bullet.pos, 'up', self.parent.parent)
                 elif bullet.pos[1] - self.parent.parent.y >= self.parent.parent.size[1]:
-                    createParticlesShoot(bullet.pos, 'down', self.parent.parent)
+                    create_particles_shoot(bullet.pos, 'down', self.parent.parent)
                 sound = r'sounds\assets_sounds_impact.wav'
                 impact = pygame.mixer.Sound(sound).play(0, -1, False)
                 if impact is not None:
                     impact.set_volume(read_settings()[0])
 
-                self.parent.parent.resize_window_plus(bullet.pos, self.parent.wallBunching)
+                self.parent.parent.resize_window_plus(bullet.pos, self.parent.wall_bunching)
                 self.bullets.remove(bullet)
 
     # Выстрел при нажатии на ЛКМ

@@ -1,12 +1,5 @@
 import pygame
-
-
-def load_font(size):
-    return pygame.font.Font(r'Font\Comfortaa-VariableFont_wght.ttf', size)
-
-
-def load_img(src, w, h):
-    return pygame.transform.scale(pygame.image.load(src), (w, h))
+from read_files import load_img, load_font
 
 
 # Быстрое создание надписей
@@ -20,7 +13,7 @@ class Text:
 
     # Рендер
     def render(self, screen):
-        font = load_font(self.size)
+        font = load_font(r'Font\Comfortaa-VariableFont_wght.ttf', self.size)
         text = font.render(self.text, 1, self.color)
 
         if self.center_x:
@@ -163,7 +156,7 @@ class NextLevelNotification:
         self.pos = pos
         self.size = size
         self.color = color
-        font = load_font(self.size)
+        font = load_font(r'Font\Comfortaa-VariableFont_wght.ttf', self.size)
         self.text = font.render(text, 1, self.color)
         self.container_rect = pygame.Rect(pos[0], pos[1], self.text.get_width(), self.text.get_height())
 

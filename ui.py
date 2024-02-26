@@ -1,11 +1,9 @@
 import sys
-import time
-
 import pygame
 from widgets import Text, Level, Slider, SwitchButton, Image
 from read_files import (read_json_file, dump_json_file,
                         read_money_and_health, dump_money_and_health,
-                        dump_lvl, read_lvl, read_settings, restart_lvl)
+                        dump_lvl, read_lvl, read_settings, restart_lvl, load_font)
 from cycle import *
 from screen import *
 
@@ -57,8 +55,8 @@ class StartWindow:
         self.on_off_volume_fon_music()
 
         # Надпись WindowKill
-        font = pygame.font.Font('Font/Comfortaa-VariableFont_wght.ttf', 70)
-        text = font.render("WindowKill", 1, (255, 255, 255))
+        fon2t = load_font('Font/Comfortaa-VariableFont_wght.ttf', 70)
+        text = fon2t.render("WindowKill", 1, (255, 255, 255))
         text_x = self.screen.get_width() // 2 - text.get_width() // 2
         text_y = self.screen.get_height() // 2 - text.get_height() // 2 - self.play_h - 10
         self.screen.blit(text, (text_x, text_y))
@@ -98,7 +96,6 @@ class StartWindow:
                 and self.pos_play[1] < y < self.pos_play[1] + self.play_h:
             pygame.time.delay(100)
             key = self.open_level_menu()
-
             if key:  # если выбрали уровень открываем окно игры
                 app1 = App()
                 run = True
@@ -119,20 +116,20 @@ class StartWindow:
                                             app2.click()
                                     app2.run()
                                     pygame.display.update()
-                                    app1.screen.window.position = (app1.screen.monResolution[0] // 2 - 600 // 2,
-                                                                   app1.screen.monResolution[1] // 2 - 400 // 2)
+                                    app1.screen.window.position = (app1.screen.mon_resolution[0] // 2 - 600 // 2,
+                                                                   app1.screen.mon_resolution[1] // 2 - 400 // 2)
                                     app1.screen.window.size = (600, 400)
-                                app1.buttonsPressed = []
+                                app1.buttons_pressed = []
                             else:
-                                app1.buttonsPressed.append(event.key)
+                                app1.buttons_pressed.append(event.key)
                         if event.type == pygame.KEYUP:
                             if event.key != pygame.K_SPACE:
-                                if event.key in app1.buttonsPressed:
-                                    app1.buttonsPressed.remove(event.key)
+                                if event.key in app1.buttons_pressed:
+                                    app1.buttons_pressed.remove(event.key)
                         if event.type == pygame.MOUSEBUTTONDOWN:
                             if event.button == 1:
                                 app1.screen.player.bullets.shoot(pygame.mouse.get_pos())
-                    app1.Run()
+                    app1.run2()
                 app1.clear()
                 pygame.display.set_mode((600, 400))
         elif self.pos_settings[0] < x < self.pos_settings[0] + self.settings_w and \
@@ -160,9 +157,6 @@ class StartWindow:
             for event in pygame.event.get():
                 if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
                     run = False
-                if event.type == pygame.QUIT:
-                    pygame.quit()
-                    sys.exit()
             menu.run()
             pygame.display.flip()
             clock.tick(60)
@@ -179,9 +173,6 @@ class StartWindow:
                     if menu.lvl is not None:
                         key = True
                     run2 = False
-                if event.type == pygame.QUIT:
-                    pygame.quit()
-                    sys.exit()
             menu.run()
             pygame.display.flip()
             clock.tick(60)
@@ -236,7 +227,7 @@ class MenuSettings:
             off_sound = 1
         self.bg_music.set_volume(music_volume)
 
-    def run(self, event=None):
+    def run(self):
         # Рисует окно настроек
         global in_tamer_on_off, hide_HUD_on_off
         self.screen.fill("black")
@@ -246,7 +237,6 @@ class MenuSettings:
 
         mouse_pos = pygame.mouse.get_pos()
         mouse = pygame.mouse.get_pressed()
-        print(mouse)
         for slider in self.sliders:
             if str(slider) == 'Slider':
                 if slider.container_rect.collidepoint(mouse_pos):

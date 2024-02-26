@@ -1,11 +1,9 @@
 import math
 import random
-
 import pygame
-
 from read_files import read_settings, read_money_and_health, dump_money_and_health
 
-particlesXP = []
+particles_xp = []
 particles = []
 
 
@@ -13,17 +11,17 @@ particles = []
 class Init:
     def __init__(self, start_pos, end_pos, screen):
         self.screen = screen
-        self.startPos = start_pos
-        self.endPos = end_pos
-        self.pos = self.startPos
+        self.start_pos = start_pos
+        self.end_pos = end_pos
+        self.pos = self.start_pos
         self.speed = random.uniform(0.5, 1)
         self.size = random.randint(1, 3)
         self.way = 0
         # Расчет вектора
         vect = (end_pos[0] - start_pos[0], end_pos[1] - start_pos[1])
-        vectLen = math.sqrt(vect[0] ** 2 + vect[1] ** 2)
-        a = vectLen / self.speed
-        self.resVect = (round(vect[0] / a, 5), round(vect[1] / a, 5))
+        vect_len = math.sqrt(vect[0] ** 2 + vect[1] ** 2)
+        a = vect_len / self.speed
+        self.res_vect = (round(vect[0] / a, 5), round(vect[1] / a, 5))
 
     # Отрисовка
     def draw(self, screen):
@@ -32,7 +30,7 @@ class Init:
     # Обновление
     def update(self):
         self.way += 1
-        self.pos = (self.pos[0] + self.resVect[0], self.pos[1] + self.resVect[1])
+        self.pos = (self.pos[0] + self.res_vect[0], self.pos[1] + self.res_vect[1])
         if self.way >= 120:
             particles.remove(self)
 
@@ -44,7 +42,7 @@ class ParticleXp:
         self.pos = self.x, self.y = pos
         self.size = size
         self.speed = 4
-        self.playerDistance = 25
+        self.player_distance = 25
         self.color = pygame.Color('purple')
         self.rect = pygame.Rect(self.pos[0] - self.size // 2, self.pos[1] - self.size // 2, self.size, self.size)
 
@@ -58,8 +56,8 @@ class ParticleXp:
         temp = read_money_and_health()
         player.xp = temp[0]
         vector = player.pos[0] - self.pos[0], player.pos[1] - self.pos[1]
-        vecLen = math.sqrt(vector[0] ** 2 + vector[1] ** 2)
-        a = vecLen // self.speed
+        vec_len = math.sqrt(vector[0] ** 2 + vector[1] ** 2)
+        a = vec_len // self.speed
         if a <= 1:
             sound = random.choice([r'sounds\Get_Xp1.wav', r'sounds\Get_Xp2.wav'])
             xp = pygame.mixer.Sound(sound).play(0, -1, False)
@@ -70,8 +68,8 @@ class ParticleXp:
             dump_money_and_health(player.xp, temp[1])
             player.xp_for_end += self.size
             player.coins.count += self.size
-            particlesXP.remove(self)
-        elif a <= self.playerDistance:
+            particles_xp.remove(self)
+        elif a <= self.player_distance:
             self.x += round(vector[0] / a, 3)
             self.y += round(vector[1] / a, 3)
         self.pos = (self.x, self.y)
@@ -79,11 +77,11 @@ class ParticleXp:
 
 
 # Создание частиц опыта
-def createParticlesXP(rect, count, parent_screen):
+def create_particles_xp(rect, count, parent_screen):
     for size in count:
         for c in range(count[size]):
             coords = (random.randint(rect[0], rect[0] + rect[2]), random.randint(rect[1], rect[1] + rect[3]))
-            particlesXP.append(ParticleXp(coords, size, parent_screen))
+            particles_xp.append(ParticleXp(coords, size, parent_screen))
 
 
 # Частицы от выстрелов
@@ -91,9 +89,9 @@ class ParticleShoot:
     def __init__(self, start_pos1, end_pos1, screen, orientation):
         self.orientation = orientation
         self.screen = screen
-        self.startPos = start_pos1
-        self.endPos = end_pos1
-        self.pos = self.startPos
+        self.start_pos = start_pos1
+        self.end_pos = end_pos1
+        self.pos = self.start_pos
         self.speed = random.uniform(0.5, 2)
         self.size = random.randint(1, 3)
         color = random.randint(100, 200)
@@ -101,9 +99,9 @@ class ParticleShoot:
 
         # Расчет вектора
         vect = (end_pos1[0] - start_pos1[0], end_pos1[1] - start_pos1[1])
-        vectLen = math.sqrt(vect[0] ** 2 + vect[1] ** 2)
-        a = vectLen / self.speed
-        self.resVect = (round(vect[0] / a, 5), round(vect[1] / a, 5))
+        vect_len = math.sqrt(vect[0] ** 2 + vect[1] ** 2)
+        a = vect_len / self.speed
+        self.res_vect = (round(vect[0] / a, 5), round(vect[1] / a, 5))
 
     # Отрисовка
     def draw(self, screen):
@@ -111,23 +109,23 @@ class ParticleShoot:
 
     # Обновление
     def update(self):
-        self.pos = (self.pos[0] + self.resVect[0], self.pos[1] + self.resVect[1])
-        if ((int(self.pos[0]) >= self.endPos[0] and
-             (int(self.pos[1]) >= self.endPos[1] or
-              int(self.pos[1]) <= self.endPos[1])) and self.orientation == 'left') \
-                or ((int(self.pos[0]) <= self.endPos[0] and (int(self.pos[1]) >= self.endPos[1]
-                                                             or int(self.pos[1]) <= self.endPos[1]))
-                    and self.orientation == 'right') or ((int(self.pos[0]) >= self.endPos[0]
-                                                          or int(self.pos[0]) <= self.endPos[0])
-                                                         and int(self.pos[1]) <= self.endPos[1]
+        self.pos = (self.pos[0] + self.res_vect[0], self.pos[1] + self.res_vect[1])
+        if ((int(self.pos[0]) >= self.end_pos[0] and
+             (int(self.pos[1]) >= self.end_pos[1] or
+              int(self.pos[1]) <= self.end_pos[1])) and self.orientation == 'left') \
+                or ((int(self.pos[0]) <= self.end_pos[0] and (int(self.pos[1]) >= self.end_pos[1]
+                                                              or int(self.pos[1]) <= self.end_pos[1]))
+                    and self.orientation == 'right') or ((int(self.pos[0]) >= self.end_pos[0]
+                                                          or int(self.pos[0]) <= self.end_pos[0])
+                                                         and int(self.pos[1]) <= self.end_pos[1]
                                                          and self.orientation == 'down') \
-                or ((int(self.pos[0]) >= self.endPos[0] or int(self.pos[0]) <= self.endPos[0])
-                    and int(self.pos[1]) >= self.endPos[1] and self.orientation == 'up'):
+                or ((int(self.pos[0]) >= self.end_pos[0] or int(self.pos[0]) <= self.end_pos[0])
+                    and int(self.pos[1]) >= self.end_pos[1] and self.orientation == 'up'):
             particles.remove(self)
 
 
 # Создание частиц от выстрелов
-def createParticlesShoot(pos, orientation, parent_screen):
+def create_particles_shoot(pos, orientation, parent_screen):
     for i in range(random.randint(3, 8)):
         if orientation == 'left':
             particles.append(
@@ -159,7 +157,7 @@ class ParticleDamage(Init):
 
 
 # Создание частиц урона
-def createParticlesDamage(start_pos, end_pos, parent_screen):
+def create_particles_damage(start_pos, end_pos, parent_screen):
     for i in range(random.randint(3, 8)):
         if start_pos[0] > end_pos[0] and start_pos[1] + 60 > end_pos[1] > start_pos[1] - 60:
             particles.append(
@@ -189,34 +187,34 @@ class ParticleKilled(Init):
 
 
 # Создание частиц смерти врагов
-def createParticlesKilled(start_pos, parent_screen, color, size):
+def create_particles_killed(start_pos, parent_screen, color, size):
     for i in range(random.randint(3, 8)):
-        endPos = (random.randint(int(start_pos[0]) - size // 2, int(start_pos[0]) + size // 2),
-                  random.randint(int(start_pos[1]) - size // 2, int(start_pos[1]) + size // 2))
-        particles.append(ParticleKilled(start_pos, (int(endPos[0]), int(endPos[1])), parent_screen, color))
+        end_pos = (random.randint(int(start_pos[0]) - size // 2, int(start_pos[0]) + size // 2),
+                   random.randint(int(start_pos[1]) - size // 2, int(start_pos[1]) + size // 2))
+        particles.append(ParticleKilled(start_pos, (int(end_pos[0]), int(end_pos[1])), parent_screen, color))
 
 
 # Отрисовка частиц
-def drawParticles(screen):
+def draw_particles(screen):
     for particle in particles:
         particle.draw(screen)
-    for particle in particlesXP:
+    for particle in particles_xp:
         particle.draw(screen)
 
 
 # Обновление частиц
-def updateParticles():
+def update_particles():
     for particle in particles:
         particle.update()
 
 
 # Обновление частиц опыта
-def updateParticlesXP(screen):
-    for particle in particlesXP:
+def update_particles_xp(screen):
+    for particle in particles_xp:
         particle.update(screen)
 
 
 # Очистка частиц
-def clearParticles():
+def clear_particles():
     global particles
     particles = []

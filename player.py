@@ -11,19 +11,19 @@ class Player:
         self.parent = parent
         self.pos = self.x, self.y = (self.parent.x + self.parent.size[0] // 2, self.parent.y + self.parent.size[1] // 2)
         self.size = 40
-        self.speed, self.wallBunching = read_json_file()[0]
+        self.speed, self.wall_bunching = read_json_file()[0]
         self.health = read_money_and_health()[1]
         self.damage = 1
         self.maxHealth = 10
         self.xp = read_money_and_health()[0]
         self.xp_for_end = 0
         # Изображения
-        self.afkImage = pygame.image.load('images/Textures/Player.png')
-        self.getDamageImage = pygame.image.load('images/Textures/Player_GetDamage.png')
-        self.image = self.afkImage
+        self.afk_image = pygame.image.load('images/Textures/Player.png')
+        self.get_damage_image = pygame.image.load('images/Textures/Player_GetDamage.png')
+        self.image = self.afk_image
 
         self.kd = 120  # Количество кадров
-        self.getDamageKd = 240  # Количество кадров
+        self.get_damage_kd = 240  # Количество кадров
         self.time = 0  # Количество кадров
 
         self.bullets = Bullets(self)
@@ -36,9 +36,9 @@ class Player:
 
     def move(self, buttons):
         # Перемещение игрока
-        self.getDamageKd += 1
-        if self.getDamageKd > 240:
-            self.image = self.afkImage
+        self.get_damage_kd += 1
+        if self.get_damage_kd > 240:
+            self.image = self.afk_image
 
         self.time += 1
         if pygame.K_a in buttons and pygame.K_w in buttons:
@@ -75,32 +75,32 @@ class Player:
                 self.y += self.speed
         self.pos = self.x, self.y
 
-    def player_get_damage(self, enemy_pos, screen, killed_enemys, damage1):
+    def player_get_damage(self, enemy_pos, screen, killed_enemys2, damage1):
         # Получение урона игроком
-        if self.getDamageKd >= 240:
+        if self.get_damage_kd >= 240:
 
             sound = r'sounds\Damage.wav'
             damage = pygame.mixer.Sound(sound).play(0, -1, False)
             if damage is not None:
                 damage.set_volume(read_settings()[0])
 
-            self.image = self.getDamageImage
+            self.image = self.get_damage_image
             start_pos = self.pos
             self.health -= damage1
             dump_money_and_health(read_money_and_health()[0], self.health)
-            self.getDamageKd = 0
+            self.get_damage_kd = 0
             vector = self.x - enemy_pos[0], self.y - enemy_pos[1]
             self.x += round(vector[0] * 2, 2)
             self.y += round(vector[1] * 2, 2)
             self.pos = self.x, self.y
-            createParticlesDamage(start_pos, self.pos, self.parent)
+            create_particles_damage(start_pos, self.pos, self.parent)
             if self.health <= 0:
-                main2(self.xp_for_end, screen.timer.time * 10, self.bullets.shooted_bullets, killed_enemys,
+                main2(self.xp_for_end, screen.timer.time * 10, self.bullets.shooted_bullets, killed_enemys2,
                       self.parent.parent)
 
     def update(self):
         # Обновление позиций игрока
-        self.speed, self.wallBunching = read_json_file()[0]
+        self.speed, self.wall_bunching = read_json_file()[0]
         self.health = read_money_and_health()[1]
         if self.pos[0] - self.size // 2 <= self.parent.x:
             self.x += 1
@@ -118,5 +118,5 @@ class Player:
         self.health = 10
         self.xp = 0
 
-        self.image = self.afkImage
+        self.image = self.afk_image
         self.time = 0  # Количество кадров

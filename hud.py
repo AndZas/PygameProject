@@ -1,15 +1,15 @@
 import pygame
-from read_files import read_money_and_health
+from read_files import read_money_and_health, load_font
 
 pygame.init()
-
+font = load_font('font/AtariClassic-gry3.ttf', 15)
 
 # Таймер
 class Timer:
     def __init__(self):
         self.time = 0
         self.koef = 0.425
-        self.font = pygame.font.Font('font/AtariClassic-gry3.ttf', 15)
+        self.font = font
         self.on = True
 
     # Отрисовка таймера
@@ -35,7 +35,7 @@ class Coins:
     def __init__(self):
         self.count = read_money_and_health()[0]
         self.on = True
-        self.font = pygame.font.Font('font/AtariClassic-gry3.ttf', 15)
+        self.font = font
 
     # Отрисовка счетчика опыта
     def draw(self, screen):
@@ -59,7 +59,7 @@ class Health:
         self.count = hp
         self.max = 10
         self.on = True
-        self.font = pygame.font.Font('font/AtariClassic-gry3.ttf', 15)
+        self.font = font
 
     # Отрисовка счетчика здоровья
     def draw(self, screen):

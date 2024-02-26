@@ -1,8 +1,6 @@
-import os
-
 from pygame._sdl2.video import Window
 from screeninfo import get_monitors
-
+import os
 from enemys import *
 from player import *
 
@@ -22,15 +20,15 @@ class Screen:
         self.clear_points = False
         self.flag = True
         self.parent = parent
-        self.minSize = (300, 300)
+        self.min_size = (300, 300)
         self.size = self.width, self.height = (500, 500)
-        self.monResolution = get_monitor_resolution()
+        self.mon_resolution = get_monitor_resolution()
         self.pos = self.x, self.y = (
-            self.monResolution[0] // 2 - self.size[0] // 2, self.monResolution[1] // 2 - self.size[1] // 2)
+            self.mon_resolution[0] // 2 - self.size[0] // 2, self.mon_resolution[1] // 2 - self.size[1] // 2)
         self.fps = 240
         os.environ['SDL_VIDEO_CENTERED'] = '0'
 
-        self.bgColor = pygame.Color('black')
+        self.bg_color = pygame.Color('black')
         self.image = pygame.image.load('images/Textures/Player.png')
 
         self.screen = pygame.display.set_mode(self.size)
@@ -49,11 +47,11 @@ class Screen:
 
     def update(self):
         # Обновление экрана каждый кадр
-        self.screen.fill(self.bgColor)
+        self.screen.fill(self.bg_color)
         self.resize_window_minus()
         self.player.bullets.draw()
-        drawParticles(self.screen)
-        drawEnemys(self.screen)
+        draw_particles(self.screen)
+        draw_enemys(self.screen)
         self.player.draw()
         self.timer.draw(self)
         self.player.coins.draw(self)
@@ -63,7 +61,7 @@ class Screen:
 
     def resize_window_minus(self):
         # Уменьшает окно каждый кадр
-        if self.width > self.minSize[0]:
+        if self.width > self.min_size[0]:
             if self.status != 'right':
                 self.width -= 0.125
             if self.status != 'left':
@@ -72,7 +70,7 @@ class Screen:
             if self.status == 'none':
                 self.width -= 0.125
                 self.x += 0.0625
-        if self.height > self.minSize[1]:
+        if self.height > self.min_size[1]:
             if self.status != 'down':
                 self.height -= 0.125
             if self.status != 'up':
@@ -111,14 +109,14 @@ class Screen:
                 self.height += punching
         if pos[0] - self.x >= self.size[0]:
             self.status = 'right'
-            if (self.x + self.size[0]) + 200 >= self.monResolution[0]:
-                self.width += punching * max((1 - ((self.x + self.size[0]) - self.monResolution[0] + 200) / 200), 0)
+            if (self.x + self.size[0]) + 200 >= self.mon_resolution[0]:
+                self.width += punching * max((1 - ((self.x + self.size[0]) - self.mon_resolution[0] + 200) / 200), 0)
             else:
                 self.width += punching
         if pos[1] - self.y >= self.size[1]:
             self.status = 'down'
-            if (self.y + self.size[1]) + 200 >= self.monResolution[1]:
-                self.height += punching * max((1 - ((self.y + self.size[1] + 50) - self.monResolution[1] + 150) / 150),
+            if (self.y + self.size[1]) + 200 >= self.mon_resolution[1]:
+                self.height += punching * max((1 - ((self.y + self.size[1] + 50) - self.mon_resolution[1] + 150) / 150),
                                               0)
             else:
                 self.height += punching
@@ -131,7 +129,7 @@ class Screen:
         # Очищает координаты и позицию окна
         self.size = self.width, self.height = (500, 500)
         self.pos = self.x, self.y = (
-            self.monResolution[0] // 2 - self.size[0] // 2, self.monResolution[1] // 2 - self.size[1] // 2)
+            self.mon_resolution[0] // 2 - self.size[0] // 2, self.mon_resolution[1] // 2 - self.size[1] // 2)
 
         self.status = 'none'
         self.time = 0

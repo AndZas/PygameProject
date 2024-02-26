@@ -1,4 +1,5 @@
 import json
+import pygame
 
 
 def read_settings():
@@ -61,3 +62,13 @@ def dump_money_and_health(money, health):
     # Сброс здоровья и денег
     with open('files_txt_json_db/money_health', 'w') as file:
         file.write(str(money) + ';' + str(health))
+
+
+def load_font(src, size):
+    # загружает и возвращает шрифт с размером size
+    return pygame.font.Font(src, size)
+
+
+def load_img(src, w, h):
+    # загружает и возвращает изображение с размерами w, h
+    return pygame.transform.scale(pygame.image.load(src), (w, h))

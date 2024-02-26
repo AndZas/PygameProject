@@ -5,11 +5,11 @@ from widgets import Text, NextLevelNotification
 from read_files import read_lvl, dump_lvl
 
 koeff = 10
-createKD = 1.7 * 480
-time = createKD
+create_kd = 1.7 * 480
+time = create_kd
 enemys = []
-killedEnemys = 0
-killedEnemys_for_end = 0
+killed_enemys = 0
+killed_enemys_for_end = 0
 enemies = None
 speed_koeff = None
 damage_koeff = None
@@ -28,21 +28,21 @@ class Rect:
         self.color = pygame.Color('green')
         self.size = 40
         self.xp = {1: 2, 2: 1}
-        self.pos = self.x, self.y = (random.randint(0, self.parent.monResolution[0]),
-                                     random.randint(0, self.parent.monResolution[1]))
+        self.pos = self.x, self.y = (random.randint(0, self.parent.mon_resolution[0]),
+                                     random.randint(0, self.parent.mon_resolution[1]))
         while self.parent.x < self.pos[0] < self.parent.x + self.parent.size[0] \
                 and self.parent.y < self.pos[1] < self.parent.y + self.parent.size[1]:
-            self.pos = self.x, self.y = (random.randint(0, self.parent.monResolution[0]),
-                                         random.randint(0, self.parent.monResolution[1]))
+            self.pos = self.x, self.y = (random.randint(0, self.parent.mon_resolution[0]),
+                                         random.randint(0, self.parent.mon_resolution[1]))
         self.rect = pygame.Rect(self.pos[0] - self.size // 2, self.pos[1] - self.size // 2, self.size, self.size)
 
     def update(self, player):
         # Обновление врага
         vector = player.pos[0] - self.pos[0], player.pos[1] - self.pos[1]
-        vecLen = math.sqrt(vector[0] ** 2 + vector[1] ** 2)
-        a = vecLen // self.speed
+        vec_len = math.sqrt(vector[0] ** 2 + vector[1] ** 2)
+        a = vec_len // self.speed
         if a <= 150:
-            player.player_get_damage(self.pos, self.parent, killedEnemys_for_end, self.damage)
+            player.player_get_damage(self.pos, self.parent, killed_enemys_for_end, self.damage)
         else:
             self.x += round(vector[0] / a, 3)
             self.y += round(vector[1] / a, 3)
@@ -68,12 +68,12 @@ class Circle:
         self.damage = damage * damage_koeff
         self.size = 20
         self.xp = {1: 3, 2: 1}
-        self.pos = self.x, self.y = (random.randint(0, self.parent.monResolution[0]),
-                                     random.randint(0, self.parent.monResolution[1]))
+        self.pos = self.x, self.y = (random.randint(0, self.parent.mon_resolution[0]),
+                                     random.randint(0, self.parent.mon_resolution[1]))
         while self.parent.x < self.pos[0] < self.parent.x + self.parent.size[0] \
                 and self.parent.y < self.pos[1] < self.parent.y + self.parent.size[1]:
-            self.pos = self.x, self.y = (random.randint(0, self.parent.monResolution[0]),
-                                         random.randint(0, self.parent.monResolution[1]))
+            self.pos = self.x, self.y = (random.randint(0, self.parent.mon_resolution[0]),
+                                         random.randint(0, self.parent.mon_resolution[1]))
         self.rect = pygame.Rect(self.pos[0] - self.size // 2, self.pos[1] - self.size // 2, self.size, self.size)
         self.image = pygame.transform.scale(pygame.image.load('images/Textures/Circle.png'), (self.size, self.size))
         self.color = pygame.Color('aqua')
@@ -81,10 +81,10 @@ class Circle:
     def update(self, player):
         # Обновление врага
         vector = player.pos[0] - self.pos[0], player.pos[1] - self.pos[1]
-        vecLen = math.sqrt(vector[0] ** 2 + vector[1] ** 2)
-        a = vecLen // self.speed
+        vec_len = math.sqrt(vector[0] ** 2 + vector[1] ** 2)
+        a = vec_len // self.speed
         if a <= 25:
-            player.player_get_damage(self.pos, self.parent, killedEnemys_for_end, self.damage)
+            player.player_get_damage(self.pos, self.parent, killed_enemys_for_end, self.damage)
         else:
             self.x += round(vector[0] / a, 3)
             self.y += round(vector[1] / a, 3)
@@ -110,12 +110,12 @@ class Triangle:
         self.damage = damage * damage_koeff
         self.size = 40
         self.xp = {1: 3}
-        self.pos = self.x, self.y = (random.randint(0, self.parent.monResolution[0]),
-                                     random.randint(0, self.parent.monResolution[1]))
+        self.pos = self.x, self.y = (random.randint(0, self.parent.mon_resolution[0]),
+                                     random.randint(0, self.parent.mon_resolution[1]))
         while self.parent.x < self.pos[0] < self.parent.x + self.parent.size[0] \
                 and self.parent.y < self.pos[1] < self.parent.y + self.parent.size[1]:
-            self.pos = self.x, self.y = (random.randint(0, self.parent.monResolution[0]),
-                                         random.randint(0, self.parent.monResolution[1]))
+            self.pos = self.x, self.y = (random.randint(0, self.parent.mon_resolution[0]),
+                                         random.randint(0, self.parent.mon_resolution[1]))
         self.rect = pygame.Rect(self.pos[0] - self.size // 2, self.pos[1] - self.size // 2, self.size, self.size)
         self.angle = 0
         self.image = pygame.transform.scale(pygame.image.load('images/Textures/Triangle.png'), (self.size, self.size))
@@ -125,10 +125,10 @@ class Triangle:
         # Обновление врага
         self.angle += 0.1
         vector = player.pos[0] - self.pos[0], player.pos[1] - self.pos[1]
-        vecLen = math.sqrt(vector[0] ** 2 + vector[1] ** 2)
-        a = vecLen // self.speed
+        vec_len = math.sqrt(vector[0] ** 2 + vector[1] ** 2)
+        a = vec_len // self.speed
         if a <= 70:
-            player.player_get_damage(self.pos, self.parent, killedEnemys_for_end, self.damage)
+            player.player_get_damage(self.pos, self.parent, killed_enemys_for_end, self.damage)
         else:
             self.x += round(vector[0] / a, 3)
             self.y += round(vector[1] / a, 3)
@@ -156,21 +156,21 @@ class Octagon:
         self.color = pygame.Color('darkgrey')
         self.size = 50
         self.xp = {1: 3, 2: 2, 3: 1}
-        self.pos = self.x, self.y = (random.randint(0, self.parent.monResolution[0]),
-                                     random.randint(0, self.parent.monResolution[1]))
+        self.pos = self.x, self.y = (random.randint(0, self.parent.mon_resolution[0]),
+                                     random.randint(0, self.parent.mon_resolution[1]))
         while self.parent.x < self.pos[0] < self.parent.x + self.parent.size[0] \
                 and self.parent.y < self.pos[1] < self.parent.y + self.parent.size[1]:
-            self.pos = self.x, self.y = (random.randint(0, self.parent.monResolution[0]),
-                                         random.randint(0, self.parent.monResolution[1]))
+            self.pos = self.x, self.y = (random.randint(0, self.parent.mon_resolution[0]),
+                                         random.randint(0, self.parent.mon_resolution[1]))
         self.rect = pygame.Rect(self.pos[0] - self.size // 2, self.pos[1] - self.size // 2, self.size, self.size)
 
     def update(self, player):
         # Обновление врага
         vector = player.pos[0] - self.pos[0], player.pos[1] - self.pos[1]
-        vecLen = math.sqrt(vector[0] ** 2 + vector[1] ** 2)
-        a = vecLen // self.speed
+        vec_len = math.sqrt(vector[0] ** 2 + vector[1] ** 2)
+        a = vec_len // self.speed
         if a <= 400:
-            player.player_get_damage(self.pos, self.parent, killedEnemys_for_end, self.damage)
+            player.player_get_damage(self.pos, self.parent, killed_enemys_for_end, self.damage)
         elif a > 1000:
             self.x += round(vector[0] / a, 3)
             self.y += round(vector[1] / a, 3)
@@ -209,15 +209,15 @@ def update_level():
 
 
 # Обновление всех врагов
-def updateEnemys(screen):
+def update_enemys(screen):
     update_level()
-    global time, createKD, koeff, killedEnemys_for_end, killedEnemys
+    global time, create_kd, koeff, killed_enemys_for_end, killed_enemys
     lst = [Rect(screen), Triangle(screen), Circle(screen), Octagon(screen)]
     choice = []
     for i in range(len(lst)):
         if str(lst[i]) in enemies:
             choice.append(lst[i])
-    if time >= createKD:
+    if time >= create_kd:
         time = 0
         enemys.append(random.choice(choice))
     else:
@@ -229,14 +229,14 @@ def updateEnemys(screen):
                 screen.player.bullets.bullets.remove(bullet)
                 enemy.hp -= bullet.damage
                 if enemy.hp <= 0:
-                    killedEnemys_for_end += 1
-                    killedEnemys += 1
-                    createParticlesKilled(enemy.pos, screen, enemy.color, enemy.size)
-                    createParticlesXP(enemy.rect, enemy.xp, enemy.parent)
+                    killed_enemys_for_end += 1
+                    killed_enemys += 1
+                    create_particles_killed(enemy.pos, screen, enemy.color, enemy.size)
+                    create_particles_xp(enemy.rect, enemy.xp, enemy.parent)
                     enemys.remove(enemy)
                     koeff -= 1
 
-    if killedEnemys == to_next_lvl:
+    if killed_enemys == to_next_lvl:
         # После прохождения уровня открывается окно
         t1 = Text((0, 20), 20, 'Congratulations!',
                   center_x=Text, color=pygame.Color('purple'))
@@ -273,15 +273,15 @@ def updateEnemys(screen):
 
 
 # Отрисовка всех врагов
-def drawEnemys(screen):
+def draw_enemys(screen):
     for enemy in enemys:
         enemy.draw(screen)
 
 
 # Очистка врагов при перезапуске
-def clearEnemies():
-    global time, enemys, killedEnemys_for_end, killedEnemys
-    time = createKD
+def clear_enemies():
+    global time, enemys, killed_enemys_for_end, killed_enemys
+    time = create_kd
     enemys = []
-    killedEnemys_for_end = 0
-    killedEnemys = 0
+    killed_enemys_for_end = 0
+    killed_enemys = 0
