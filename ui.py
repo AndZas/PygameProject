@@ -389,7 +389,7 @@ def main1():
             pos = pygame.mouse.get_pos()
             if event.type == pygame.QUIT:
                 running = False
-            elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+            elif event.type == pygame.MOUSEBUTTONUP and event.button == 1:
                 w.click(pos)
         w.draw()
         clock.tick(60)
