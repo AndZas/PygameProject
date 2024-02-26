@@ -1,9 +1,8 @@
-from time import sleep
 import pygame.draw
 from particles import *
 import sqlite3
 from widgets import Text, NextLevelNotification
-from read_files import read_settings, read_lvl, dump_lvl
+from read_files import read_lvl, dump_lvl
 
 koeff = 10
 createKD = 1.7 * 480
@@ -43,7 +42,7 @@ class Rect:
         vecLen = math.sqrt(vector[0] ** 2 + vector[1] ** 2)
         a = vecLen // self.speed
         if a <= 150:
-            player.playerGetDamage(self.pos, self.parent, killedEnemys_for_end, self.damage)
+            player.player_get_damage(self.pos, self.parent, killedEnemys_for_end, self.damage)
         else:
             self.x += round(vector[0] / a, 3)
             self.y += round(vector[1] / a, 3)
@@ -85,7 +84,7 @@ class Circle:
         vecLen = math.sqrt(vector[0] ** 2 + vector[1] ** 2)
         a = vecLen // self.speed
         if a <= 25:
-            player.playerGetDamage(self.pos, self.parent, killedEnemys_for_end, self.damage)
+            player.player_get_damage(self.pos, self.parent, killedEnemys_for_end, self.damage)
         else:
             self.x += round(vector[0] / a, 3)
             self.y += round(vector[1] / a, 3)
@@ -129,7 +128,7 @@ class Triangle:
         vecLen = math.sqrt(vector[0] ** 2 + vector[1] ** 2)
         a = vecLen // self.speed
         if a <= 70:
-            player.playerGetDamage(self.pos, self.parent, killedEnemys_for_end, self.damage)
+            player.player_get_damage(self.pos, self.parent, killedEnemys_for_end, self.damage)
         else:
             self.x += round(vector[0] / a, 3)
             self.y += round(vector[1] / a, 3)
@@ -171,7 +170,7 @@ class Octagon:
         vecLen = math.sqrt(vector[0] ** 2 + vector[1] ** 2)
         a = vecLen // self.speed
         if a <= 400:
-            player.playerGetDamage(self.pos, self.parent, killedEnemys_for_end, self.damage)
+            player.player_get_damage(self.pos, self.parent, killedEnemys_for_end, self.damage)
         elif a > 1000:
             self.x += round(vector[0] / a, 3)
             self.y += round(vector[1] / a, 3)

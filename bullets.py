@@ -15,8 +15,8 @@ class Bullet:
         # Расчет вектора движения пули
         vect = (mouse_pos[0] - (player_pos[0] - self.parent.parent.x),
                 mouse_pos[1] - (player_pos[1] - self.parent.parent.y))
-        vectLen = math.sqrt(vect[0] ** 2 + vect[1] ** 2)
-        self.resVect = (round(vect[0] / (vectLen / self.speed), 2), round(vect[1] / (vectLen / self.speed), 2))
+        vect_len = math.sqrt(vect[0] ** 2 + vect[1] ** 2)
+        self.res_vect = (round(vect[0] / (vect_len / self.speed), 2), round(vect[1] / (vect_len / self.speed), 2))
 
     # Отрисовка пули
     def draw(self, screen):
@@ -26,7 +26,7 @@ class Bullet:
 
     # Обновление пули
     def update(self):
-        self.pos = (self.pos[0] + self.resVect[0], self.pos[1] + self.resVect[1])
+        self.pos = (self.pos[0] + self.res_vect[0], self.pos[1] + self.res_vect[1])
 
 
 # Класс обновления всего массива пуль
@@ -34,7 +34,7 @@ class Bullets:
     def __init__(self, parent):
         self.parent = parent
         self.bullets = []
-        self.shootedBullets = 0
+        self.shooted_bullets = 0
 
     # Обновление всего списка пуль
     def update(self):
@@ -57,7 +57,7 @@ class Bullets:
                 if impact is not None:
                     impact.set_volume(read_settings()[0])
 
-                self.parent.parent.resizeWindowPlus(bullet.pos, self.parent.wallBunching)
+                self.parent.parent.resize_window_plus(bullet.pos, self.parent.wallBunching)
                 self.bullets.remove(bullet)
 
     # Выстрел при нажатии на ЛКМ
@@ -67,7 +67,7 @@ class Bullets:
         if shoot is not None:
             shoot.set_volume(read_settings()[0])
 
-        self.shootedBullets += 1
+        self.shooted_bullets += 1
         self.bullets.append(
             Bullet((self.parent.pos[0], self.parent.pos[1]), pos, self.parent))
 
@@ -79,4 +79,4 @@ class Bullets:
     # Очистка позиций пуль
     def clear(self):
         self.bullets = []
-        self.shootedBullets = 0
+        self.shooted_bullets = 0

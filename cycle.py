@@ -1,6 +1,5 @@
-import pygame.event
 from screen import *
-from read_files import read_settings
+from read_files import *
 
 
 class App:
@@ -38,8 +37,3 @@ class App:
         clearParticles()
         dump_money_and_health(0, 10)
         dump_json_file()
-
-
-if __name__ == '__main__':
-    app = App()
-    app.Run()

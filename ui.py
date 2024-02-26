@@ -1,4 +1,6 @@
 import sys
+import time
+
 import pygame
 from widgets import Text, Level, Slider, SwitchButton, Image
 from read_files import (read_json_file, dump_json_file,
@@ -96,6 +98,7 @@ class StartWindow:
                 and self.pos_play[1] < y < self.pos_play[1] + self.play_h:
             pygame.time.delay(100)
             key = self.open_level_menu()
+
             if key:  # если выбрали уровень открываем окно игры
                 app1 = App()
                 run = True
@@ -157,6 +160,9 @@ class StartWindow:
             for event in pygame.event.get():
                 if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
                     run = False
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    sys.exit()
             menu.run()
             pygame.display.flip()
             clock.tick(60)
@@ -173,6 +179,9 @@ class StartWindow:
                     if menu.lvl is not None:
                         key = True
                     run2 = False
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    sys.exit()
             menu.run()
             pygame.display.flip()
             clock.tick(60)
@@ -227,7 +236,7 @@ class MenuSettings:
             off_sound = 1
         self.bg_music.set_volume(music_volume)
 
-    def run(self):
+    def run(self, event=None):
         # Рисует окно настроек
         global in_tamer_on_off, hide_HUD_on_off
         self.screen.fill("black")
@@ -237,6 +246,7 @@ class MenuSettings:
 
         mouse_pos = pygame.mouse.get_pos()
         mouse = pygame.mouse.get_pressed()
+        print(mouse)
         for slider in self.sliders:
             if str(slider) == 'Slider':
                 if slider.container_rect.collidepoint(mouse_pos):

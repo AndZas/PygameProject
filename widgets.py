@@ -1,6 +1,14 @@
 import pygame
 
 
+def load_font(size):
+    return pygame.font.Font(r'Font\Comfortaa-VariableFont_wght.ttf', size)
+
+
+def load_img(src, w, h):
+    return pygame.transform.scale(pygame.image.load(src), (w, h))
+
+
 # Быстрое создание надписей
 class Text:
     def __init__(self, pos: tuple, size: int, text: str, center_x: bool = False, color: tuple = (255, 255, 255)):
@@ -12,7 +20,7 @@ class Text:
 
     # Рендер
     def render(self, screen):
-        font = pygame.font.Font('Font\Comfortaa-VariableFont_wght.ttf', self.size)
+        font = load_font(self.size)
         text = font.render(self.text, 1, self.color)
 
         if self.center_x:
@@ -61,9 +69,9 @@ class SwitchButton:
     def render(self, screen):
         # Отрисовка
         if self.working:
-            img = pygame.transform.scale(pygame.image.load('images\StartWindow\on_btn.png'), (self.w, self.h))
+            img = load_img(r'images\StartWindow\on_btn.png', self.w, self.h)
         else:
-            img = pygame.transform.scale(pygame.image.load('images\StartWindow\off_btn.png'), (self.w, self.h))
+            img = load_img(r'images\StartWindow\off_btn.png', self.w, self.h)
         screen.blit(img, self.pos)  # левый верхний угол в точке pos
 
     def get_name(self):
@@ -134,7 +142,7 @@ class Slider:
 
 # Загрузка изображений
 class Image:
-    def __init__(self, path: str, size: tuple, pos: tuple) -> object:
+    def __init__(self, path: str, size: tuple, pos: tuple):
         self.path = path
         self.w, self.h = size
         self.pos = pos
@@ -155,7 +163,7 @@ class NextLevelNotification:
         self.pos = pos
         self.size = size
         self.color = color
-        font = pygame.font.Font('Font\Comfortaa-VariableFont_wght.ttf', self.size)
+        font = load_font(self.size)
         self.text = font.render(text, 1, self.color)
         self.container_rect = pygame.Rect(pos[0], pos[1], self.text.get_width(), self.text.get_height())
 

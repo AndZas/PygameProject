@@ -75,7 +75,7 @@ class Player:
                 self.y += self.speed
         self.pos = self.x, self.y
 
-    def playerGetDamage(self, enemy_pos, screen, killed_enemys, damage1):
+    def player_get_damage(self, enemy_pos, screen, killed_enemys, damage1):
         # Получение урона игроком
         if self.getDamageKd >= 240:
 
@@ -85,7 +85,7 @@ class Player:
                 damage.set_volume(read_settings()[0])
 
             self.image = self.getDamageImage
-            startPos = self.pos
+            start_pos = self.pos
             self.health -= damage1
             dump_money_and_health(read_money_and_health()[0], self.health)
             self.getDamageKd = 0
@@ -93,9 +93,9 @@ class Player:
             self.x += round(vector[0] * 2, 2)
             self.y += round(vector[1] * 2, 2)
             self.pos = self.x, self.y
-            createParticlesDamage(startPos, self.pos, self.parent)
+            createParticlesDamage(start_pos, self.pos, self.parent)
             if self.health <= 0:
-                main2(self.xp_for_end, screen.timer.time * 10, self.bullets.shootedBullets, killed_enemys,
+                main2(self.xp_for_end, screen.timer.time * 10, self.bullets.shooted_bullets, killed_enemys,
                       self.parent.parent)
 
     def update(self):

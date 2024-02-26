@@ -8,7 +8,7 @@ from player import *
 
 
 # Экран
-def getMonitorResolution():
+def get_monitor_resolution():
     # Возвращает разрешение монитора
     for monitor in get_monitors():
         if monitor.is_primary:
@@ -24,7 +24,7 @@ class Screen:
         self.parent = parent
         self.minSize = (300, 300)
         self.size = self.width, self.height = (500, 500)
-        self.monResolution = getMonitorResolution()
+        self.monResolution = get_monitor_resolution()
         self.pos = self.x, self.y = (
             self.monResolution[0] // 2 - self.size[0] // 2, self.monResolution[1] // 2 - self.size[1] // 2)
         self.fps = 240
@@ -50,7 +50,7 @@ class Screen:
     def update(self):
         # Обновление экрана каждый кадр
         self.screen.fill(self.bgColor)
-        self.resizeWindowMinus()
+        self.resize_window_minus()
         self.player.bullets.draw()
         drawParticles(self.screen)
         drawEnemys(self.screen)
@@ -61,7 +61,7 @@ class Screen:
         pygame.display.update()
         self.clock.tick(self.fps)
 
-    def resizeWindowMinus(self):
+    def resize_window_minus(self):
         # Уменьшает окно каждый кадр
         if self.width > self.minSize[0]:
             if self.status != 'right':
@@ -91,7 +91,7 @@ class Screen:
                 self.time = 0
                 self.status = 'none'
 
-    def resizeWindowPlus(self, pos, punching):
+    def resize_window_plus(self, pos, punching):
         # Увеличивает окно при соприкосновении с ним пули
         if pos[0] - self.x <= 0:
             self.status = 'left'
