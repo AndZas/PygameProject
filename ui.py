@@ -157,6 +157,9 @@ class StartWindow:
             for event in pygame.event.get():
                 if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
                     run = False
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    sys.exit()
             menu.run()
             pygame.display.flip()
             clock.tick(60)
@@ -173,6 +176,9 @@ class StartWindow:
                     if menu.lvl is not None:
                         key = True
                     run2 = False
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    sys.exit()
             menu.run()
             pygame.display.flip()
             clock.tick(60)
